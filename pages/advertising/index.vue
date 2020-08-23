@@ -1,136 +1,159 @@
 <template>
   <div>
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-row>
-        <v-col cols="4">
-          <v-select
-            v-model="formData.adKind"
-            :items="kindList"
-            :rules="[v => !!v || 'Item is required']"
-            label="نوع آگهی"
-            required
-          ></v-select>
-        </v-col>
-        <v-col cols="4">
-          <v-select
-            v-model="formData.adStatus"
-            :items="statusList"
-            :rules="[v => !!v || 'Item is required']"
-            label="وضعیت آگهی"
-            required
-          ></v-select>
-        </v-col>
-        <v-col cols="4">
-          <v-text-field
-            v-model="formData.name"
-            :rules="[v => !!v || 'Item is required']"
-            label="عنوان آگهی"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4">
-          <v-select
-            :items="$store.state.cityList"
-            v-model="formData.city"
-            item-text="name"
-            item-value="id"
-            multiple
-            :rules="[v => !!v || 'Item is required']"
-            label="استان"
-            required
-          ></v-select>
-        </v-col>
-        <v-col cols="4">
-          <v-text-field
-            v-model="formData.callingCode"
-            :rules="[v => !!v || 'Item is required']"
-            label="کد فراخوان"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4">
-          <v-text-field
-            v-model="formData.source"
-            :rules="[v => !!v || 'Item is required']"
-            label="منبع"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4">
-          <v-text-field
-            v-model="formData.adTitleTransition"
-            :rules="[v => !!v || 'Item is required']"
-            label="عنوان آگهی گذار "
-            required
-          ></v-text-field>
-        </v-col>
+    <v-card>
+      <v-card-title>آگهی</v-card-title>
+      <v-form class="form" ref="form" v-model="valid" lazy-validation>
+        <v-row>
+          <v-col cols="4">
+            <v-select
+              v-model="formData.adKind"
+              :items="kindList"
+              :rules="[v => !!v || 'Item is required']"
+              label="نوع آگهی"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="4">
+            <v-select
+              v-model="formData.adStatus"
+              :items="statusList"
+              :rules="[v => !!v || 'Item is required']"
+              label="وضعیت آگهی"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="4">
+            <v-text-field
+              v-model="formData.name"
+              :rules="[v => !!v || 'Item is required']"
+              label="عنوان آگهی"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="4">
+            <v-select
+              :items="$store.state.cityList"
+              v-model="formData.city"
+              item-text="name"
+              item-value="id"
+              multiple
+              :rules="[v => !!v || 'Item is required']"
+              label="استان"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="4">
+            <v-text-field
+              v-model="formData.callingCode"
+              :rules="[v => !!v || 'Item is required']"
+              label="کد فراخوان"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="4">
+            <v-text-field
+              v-model="formData.source"
+              :rules="[v => !!v || 'Item is required']"
+              label="منبع"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="4">
+            <v-text-field
+              v-model="formData.adTitleTransition"
+              :rules="[v => !!v || 'Item is required']"
+              label="عنوان آگهی گذار "
+              required
+            ></v-text-field>
+          </v-col>
 
-        <v-col cols="4">
-          <custom-date-picker label="تاریخ فراخوان" v-model="formData.date"></custom-date-picker>
-        </v-col>
-        <v-col cols="4">
-          <custom-date-picker label="تاریخ ارسال" v-model="formData.date"></custom-date-picker>
-        </v-col>
-        <v-col cols="4">
-          <custom-date-picker label="تاریخ دریافت" v-model="formData.date"></custom-date-picker>
-        </v-col>
-        <v-col cols="4">
-          <custom-date-picker label="تاریخ بازگشایی" v-model="formData.date"></custom-date-picker>
-        </v-col>
-        <v-col cols="4">
-          <custom-date-picker label="رایگان از تاریخ" v-model="formData.date"></custom-date-picker>
-        </v-col>
+          <v-col cols="4">
+            <custom-date-picker label="تاریخ فراخوان" v-model="formData.date"></custom-date-picker>
+          </v-col>
+          <v-col cols="4">
+            <custom-date-picker label="تاریخ ارسال" v-model="formData.date"></custom-date-picker>
+          </v-col>
+          <v-col cols="4">
+            <custom-date-picker label="تاریخ دریافت" v-model="formData.date"></custom-date-picker>
+          </v-col>
+          <v-col cols="4">
+            <custom-date-picker label="تاریخ بازگشایی" v-model="formData.date"></custom-date-picker>
+          </v-col>
+          <v-col cols="4">
+            <custom-date-picker label="رایگان از تاریخ" v-model="formData.date"></custom-date-picker>
+          </v-col>
 
-        <v-col cols="4">
-          <v-combobox v-model="select" :items="items" label="گروه های کاری" multiple></v-combobox>
-        </v-col>
+          <v-col cols="4">
+            <v-combobox v-model="select" :items="items" label="گروه های کاری" multiple></v-combobox>
+          </v-col>
 
-        <v-col cols="4">
-          <v-file-input prepend-icon="mdi-camera" chips multiple label="آپلود عکس"></v-file-input>
-        </v-col>
-        <v-col cols="4">
-          <v-select
-            :items="staffStatusList"
-            v-model="formData.staffStatus"
-            item-text="name"
-            item-value="id"
-            :rules="[v => !!v || 'Item is required']"
-            label="وضعیت ستاد"
-            required
-          ></v-select>
-        </v-col>
-        <v-col cols="12">
-          <v-textarea
-            name="input-7-1"
-            label="توضیحات"
-            value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
-          ></v-textarea>
-        </v-col>
-
+          <v-col cols="4">
+            <v-file-input prepend-icon="mdi-camera" chips multiple label="آپلود عکس"></v-file-input>
+          </v-col>
+          <v-col cols="4">
+            <v-select
+              :items="staffStatusList"
+              v-model="formData.staffStatus"
+              item-text="name"
+              item-value="id"
+              :rules="[v => !!v || 'Item is required']"
+              label="وضعیت ستاد"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="12">
+            <v-textarea
+              name="input-7-1"
+              label="توضیحات"
+              value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+            ></v-textarea>
+          </v-col>
+        </v-row>
+      </v-form>
+      <v-card-actions>
         <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">Validate</v-btn>
 
         <v-btn color="error" class="mr-4" @click="reset">Reset Form</v-btn>
 
         <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
-      </v-row>
-    </v-form>
+      </v-card-actions>
+    </v-card>
+    <v-card class="table">
+      <v-menu bottom origin="center center" transition="scale-transition">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            class="mt-5 ml-5"
+            color="primary "
+            v-model="menu"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >Scale Transition</v-btn>
+        </template>
 
-    <v-data-table
-      class="mt-5"
-      v-model="selected"
-      :headers="headers"
-      :items="desserts"
-      item-key="name"
-      show-select
-    >
-      <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2">mdi-pencil</v-icon>
-        <v-icon small @click="showItem(item)">mdi-eye</v-icon>
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
-      </template>
-    </v-data-table>
+        <v-list>
+          <v-list-item v-for="(item, i) in items" :key="i" @click="buttonActions(item.title)">
+            <v-list-item-title>{{ item.title }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+      <v-data-table
+        class="mt-5"
+        v-model="selected"
+        :headers="headers"
+        :items="desserts"
+        item-key="name"
+        show-select
+      >
+        <template v-slot:item.actions="{ item }">
+          <v-icon small class="mr-2">mdi-pencil</v-icon>
+          <v-icon small @click="showItem(item)">mdi-eye</v-icon>
+        </template>
+        <template v-slot:no-data>
+          <v-btn color="primary" @click="initialize">Reset</v-btn>
+        </template>
+      </v-data-table>
+    </v-card>
     <!-- dialog for show item in table -->
     <v-dialog v-model="showItemDialog" max-width="500px">
       <v-card>
@@ -155,12 +178,28 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- change work group dialog -->
+
+    <v-dialog v-model="wgDialog">
+      <v-row justify="center">
+        <v-card class="wg-dialog">
+          <v-card-title>
+            <span class="headline">User Profile</span>
+          </v-card-title>
+          <v-col cols="5">
+            <v-combobox v-model="select" :items="items" label="گروه کاری" multiple></v-combobox>
+          </v-col>
+        </v-card>
+      </v-row>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 export default {
   data: () => ({
+    menu: false,
+    wgDialog: false,
     valid: true,
     formData: {
       adKind: "",
@@ -243,6 +282,12 @@ export default {
       carbs: 0,
       protein: 0,
     },
+    items: [
+      { title: "انتشار آگهی" },
+      { title: "تغییر به حالت بررسی" },
+      { title: "تغییر گروه‌کاری" },
+      { title: "حذف" },
+    ],
   }),
 
   methods: {
@@ -263,6 +308,33 @@ export default {
     close() {
       this.showItemDialog = false;
     },
+    deleteItem() {
+      this.desserts.splice(selected, 1);
+    },
+    buttonActions(title) {
+      if (title === "حذف") {
+        confirm("آیا میخواهید پاک شود؟") && this.deleteItem();
+      } else if (title === "انتشار آگهی") {
+        confirm("آیا میخواهید آگهی انتشار یابد؟");
+      } else if (title === "تغییر به حالت بررسی") {
+        confirm("آیا مطمئن هستید؟");
+      } else if (title === "تغییر گروه‌کاری") {
+        this.wgDialog = true;
+        console.log("0000");
+      }
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.form {
+  padding: 10px;
+}
+.wg-dialog {
+  padding: 50px;
+  width: 800px;
+  display: flex;
+  justify-content: center;
+}
+</style>
