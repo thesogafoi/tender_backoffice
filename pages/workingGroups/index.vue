@@ -18,20 +18,21 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6">
                       <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                    <v-col cols="12" sm="6">
+                      <v-select
+                        v-model="editedItem.level"
+                        :items="items"
+                        :error-messages="errors"
+                        label="Select"
+                        data-vv-name="select"
+                        required
+                      ></v-select>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                    <v-col cols="12" sm="6" v-if="editedItem.level == 'سطح اول'">
+                      <v-file-input v-model="editedItem.image" label="File input"></v-file-input>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -61,6 +62,9 @@
 export default {
   data: () => ({
     dialog: false,
+    items: ["سطح اول", "سطح دوم"],
+    select: null,
+
     headers: [
       {
         text: "Dessert (100g serving)",
@@ -68,27 +72,20 @@ export default {
         sortable: false,
         value: "name",
       },
-      { text: "Calories", value: "calories" },
-      { text: "Fat (g)", value: "fat" },
-      { text: "Carbs (g)", value: "carbs" },
-      { text: "Protein (g)", value: "protein" },
+      { text: "level", value: "level" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     desserts: [],
     editedIndex: -1,
     editedItem: {
       name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      level: "سطح اول",
+      image: "",
     },
     defaultItem: {
       name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
+      level: "سطح اول",
+      image: "",
     },
   }),
 
@@ -113,73 +110,44 @@ export default {
       this.desserts = [
         {
           name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
+          level: "سطح اول",
+          image: "",
         },
         {
           name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
+          level: "سطح اول",
         },
         {
           name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
+          level: "سطح اول",
         },
         {
           name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
+          level: "سطح اول",
         },
         {
           name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
+          level: "سطح اول",
         },
         {
           name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
+          level: "سطح اول",
         },
         {
           name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
+          level: "سطح اول",
         },
         {
           name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
+          level: "سطح اول",
         },
         {
           name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
+          level: "سطح اول",
         },
         {
           name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
+          level: "سطح اول",
         },
       ];
     },
@@ -187,6 +155,7 @@ export default {
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
+      console.log(this.editedItem);
       this.dialog = true;
     },
 
