@@ -1,25 +1,39 @@
 <template>
-  <v-card>
-    <v-card-title>
-      Nutrition
-      <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Search"
-        single-line
-        hide-details
-      ></v-text-field>
-    </v-card-title>
-    <v-data-table :search="search" :headers="headers" :items="desserts"></v-data-table>
-  </v-card>
+  <div>
+    <v-card>
+      <v-card-title>
+        Nutrition
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          @keyup="getDataFromApi"
+          single-line
+          hide-details
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :items="desserts"
+        :options.sync="options"
+        :server-items-length="totalDesserts"
+        :loading="loading"
+        class="elevation-1"
+      ></v-data-table>
+    </v-card>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      totalDesserts: 0,
       search: "",
+      desserts: [],
+      loading: true,
+      options: {},
       headers: [
         {
           text: "Dessert (100g serving)",
@@ -33,7 +47,49 @@ export default {
         { text: "Protein (g)", value: "protein" },
         { text: "Iron (%)", value: "iron" },
       ],
-      desserts: [
+    };
+  },
+  watch: {
+    options: {
+      handler() {
+        this.getDataFromApi().then((data) => {
+          this.desserts = data.items;
+          this.totalDesserts = data.total;
+        });
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.getDataFromApi().then((data) => {
+      this.desserts = data.items;
+      this.totalDesserts = data.total;
+    });
+  },
+  methods: {
+    getDataFromApi() {
+      this.loading = true;
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+      console.log(sortBy, sortDesc, page, itemsPerPage, this.search);
+      return new Promise((resolve, reject) => {
+        let items = this.getDesserts();
+        const total = items.length;
+
+        if (itemsPerPage > 0) {
+          items = items.slice((page - 1) * itemsPerPage, page * itemsPerPage);
+        }
+
+        setTimeout(() => {
+          this.loading = false;
+          resolve({
+            items,
+            total,
+          });
+        }, 1000);
+      });
+    },
+    getDesserts() {
+      return [
         {
           name: "Frozen Yogurt",
           calories: 159,
@@ -114,12 +170,7 @@ export default {
           protein: 7,
           iron: "6%",
         },
-      ],
-    };
-  },
-  methods: {
-    filters() {
-      console.log("hi");
+      ];
     },
   },
 };
