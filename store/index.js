@@ -127,6 +127,8 @@ export const state = () => ({
       id: 31,
     },
   ],
+  required: [(v) => !!v || 'This Field Is Required'],
+
 })
 export const getters = {
   isAuthenticated(state) {
