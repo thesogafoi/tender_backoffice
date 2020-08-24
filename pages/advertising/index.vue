@@ -1,7 +1,14 @@
 <template>
   <div>
     <v-card>
-      <v-card-title>آگهی</v-card-title>
+      <v-row>
+        <v-col cols="2">
+          <v-card-title>آگهی</v-card-title>
+        </v-col>
+        <v-col cols="10">
+          <v-file-input class="ml-5" hide-input label="File input"></v-file-input>
+        </v-col>
+      </v-row>
       <v-form class="form" ref="form" v-model="valid" lazy-validation>
         <v-row>
           <v-col cols="4">
