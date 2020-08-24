@@ -66,24 +66,64 @@
         </v-col>
 
         <v-col cols="4">
-          <custom-date-picker label="تاریخ فراخوان " v-model="formData.date"></custom-date-picker>
-          <custom-date-picker label="تاریخ فراخوان" v-model="formData.date"></custom-date-picker>
+          <custom-date-picker
+            placeholder="شروع "
+            label="تاریخ فراخوان "
+            v-model="formData.startCallDate"
+          ></custom-date-picker>
+          <custom-date-picker
+            placeholder="پایان"
+            label="تاریخ فراخوان"
+            v-model="formData.endCallDate"
+          ></custom-date-picker>
         </v-col>
         <v-col cols="4">
-          <custom-date-picker label="تاریخ ارسال" v-model="formData.date"></custom-date-picker>
-          <custom-date-picker label="تاریخ ارسال" v-model="formData.date"></custom-date-picker>
+          <custom-date-picker
+            placeholder="شروع "
+            label="تاریخ ارسال"
+            v-model="formData.startSendDate"
+          ></custom-date-picker>
+          <custom-date-picker
+            placeholder="پایان "
+            label="تاریخ ارسال"
+            v-model="formData.endSendDate"
+          ></custom-date-picker>
         </v-col>
         <v-col cols="4">
-          <custom-date-picker label="تاریخ دریافت" v-model="formData.date"></custom-date-picker>
-          <custom-date-picker label="تاریخ دریافت" v-model="formData.date"></custom-date-picker>
+          <custom-date-picker
+            placeholder="شروع "
+            label="تاریخ دریافت"
+            v-model="formData.startGetDate"
+          ></custom-date-picker>
+          <custom-date-picker
+            placeholder="پایان "
+            label="تاریخ دریافت"
+            v-model="formData.endGetDate"
+          ></custom-date-picker>
         </v-col>
         <v-col cols="4">
-          <custom-date-picker label="تاریخ بازگشایی" v-model="formData.date"></custom-date-picker>
-          <custom-date-picker label="تاریخ بازگشایی" v-model="formData.date"></custom-date-picker>
+          <custom-date-picker
+            placeholder="شروع "
+            label="تاریخ بازگشایی"
+            v-model="formData.startOpenDate"
+          ></custom-date-picker>
+          <custom-date-picker
+            placeholder="پایان "
+            label="تاریخ بازگشایی"
+            v-model="formData.endOpenDate"
+          ></custom-date-picker>
         </v-col>
         <v-col cols="4">
-          <custom-date-picker label="رایگان از تاریخ" v-model="formData.date"></custom-date-picker>
-          <custom-date-picker label="رایگان تا تاریخ" v-model="formData.date"></custom-date-picker>
+          <custom-date-picker
+            placeholder="شروع "
+            label="رایگان از تاریخ"
+            v-model="formData.startFreeDate"
+          ></custom-date-picker>
+          <custom-date-picker
+            placeholder="پایان "
+            label="رایگان تا تاریخ"
+            v-model="formData.endFreeDate"
+          ></custom-date-picker>
         </v-col>
 
         <v-col cols="4">
@@ -176,7 +216,16 @@ export default {
       source: "",
       adTitleTransition: "",
       staffStatus: "",
-      date: "",
+      startCallDate: "",
+      endCallDate: "",
+      startGetDate: "",
+      endGetDate: "",
+      startSendDate: "",
+      endSendDate: "",
+      startOpenDate: "",
+      endOpenDate: "",
+      startfreeDate: "",
+      endfreeDate: "",
     },
     items: ["Programming", "Design", "Vue", "Vuetify"],
 
