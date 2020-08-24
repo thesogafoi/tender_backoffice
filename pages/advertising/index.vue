@@ -1,17 +1,17 @@
 <template>
   <div>
     <v-card>
-      <v-row>
+      <v-row class="c-header c-rtl">
         <v-col cols="2">
           <v-card-title>آگهی</v-card-title>
         </v-col>
-        <v-col cols="10">
-          <v-file-input class="ml-5" hide-input label="File input"></v-file-input>
+        <v-col cols="5">
+          <v-file-input class="button-uploader ml-5" label="ارسال فایل به صورت اکسل"></v-file-input>
         </v-col>
       </v-row>
-      <v-form class="form" ref="form" v-model="valid" lazy-validation>
-        <v-row>
-          <v-col cols="4">
+      <v-form class="c-form" ref="form" v-model="valid" lazy-validation>
+        <v-row class="c-rtl">
+          <v-col class="c-rtl" cols="4">
             <v-select
               v-model="formData.adKind"
               :items="kindList"
@@ -38,7 +38,7 @@
             ></v-text-field>
           </v-col>
           <v-col cols="4">
-            <v-select
+            <v-combobox
               :items="$store.state.cityList"
               v-model="formData.city"
               item-text="name"
@@ -47,7 +47,7 @@
               :rules="[v => !!v || 'Item is required']"
               label="استان"
               required
-            ></v-select>
+            ></v-combobox>
           </v-col>
           <v-col cols="4">
             <v-text-field
@@ -341,9 +341,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.form {
-  padding: 10px;
-}
 .wg-dialog {
   padding: 50px;
   width: 800px;

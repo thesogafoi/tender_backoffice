@@ -6,25 +6,25 @@
           <v-toolbar-title>کد تخفیف</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
+          <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">اضافه کردن</v-btn>
             </template>
             <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
+              <v-card-title class="c-header">
+                <span class="headline">اضافه کردن کد تخفیف</span>
               </v-card-title>
 
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6" md="6">
                       <v-text-field v-model="editedItem.planName" label=" نام پلن فروش"></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6" md="6">
                       <v-text-field v-model="editedItem.discountCount" label="تعداد کد تخفیف "></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6" md="6">
                       <custom-date-picker label="تاریخ انقضا" v-model="editedItem.expired"></custom-date-picker>
                     </v-col>
                   </v-row>
@@ -33,8 +33,8 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                <v-btn color="red" text @click="close">Cancel</v-btn>
+                <v-btn color="green" text @click="save">Save</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

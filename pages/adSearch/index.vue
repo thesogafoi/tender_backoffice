@@ -1,164 +1,172 @@
 <template>
   <div>
-    <v-form ref="form" v-model="valid" lazy-validation>
-      <v-row>
-        <v-col cols="4">
-          <v-select
-            v-model="formData.adKind"
-            :items="kindList"
-            :rules="[v => !!v || 'Item is required']"
-            label="نوع آگهی"
-            required
-          ></v-select>
+    <v-card>
+      <v-row class="c-header c-rtl">
+        <v-col cols="2">
+          <v-card-title>جستجوی آگهی</v-card-title>
         </v-col>
-        <v-col cols="4">
-          <v-select
-            v-model="formData.adStatus"
-            :items="statusList"
-            :rules="[v => !!v || 'Item is required']"
-            label="وضعیت آگهی"
-            required
-          ></v-select>
-        </v-col>
-        <v-col cols="4">
-          <v-text-field
-            v-model="formData.name"
-            :rules="[v => !!v || 'Item is required']"
-            label="عنوان آگهی"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4">
-          <v-select
-            :items="$store.state.cityList"
-            v-model="formData.city"
-            item-text="name"
-            item-value="id"
-            multiple
-            :rules="[v => !!v || 'Item is required']"
-            label="استان"
-            required
-          ></v-select>
-        </v-col>
-        <v-col cols="4">
-          <v-text-field
-            v-model="formData.callingCode"
-            :rules="[v => !!v || 'Item is required']"
-            label="کد فراخوان"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4">
-          <v-text-field
-            v-model="formData.source"
-            :rules="[v => !!v || 'Item is required']"
-            label="منبع"
-            required
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4">
-          <v-text-field
-            v-model="formData.adTitleTransition"
-            :rules="[v => !!v || 'Item is required']"
-            label="عنوان آگهی گذار "
-            required
-          ></v-text-field>
-        </v-col>
-
-        <v-col cols="4">
-          <custom-date-picker
-            placeholder="شروع "
-            label="تاریخ فراخوان "
-            v-model="formData.startCallDate"
-          ></custom-date-picker>
-          <custom-date-picker
-            placeholder="پایان"
-            label="تاریخ فراخوان"
-            v-model="formData.endCallDate"
-          ></custom-date-picker>
-        </v-col>
-        <v-col cols="4">
-          <custom-date-picker
-            placeholder="شروع "
-            label="تاریخ ارسال"
-            v-model="formData.startSendDate"
-          ></custom-date-picker>
-          <custom-date-picker
-            placeholder="پایان "
-            label="تاریخ ارسال"
-            v-model="formData.endSendDate"
-          ></custom-date-picker>
-        </v-col>
-        <v-col cols="4">
-          <custom-date-picker
-            placeholder="شروع "
-            label="تاریخ دریافت"
-            v-model="formData.startGetDate"
-          ></custom-date-picker>
-          <custom-date-picker
-            placeholder="پایان "
-            label="تاریخ دریافت"
-            v-model="formData.endGetDate"
-          ></custom-date-picker>
-        </v-col>
-        <v-col cols="4">
-          <custom-date-picker
-            placeholder="شروع "
-            label="تاریخ بازگشایی"
-            v-model="formData.startOpenDate"
-          ></custom-date-picker>
-          <custom-date-picker
-            placeholder="پایان "
-            label="تاریخ بازگشایی"
-            v-model="formData.endOpenDate"
-          ></custom-date-picker>
-        </v-col>
-        <v-col cols="4">
-          <custom-date-picker
-            placeholder="شروع "
-            label="رایگان از تاریخ"
-            v-model="formData.startFreeDate"
-          ></custom-date-picker>
-          <custom-date-picker
-            placeholder="پایان "
-            label="رایگان تا تاریخ"
-            v-model="formData.endFreeDate"
-          ></custom-date-picker>
-        </v-col>
-
-        <v-col cols="4">
-          <v-combobox v-model="select" :items="items" label="گروه های کاری" multiple></v-combobox>
-        </v-col>
-
-        <v-col cols="4">
-          <v-file-input prepend-icon="mdi-camera" chips multiple label="آپلود عکس"></v-file-input>
-        </v-col>
-        <v-col cols="4">
-          <v-select
-            :items="staffStatusList"
-            v-model="formData.staffStatus"
-            item-text="name"
-            item-value="id"
-            :rules="[v => !!v || 'Item is required']"
-            label="وضعیت ستاد"
-            required
-          ></v-select>
-        </v-col>
-        <v-col cols="12">
-          <v-textarea
-            name="input-7-1"
-            label="توضیحات"
-            value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
-          ></v-textarea>
-        </v-col>
-
-        <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">Validate</v-btn>
-
-        <v-btn color="error" class="mr-4" @click="reset">Reset Form</v-btn>
-
-        <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
       </v-row>
-    </v-form>
+      <v-form ref="form" class="c-form" v-model="valid" lazy-validation>
+        <v-row>
+          <v-col cols="4">
+            <v-select
+              v-model="formData.adKind"
+              :items="kindList"
+              :rules="[v => !!v || 'Item is required']"
+              label="نوع آگهی"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="4">
+            <v-select
+              v-model="formData.adStatus"
+              :items="statusList"
+              :rules="[v => !!v || 'Item is required']"
+              label="وضعیت آگهی"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="4">
+            <v-text-field
+              v-model="formData.name"
+              :rules="[v => !!v || 'Item is required']"
+              label="عنوان آگهی"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="4">
+            <v-combobox
+              :items="$store.state.cityList"
+              v-model="formData.city"
+              item-text="name"
+              item-value="id"
+              multiple
+              :rules="[v => !!v || 'Item is required']"
+              label="استان"
+              required
+            ></v-combobox>
+          </v-col>
+          <v-col cols="4">
+            <v-text-field
+              v-model="formData.callingCode"
+              :rules="[v => !!v || 'Item is required']"
+              label="کد فراخوان"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="4">
+            <v-text-field
+              v-model="formData.source"
+              :rules="[v => !!v || 'Item is required']"
+              label="منبع"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="4">
+            <v-text-field
+              v-model="formData.adTitleTransition"
+              :rules="[v => !!v || 'Item is required']"
+              label="عنوان آگهی گذار "
+              required
+            ></v-text-field>
+          </v-col>
+
+          <v-col cols="4">
+            <custom-date-picker
+              placeholder="شروع "
+              label="تاریخ فراخوان "
+              v-model="formData.startCallDate"
+            ></custom-date-picker>
+            <custom-date-picker
+              placeholder="پایان"
+              label="تاریخ فراخوان"
+              v-model="formData.endCallDate"
+            ></custom-date-picker>
+          </v-col>
+          <v-col cols="4">
+            <custom-date-picker
+              placeholder="شروع "
+              label="تاریخ ارسال"
+              v-model="formData.startSendDate"
+            ></custom-date-picker>
+            <custom-date-picker
+              placeholder="پایان "
+              label="تاریخ ارسال"
+              v-model="formData.endSendDate"
+            ></custom-date-picker>
+          </v-col>
+          <v-col cols="4">
+            <custom-date-picker
+              placeholder="شروع "
+              label="تاریخ دریافت"
+              v-model="formData.startGetDate"
+            ></custom-date-picker>
+            <custom-date-picker
+              placeholder="پایان "
+              label="تاریخ دریافت"
+              v-model="formData.endGetDate"
+            ></custom-date-picker>
+          </v-col>
+          <v-col cols="4">
+            <custom-date-picker
+              placeholder="شروع "
+              label="تاریخ بازگشایی"
+              v-model="formData.startOpenDate"
+            ></custom-date-picker>
+            <custom-date-picker
+              placeholder="پایان "
+              label="تاریخ بازگشایی"
+              v-model="formData.endOpenDate"
+            ></custom-date-picker>
+          </v-col>
+          <v-col cols="4">
+            <custom-date-picker
+              placeholder="شروع "
+              label="رایگان از تاریخ"
+              v-model="formData.startFreeDate"
+            ></custom-date-picker>
+            <custom-date-picker
+              placeholder="پایان "
+              label="رایگان تا تاریخ"
+              v-model="formData.endFreeDate"
+            ></custom-date-picker>
+          </v-col>
+
+          <v-col cols="4">
+            <v-combobox v-model="select" :items="items" label="گروه های کاری" multiple></v-combobox>
+          </v-col>
+
+          <v-col cols="4">
+            <v-file-input prepend-icon="mdi-camera" chips multiple label="آپلود عکس"></v-file-input>
+          </v-col>
+          <v-col cols="4">
+            <v-select
+              :items="staffStatusList"
+              v-model="formData.staffStatus"
+              item-text="name"
+              item-value="id"
+              :rules="[v => !!v || 'Item is required']"
+              label="وضعیت ستاد"
+              required
+            ></v-select>
+          </v-col>
+          <v-col cols="12">
+            <v-textarea
+              name="input-7-1"
+              label="توضیحات"
+              value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+            ></v-textarea>
+          </v-col>
+          <v-card-actions>
+            <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">Validate</v-btn>
+
+            <v-btn color="error" class="mr-4" @click="reset">Reset Form</v-btn>
+
+            <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
+          </v-card-actions>
+        </v-row>
+      </v-form>
+    </v-card>
 
     <v-data-table
       class="mt-5"

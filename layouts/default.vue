@@ -119,4 +119,16 @@ export default {
   justify-content: center;
   margin: 13px;
 }
+.c-rtl {
+  direction: rtl !important;
+}
+.c-header {
+  background-color: #ccc;
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.c-form {
+  padding: 10px;
+}
 </style>
