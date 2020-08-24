@@ -180,15 +180,21 @@
     </v-dialog>
     <!-- change work group dialog -->
 
-    <v-dialog v-model="wgDialog">
+    <v-dialog v-model="wgDialog" width="800">
       <v-row justify="center">
         <v-card class="wg-dialog">
           <v-card-title>
-            <span class="headline">User Profile</span>
+            <span class="headline">تعین گروه کاری</span>
           </v-card-title>
-          <v-col cols="5">
+          <v-col cols="12">
             <v-combobox v-model="select" :items="items" label="گروه کاری" multiple></v-combobox>
           </v-col>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text>بستن</v-btn>
+            <v-btn color="blue darken-1" text>ذخیره</v-btn>
+          </v-card-actions>
         </v-card>
       </v-row>
     </v-dialog>
@@ -334,7 +340,5 @@ export default {
 .wg-dialog {
   padding: 50px;
   width: 800px;
-  display: flex;
-  justify-content: center;
 }
 </style>
