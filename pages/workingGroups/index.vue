@@ -22,16 +22,15 @@
                       <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6">
-                      <v-select
+                      <v-combobox
                         v-model="editedItem.level"
                         :items="items"
-                        :error-messages="errors"
-                        label="Select"
-                        data-vv-name="select"
-                        required
-                      ></v-select>
+                        item-text="name"
+                        label="I use a scoped slot"
+                        multiple
+                      ></v-combobox>
                     </v-col>
-                    <v-col cols="12" sm="6" v-if="editedItem.level == 'سطح اول'">
+                    <v-col cols="12" sm="6" v-if="editedItem.level.length == 0">
                       <v-file-input v-model="editedItem.image" label="File input"></v-file-input>
                     </v-col>
                   </v-row>
@@ -62,8 +61,13 @@
 export default {
   data: () => ({
     dialog: false,
-    items: ["سطح اول", "سطح دوم"],
-    select: null,
+    items: [
+      {
+        name: "برق",
+        id: "bargh",
+      },
+    ],
+    select: [],
 
     headers: [
       {
@@ -79,12 +83,12 @@ export default {
     editedIndex: -1,
     editedItem: {
       name: "",
-      level: "سطح اول",
+      level: [],
       image: "",
     },
     defaultItem: {
       name: "",
-      level: "سطح اول",
+      level: [],
       image: "",
     },
   }),
