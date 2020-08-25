@@ -20,17 +20,17 @@ export default {
     titleTemplate: '%s - ' + process.env.npm_package_name,
     title: process.env.npm_package_name || '',
     meta: [{
-        charset: 'utf-8'
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1'
-      },
-      {
-        hid: 'description',
-        name: 'description',
-        content: process.env.npm_package_description || ''
-      }
+      charset: 'utf-8'
+    },
+    {
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1'
+    },
+    {
+      hid: 'description',
+      name: 'description',
+      content: process.env.npm_package_description || ''
+    }
     ],
     link: [{
       rel: 'icon',
@@ -46,10 +46,12 @@ export default {
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
    */
-  plugins: [{
-    src: '~plugins/jalaliCalender.js',
-    ssr: false
-  }],
+  plugins: [
+    './plugins/errorHandling.js',
+    {
+      src: '~plugins/jalaliCalender.js',
+      ssr: false
+    }],
   /*
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components
@@ -75,7 +77,9 @@ export default {
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
-  axios: {},
+  axios: {
+    baseURL: 'http://tender-backend.localhost/api/',
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module

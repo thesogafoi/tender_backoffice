@@ -13,8 +13,10 @@
         <v-row class="c-rtl">
           <v-col class="c-rtl" cols="4">
             <v-select
-              v-model="formData.adKind"
-              :items="kindList"
+              v-model="formData.type"
+              item-value="id"
+              item-text="value"
+              :items="listType"
               :rules="[v => !!v || 'Item is required']"
               label="نوع آگهی"
               required
@@ -22,8 +24,10 @@
           </v-col>
           <v-col cols="4">
             <v-select
-              v-model="formData.adStatus"
+              v-model="formData.status"
               :items="statusList"
+              item-value="id"
+              item-text="value"
               :rules="[v => !!v || 'Item is required']"
               label="وضعیت آگهی"
               required
@@ -31,7 +35,7 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
-              v-model="formData.name"
+              v-model="formData.title"
               :rules="[v => !!v || 'Item is required']"
               label="عنوان آگهی"
               required
@@ -40,7 +44,7 @@
           <v-col cols="4">
             <v-combobox
               :items="$store.state.cityList"
-              v-model="formData.city"
+              v-model="formData.provinces"
               item-text="name"
               item-value="id"
               multiple
@@ -51,7 +55,7 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
-              v-model="formData.callingCode"
+              v-model="formData.invitation_code"
               :rules="[v => !!v || 'Item is required']"
               label="کد فراخوان"
               required
@@ -59,7 +63,7 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
-              v-model="formData.source"
+              v-model="formData.resource"
               :rules="[v => !!v || 'Item is required']"
               label="منبع"
               required
@@ -67,7 +71,7 @@
           </v-col>
           <v-col cols="4">
             <v-text-field
-              v-model="formData.adTitleTransition"
+              v-model="formData.adinviter_title"
               :rules="[v => !!v || 'Item is required']"
               label="عنوان آگهی گذار "
               required
@@ -75,23 +79,27 @@
           </v-col>
 
           <v-col cols="4">
-            <custom-date-picker label="تاریخ فراخوان" v-model="formData.date"></custom-date-picker>
+            <custom-date-picker label="تاریخ فراخوان" v-model="formData.invitation_date"></custom-date-picker>
           </v-col>
           <v-col cols="4">
-            <custom-date-picker label="تاریخ ارسال" v-model="formData.date"></custom-date-picker>
+            <custom-date-picker label="تاریخ ارسال" v-model="formData.submit_date"></custom-date-picker>
           </v-col>
           <v-col cols="4">
-            <custom-date-picker label="تاریخ دریافت" v-model="formData.date"></custom-date-picker>
+            <custom-date-picker label="تاریخ دریافت" v-model="formData.receipt_date"></custom-date-picker>
           </v-col>
           <v-col cols="4">
-            <custom-date-picker label="تاریخ بازگشایی" v-model="formData.date"></custom-date-picker>
+            <custom-date-picker label="تاریخ بازگشایی" v-model="formData.start_date"></custom-date-picker>
           </v-col>
           <v-col cols="4">
-            <custom-date-picker label="رایگان از تاریخ" v-model="formData.date"></custom-date-picker>
+            <custom-date-picker label="رایگان از تاریخ" v-model="formData.free_date"></custom-date-picker>
           </v-col>
 
           <v-col cols="4">
-            <v-combobox v-model="select" :items="items" label="گروه های کاری" multiple></v-combobox>
+            <ChooseWorkGroup
+              :work_groups="this.$store.getters.workGroups"
+              @selected_work_group_changed="fillSelected"
+            />
+            <!-- <v-combobox v-model="work_groups" :items="items" label="گروه های کاری" multiple></v-combobox> -->
           </v-col>
 
           <v-col cols="4">
@@ -100,8 +108,8 @@
           <v-col cols="4">
             <v-select
               :items="staffStatusList"
-              v-model="formData.staffStatus"
-              item-text="name"
+              v-model="formData.is_nerve_center"
+              item-text="value"
               item-value="id"
               :rules="[v => !!v || 'Item is required']"
               label="وضعیت ستاد"
@@ -109,20 +117,19 @@
             ></v-select>
           </v-col>
           <v-col cols="12">
-            <v-textarea
-              name="input-7-1"
-              label="توضیحات"
-              value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
-            ></v-textarea>
+            <v-textarea name="input-7-1" label="توضیحات" v-model="formData.description"></v-textarea>
           </v-col>
         </v-row>
       </v-form>
       <v-card-actions>
-        <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">Validate</v-btn>
-
-        <v-btn color="error" class="mr-4" @click="reset">Reset Form</v-btn>
-
-        <v-btn color="warning" @click="resetValidation">Reset Validation</v-btn>
+        <v-btn
+          :disabled="!valid"
+          color="success"
+          class="mr-4"
+          type="button"
+          @click.prevent="sendData"
+        >ذخیره</v-btn>
+        <v-btn color="primary" class="mr-4" @click.prevent="search" type="button">جستجو</v-btn>
       </v-card-actions>
     </v-card>
     <v-card class="table">
@@ -148,8 +155,10 @@
         class="mt-5"
         v-model="selected"
         :headers="headers"
-        :items="desserts"
-        item-key="name"
+        :items="advertises"
+        :server-items-length="meta.total"
+        :loading="loading"
+        :options.sync="options"
         show-select
       >
         <template v-slot:item.actions="{ item }">
@@ -157,7 +166,7 @@
           <v-icon small @click="showItem(item)">mdi-eye</v-icon>
         </template>
         <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize">Reset</v-btn>
+          <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
         </template>
       </v-data-table>
     </v-card>
@@ -194,7 +203,7 @@
             <span class="headline">تعین گروه کاری</span>
           </v-card-title>
           <v-col cols="12">
-            <v-combobox v-model="select" :items="items" label="گروه کاری" multiple></v-combobox>
+            <!-- <v-combobox v-model="select" :items="items" label="گروه کاری" multiple></v-combobox> -->
           </v-col>
 
           <v-card-actions>
@@ -210,20 +219,38 @@
 
 <script>
 export default {
+  created() {},
+  watch: {
+    options: {
+      handler() {
+        this.getDataFromApi().then((data) => {
+          this.desserts = data.items;
+          this.totalDesserts = data.total;
+        });
+      },
+      deep: true,
+    },
+  },
   data: () => ({
+    options: {},
+    meta: [],
+    pagination: [],
+    loading: true,
     menu: false,
     wgDialog: false,
     valid: true,
     formData: {
-      adKind: "",
-      adStatus: "",
-      city: "",
-      name: "",
-      callingCode: "",
-      source: "",
-      adTitleTransition: "",
-      staffStatus: "",
-      date: "",
+      description: "",
+      type: "",
+      status: "",
+      provinces: "",
+      title: "",
+      invitation_code: "",
+      resource: "",
+      adinviter_title: "",
+      is_nerve_center: "",
+      invitation_date: "",
+      work_groups: [],
     },
     items: ["Programming", "Design", "Vue", "Vuetify"],
 
@@ -236,56 +263,55 @@ export default {
       (v) => !!v || "E-mail is required",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
-    select: null,
     selected: [],
-    kindList: ["مزایده", "مناقصه", "استعلام"],
-    statusList: ["در حال بررسی", "انتشار یافته"],
-    staffStatusList: ["غیر ستاد", "ستاد"],
+    listType: [
+      {
+        id: "AUCTION",
+        value: "مزایده",
+      },
+      {
+        id: "TENDER",
+        value: "مناقصه",
+      },
+      {
+        id: "INQUIRY",
+        value: "استعلام",
+      },
+    ],
+    statusList: [
+      {
+        id: "0",
+        value: "در حال بررسی",
+      },
+      {
+        id: "1",
+        value: "انتشار یافته",
+      },
+    ],
+    staffStatusList: [
+      {
+        value: "ستاد",
+        id: "1",
+      },
+      {
+        value: "غیر ستاد",
+        id: "0",
+      },
+    ],
 
     checkbox: false,
     singleSelect: false,
     headers: [
-      {
-        text: "Dessert (100g serving)",
-        align: "start",
-        sortable: false,
-        value: "name",
-      },
-      { text: "کد آگهی", value: "calories" },
-      { text: "کد فراخوان", value: "fat" },
-      { text: "عنوان آگهی", value: "carbs" },
-      { text: "تاریخ انتشار", value: "protein" },
-      { text: "آگهی گذار", value: "iron" },
-      { text: "تاریخ فراخوان", value: "calories" },
-      { text: "گروه های کاری", value: "calories" },
+      { text: "کد آگهی", value: "tender_code" },
+      { text: "کد فراخوان", value: "invitation_code" },
+      { text: "عنوان آگهی", value: "title" },
+      { text: "تاریخ انتشار", value: "created_at" },
+      { text: "آگهی گذار", value: "adinviter_title" },
+      { text: " تاریخ فراخوان", value: "invitation_date" },
+      // { text: "گروه های کاری", value: "provinces" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    desserts: [
-      {
-        name: "Frozen Yogurt",
-        calories: 234,
-        fat: 8.0,
-        carbs: 44,
-        protein: 4.4,
-        iron: "1%",
-      },
-      {
-        name: "Ice cream sandwich",
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        iron: "1%",
-      },
-      {
-        name: "Eclair",
-        calories: 159,
-        fat: 6.0,
-        carbs: 24,
-        protein: 4.0,
-        iron: "1%",
-      },
-    ],
+    advertises: [],
     editedIndex: -1,
     showItemDialog: false,
     showItemIndex: {
@@ -304,17 +330,55 @@ export default {
   }),
 
   methods: {
-    validate() {
-      this.$refs.form.validate();
+    fillSelected(data) {
+      this.formData.work_groups = data;
     },
-    reset() {
-      this.$refs.form.reset();
-    },
-    resetValidation() {
+    getDataFromApi() {
+      this.loading = true;
       this.$refs.form.resetValidation();
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+      let newFormData = this.removeEmptyObjects(this.formData);
+      return new Promise((resolve, reject) => {
+        this.$axios
+          .$post(
+            "advertise/page/get/searchable/advertises?page=" +
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage,
+            {
+              ...this.formData,
+            }
+          )
+          .then((response) => {
+            this.meta = response.meta;
+            this.advertises = response.data;
+            this.loading = false;
+          });
+      });
+    },
+    sendData() {
+      this.$refs.form.validate();
+      this.$axios.$post("advertise/create", this.formData).then((response) => {
+        // do something here for show result
+      });
+      // this.$refs.form.reset();
+      // this.$refs.form.resetValidation();
+      // send axios to backend and add refresh data
+    },
+    search() {
+      let newFormData = this.removeEmptyObjects(this.formData);
+      this.getDataFromApi();
+    },
+    removeEmptyObjects(obj) {
+      Object.keys(obj).map((key) => {
+        if (obj[key] == "" || obj[key] == undefined || obj[key] == null) {
+          delete obj[key];
+        }
+      });
+      return obj;
     },
     showItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.advertises.indexOf(item);
       this.showItemIndex = item;
       this.showItemDialog = true;
     },
@@ -322,7 +386,7 @@ export default {
       this.showItemDialog = false;
     },
     deleteItem() {
-      this.desserts.splice(selected, 1);
+      this.advertises.splice(selected, 1);
     },
     buttonActions(title) {
       if (title === "حذف") {
@@ -333,7 +397,6 @@ export default {
         confirm("آیا مطمئن هستید؟");
       } else if (title === "تغییر گروه‌کاری") {
         this.wgDialog = true;
-        console.log("0000");
       }
     },
   },
