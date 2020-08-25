@@ -1,38 +1,99 @@
 <template>
   <div>
+    <v-dialog v-model="dialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">title</span>
+        </v-card-title>
+
+        <v-card-text>
+          <v-container>
+            <v-form ref="form" v-model="valid">
+              <v-row>
+                <v-col cols="12" sm="12">
+                  {{editedItem}}
+                  <v-text-field
+                    :rules="[v => !!v || 'You must agree to continue!']"
+                    v-model="editedItem.title"
+                    :label="editedItem.subWorks.length === 0?` نام گروه کاری`:`اضافه کردن به گروه کاری` "
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="12">
+                  <v-autocomplete
+                    v-model="editedItem.subWorks"
+                    item-text="title"
+                    item-value="id"
+                    :items="items"
+                    small-chips
+                    label="Outlined"
+                  ></v-autocomplete>
+                </v-col>
+                <v-col v-if="editedItem.subWorks.length === 0" cols="12" sm="12">
+                  <v-file-input
+                    :rules="[v => !!v || 'You must agree to continue!']"
+                    v-model="editedItem.imageUrl"
+                    accept="image/*"
+                    label="File input"
+                  ></v-file-input>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-data-table
       :headers="headers"
-      :items="desserts"
+      :items="works"
+      :single-expand="singleExpand"
+      :expanded.sync="expanded"
       item-key="name"
-      sort-by="name"
-      group-by="category"
+      show-expand
       class="elevation-1"
-      show-group-by
     >
       <template v-slot:top>
-        <v-toolbar flat color="white">
-          <v-toolbar-title>گروه های کاری</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
+        <v-toolbar flat>
+          <v-toolbar-title>Expandable Table</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">اضافه کردن</v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>
-              <v-card-text>
-                <!-- card form -->
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <v-btn color="primary" dark class="mb-2" @click="dialog = true">New Item</v-btn>
         </v-toolbar>
+      </template>
+      <template v-slot:item.imageUrl="{ item }">
+        <v-avatar size="36px">
+          <img :src="item.imageUrl" alt="John" />
+        </v-avatar>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-icon small class="mr-2" @click="openDialog(item)">mdi-pencil</v-icon>
+        <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+      </template>
+      <template v-slot:expanded-item="{ headers, item }">
+        <td style="    padding: 0;" :colspan="headers.length">
+          <v-simple-table>
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th class="text-right">Name</th>
+                  <th class="text-center">Calories</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(subWork,index) in item.subWorks" :key="index">
+                  <td>{{subWork.title}}</td>
+                  <td class="text-center">
+                    <v-icon small class="mr-2" @click="openDialogSubWork(item,index)">mdi-pencil</v-icon>
+                    <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+        </td>
       </template>
     </v-data-table>
   </div>
@@ -40,68 +101,88 @@
 
 <script>
 export default {
+  methods: {
+    openDialog(item) {
+      this.dialog = true;
+      this.editedItem = item;
+    },
+    openDialogSubWork(item, index) {
+      console.log(item, index);
+      this.dialog = true;
+      console.log(item);
+      this.editedItem.subWorks = item.subWorks[index];
+      this.editedItem.subWorks = item.subWorks[index];
+    },
+    save() {
+      var temp = this.$refs.form.validate();
+      if (temp) {
+        if (this.editedItem.subWork.length != 0) {
+          // add subWork here
+        } else {
+          // add Work group here
+        }
+      }
+    },
+  },
   data() {
     return {
-      headers: [
+      valid: false,
+      expanded: [],
+      dialog: false,
+      items: [
         {
-          text: "Dessert (100g serving)",
-          align: "start",
-          value: "name",
-          groupable: false,
+          id: 1,
+          title: "تست",
         },
-        { text: "Category", value: "category", align: "right" },
-        { text: "Dairy", value: "dairy", align: "right" },
+        {
+          id: 2,
+          title: "تستس۱",
+        },
+        {
+          id: 3,
+          title: "تستستس",
+        },
       ],
-      desserts: [
+      values: ["ظطزر"],
+      singleExpand: true,
+      editedItem: {
+        title: "",
+        imageUrl: "",
+        image: null,
+        subWorks: [],
+      },
+
+      headers: [
+        { text: "Image", value: "imageUrl" },
+        { text: "Id", value: "id" },
         {
-          name: "Frozen Yogurt",
-          category: "Ice cream",
-          dairy: "Yes",
+          text: "Work Title",
+          align: "start",
+          sortable: true,
+          value: "title",
         },
+        { text: "Tools", value: "actions" },
+        { text: "", value: "data-table-expand" },
+      ],
+      works: [
         {
-          name: "Ice cream sandwich",
-          category: "Ice cream",
-          dairy: "Yes",
-        },
-        {
-          name: "Eclair",
-          category: "Cookie",
-          dairy: "Yes",
-        },
-        {
-          name: "Cupcake",
-          category: "Pastry",
-          dairy: "Yes",
-        },
-        {
-          name: "Gingerbread",
-          category: "Cookie",
-          dairy: "No",
-        },
-        {
-          name: "Jelly bean",
-          category: "Candy",
-          dairy: "No",
-        },
-        {
-          name: "Lollipop",
-          category: "Candy",
-          dairy: "No",
-        },
-        {
-          name: "Honeycomb",
-          category: "Toffee",
-          dairy: "No",
-        },
-        {
-          name: "Donut",
-          category: "Pastry",
-          dairy: "Yes",
-        },
-        {
-          name: "KitKat",
-          category: "Candy",
-          dairy: "Yes",
+          title: "test main",
+          id: 2,
+          imageUrl: "https://randomuser.me/api/portraits/men/85.jpg",
+          subWorks: [
+            {
+              id: 1,
+              title: "تست",
+            },
+            {
+              id: 2,
+              title: "تستس۱",
+            },
+            {
+              id: 3,
+              title: "تستستس",
+            },
+          ],
         },
       ],
     };
