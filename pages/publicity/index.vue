@@ -47,8 +47,8 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red" text @click="close">Cancel</v-btn>
-                <v-btn color="green" text @click="save">Save</v-btn>
+                <v-btn color="red" text @click="close">انصراف</v-btn>
+                <v-btn color="green" text @click="save">ذخیره</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>

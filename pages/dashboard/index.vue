@@ -1,82 +1,40 @@
 <template>
   <div>
-    <v-row>
-      <v-col cols="4">
-        <v-card class="mx-auto" max-width="400">
-          <v-img
-            class="white--text align-end"
-            height="200px"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-          >
-            <v-card-title>Top 10 Australian beaches</v-card-title>
-          </v-img>
-
-          <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
-
-          <v-card-text class="text--primary">
-            <div>Whitehaven Beach</div>
-
-            <div>Whitsunday Island, Whitsunday Islands</div>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn color="orange" text>Share</v-btn>
-
-            <v-btn color="orange" text>Explore</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-      <v-col cols="4">
-        <v-card class="mx-auto" max-width="400">
-          <v-img
-            class="white--text align-end"
-            height="200px"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-          >
-            <v-card-title>Top 10 Australian beaches</v-card-title>
-          </v-img>
-
-          <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
-
-          <v-card-text class="text--primary">
-            <div>Whitehaven Beach</div>
-
-            <div>Whitsunday Island, Whitsunday Islands</div>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn color="orange" text>Share</v-btn>
-
-            <v-btn color="orange" text>Explore</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-      <v-col cols="4">
-        <v-card class="mx-auto" max-width="400">
-          <v-img
-            class="white--text align-end"
-            height="200px"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-          >
-            <v-card-title>Top 10 Australian beaches</v-card-title>
-          </v-img>
-
-          <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
-
-          <v-card-text class="text--primary">
-            <div>Whitehaven Beach</div>
-
-            <div>Whitsunday Island, Whitsunday Islands</div>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-btn color="orange" text>Share</v-btn>
-
-            <v-btn color="orange" text>Explore</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+    <div class="row center">
+      <div class="card">
+        <div class="row">
+          <div class="col-4 icon">
+            <v-icon class="icon-card" large>mdi-account</v-icon>
+            <h5>مشتری</h5>
+          </div>
+          <div class="col-7">
+            <h4 class="card-number">578</h4>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row">
+          <div class="col-4 icon">
+            <v-icon class="icon-card" large>mdi-chart-bar-stacked</v-icon>
+            <h5>آمار</h5>
+          </div>
+          <div class="col-7">
+            <h4 class="card-number">578</h4>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="row">
+          <div class="col-4 icon">
+            <v-icon class="icon-card" large>mdi-attachment</v-icon>
+            <h5>تبلیغات</h5>
+          </div>
+          <div class="col-7">
+            <h4 class="card-number">578</h4>
+          </div>
+        </div>
+      </div>
+    </div>
     <v-row>
       <v-col cols="6">
         <v-data-table :headers="headers" :items="desserts" :items-per-page="5" class="elevation-1"></v-data-table>
@@ -191,3 +149,37 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.center {
+  display: flex;
+  .card {
+    background-color: white;
+    width: 380px;
+    height: 100px;
+    box-shadow: 0px 0px 3px black;
+    margin: 5px;
+  }
+  .icon {
+    background-color: rgba(255, 0, 85, 0.377);
+    margin-right: 10px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .icon-card {
+    justify-content: center;
+    display: flex;
+  }
+  .card-number {
+    align-items: center;
+    font-size: 50px;
+    justify-content: center;
+    display: flex;
+  }
+  h5 {
+    font-size: 20px;
+  }
+}
+</style>
