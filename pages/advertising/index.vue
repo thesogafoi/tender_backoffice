@@ -6,7 +6,7 @@
           <v-card-title>آگهی</v-card-title>
         </v-col>
         <v-col cols="5">
-          <v-file-input class="button-uploader ml-5" label="ارسال فایل به صورت اکسل"></v-file-input>
+          <input type="file" @change="onFileChange" class="button-uploader ml-5" />
         </v-col>
       </v-row>
       <v-form class="c-form" ref="form" v-model="valid" lazy-validation>
@@ -42,16 +42,16 @@
             ></v-text-field>
           </v-col>
           <v-col cols="4">
-            <v-combobox
+            <v-select
               :items="$store.state.cityList"
               v-model="formData.provinces"
               item-text="name"
               item-value="id"
+              label="استان"
               multiple
               :rules="[v => !!v || 'Item is required']"
-              label="استان"
               required
-            ></v-combobox>
+            ></v-select>
           </v-col>
           <v-col cols="4">
             <v-text-field
@@ -117,19 +117,37 @@
             ></v-select>
           </v-col>
           <v-col cols="12">
-            <v-textarea name="input-7-1" label="توضیحات" v-model="formData.description"></v-textarea>
+            <v-textarea
+              name="input-7-1"
+              :rules="[v => !!v || 'Item is required']"
+              label="توضیحات"
+              v-model="formData.description"
+            ></v-textarea>
           </v-col>
         </v-row>
       </v-form>
       <v-card-actions>
-        <v-btn
-          :disabled="!valid"
-          color="success"
-          class="mr-4"
-          type="button"
-          @click.prevent="sendData"
-        >ذخیره</v-btn>
-        <v-btn color="primary" class="mr-4" @click.prevent="search" type="button">جستجو</v-btn>
+        <div v-if="editMode">
+          <v-btn
+            :disabled="!valid"
+            color="success"
+            class="mr-4"
+            type="button"
+            @click.prevent="editItem"
+          >به روز رسانی اطلاعت</v-btn>
+          <v-btn color="warning" class="mr-4" @click.prevent="backToShowMode" type="button">انصراف</v-btn>
+        </div>
+        <div v-else>
+          <v-btn
+            :disabled="!valid"
+            color="success"
+            class="mr-4"
+            type="button"
+            @click.prevent="sendData"
+          >ذخیره</v-btn>
+
+          <v-btn color="primary" class="mr-4" @click.prevent="search" type="button">جستجو</v-btn>
+        </div>
       </v-card-actions>
     </v-card>
     <v-card class="table">
@@ -162,7 +180,7 @@
         show-select
       >
         <template v-slot:item.actions="{ item }">
-          <v-icon small class="mr-2">mdi-pencil</v-icon>
+          <v-icon small class="mr-2" @click="showAsEditFile(item)">mdi-pencil</v-icon>
           <v-icon small @click="showItem(item)">mdi-eye</v-icon>
         </template>
         <template v-slot:no-data>
@@ -180,10 +198,120 @@
         <v-card-text>
           <v-container>
             <ul>
-              <li>name: {{showItemIndex.name}}</li>
-              <li>name: {{showItemIndex.name}}</li>
-              <li>name: {{showItemIndex.name}}</li>
-              <li>name: {{showItemIndex.name}}</li>
+              <li>
+                <div>
+                  <span>عنوان آگهی گذار</span>
+                  <span>{{singleAdvertise.adinviter_title}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ انتشار :</span>
+                  <span>{{singleAdvertise.created_at}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>شرح :</span>
+                  <span>{{singleAdvertise.description}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ بازگشایی :</span>
+                  <span>{{singleAdvertise.free_date}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>آی دی :</span>
+                  <span>{{singleAdvertise.id}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>عکس :‌</span>
+                  <span>{{singleAdvertise.image}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>ستاد :</span>
+                  <span>{{singleAdvertise.is_nerve_center}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>لینک :</span>
+                  <span>{{singleAdvertise.link}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ دریافت :</span>
+                  <span>{{singleAdvertise.receipt_date}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ فراخوان :</span>
+                  <span>{{singleAdvertise.invitation_date}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>منبع :‌</span>
+                  <span>{{singleAdvertise.resource}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ شروع :‌</span>
+                  <span>{{singleAdvertise.start_date}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>وضعیت :‌</span>
+                  <span>{{singleAdvertise.status}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ ارسال :</span>
+                  <span>{{singleAdvertise.submit_date}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>کد آگهی :‌</span>
+                  <span>{{singleAdvertise.tender_code}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>عنوان :‌</span>
+                  <span>{{singleAdvertise.title}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>نوع آگهی :</span>
+                  <span>{{singleAdvertise.type}}</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  v-for="workGroup in singleAdvertise.work_groups"
+                  :key="workGroup.id"
+                >{{workGroup.name}}</div>
+              </li>
+              <li>
+                <div
+                  v-for="province in singleAdvertise.provinces"
+                  :key="province.id"
+                >{{province.name}}</div>
+              </li>
             </ul>
           </v-container>
         </v-card-text>
@@ -232,6 +360,7 @@ export default {
     },
   },
   data: () => ({
+    excel_file: "",
     options: {},
     meta: [],
     pagination: [],
@@ -243,7 +372,7 @@ export default {
       description: "",
       type: "",
       status: "",
-      provinces: "",
+      provinces: [],
       title: "",
       invitation_code: "",
       resource: "",
@@ -308,28 +437,57 @@ export default {
       { text: "تاریخ انتشار", value: "created_at" },
       { text: "آگهی گذار", value: "adinviter_title" },
       { text: " تاریخ فراخوان", value: "invitation_date" },
-      // { text: "گروه های کاری", value: "provinces" },
+      // { text: "دسته های کاری", value: "work_groups" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     advertises: [],
     editedIndex: -1,
     showItemDialog: false,
-    showItemIndex: {
-      name: "",
-      calories: 0,
-      fat: 0,
-      carbs: 0,
-      protein: 0,
-    },
+    singleAdvertise: {},
     items: [
       { title: "انتشار آگهی" },
       { title: "تغییر به حالت بررسی" },
       { title: "تغییر گروه‌کاری" },
       { title: "حذف" },
     ],
+
+    advertiseId: "",
+    editMode: false,
   }),
 
   methods: {
+    editItem() {
+      //send data to database
+      this.$axios.$put("advertise/update/" + this.advertiseId, this.formData);
+      this.backToShowMode();
+      // this.$refs.form.resetValidation();
+      // this.editMode = false;
+      // this.advertiseId = ''
+    },
+    backToShowMode() {
+      this.formData = [];
+      this.$refs.form.resetValidation();
+      this.editMode = false;
+      this.advertiseId = "";
+      this.getDataFromApi();
+    },
+    showAsEditFile(item) {
+      this.editMode = true;
+      this.advertiseId = item.id;
+      this.$axios.$get("advertise/show/" + item.id).then((response) => {
+        this.formData = response.data;
+      });
+    },
+    async onFileChange(e) {
+      let formData = new FormData();
+      const file = e.target.files[0];
+      formData.append("excel_file", file);
+      e.target.value = "";
+      await this.$axios
+        .post("advertise/excel/create", formData)
+        .then((response) => {});
+    },
+
     fillSelected(data) {
       this.formData.work_groups = data;
     },
@@ -360,6 +518,7 @@ export default {
       this.$refs.form.validate();
       this.$axios.$post("advertise/create", this.formData).then((response) => {
         // do something here for show result
+        this.getDataFromApi();
       });
       // this.$refs.form.reset();
       // this.$refs.form.resetValidation();
@@ -378,11 +537,13 @@ export default {
       return obj;
     },
     showItem(item) {
-      this.editedIndex = this.advertises.indexOf(item);
-      this.showItemIndex = item;
       this.showItemDialog = true;
+      this.$axios.$get("advertise/show/" + item.id).then((response) => {
+        this.singleAdvertise = response.data;
+      });
     },
     close() {
+      this.singleAdvertise = "";
       this.showItemDialog = false;
     },
     deleteItem() {
