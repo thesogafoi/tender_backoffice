@@ -12,23 +12,29 @@
             </template>
             <v-card>
               <v-card-title class="c-header">
-                <span class="headline">اضافه کردن پلن فروش</span>
+                <span class="headline">{{formTitle}}</span>
               </v-card-title>
 
               <v-card-text>
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.planName" label="نام پلن"></v-text-field>
+                      <v-text-field v-model="editedItem.title" label="نام پلن"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.workGtoupCount" label="تعداد گروه‌های کاری"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.allowed_selection"
+                        label="تعداد گروه‌های کاری"
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.planValue" label="ارزش پلن"></v-text-field>
+                      <v-text-field v-model="editedItem.cost" label="ارزش پلن"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <custom-date-picker label="تاریخ انقضا" v-model="editedItem.expired"></custom-date-picker>
+                      <custom-date-picker label="تاریخ انقضا" v-model="editedItem.period"></custom-date-picker>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-select v-model="editedItem.priorty" :items="items" label="اولویت"></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -58,32 +64,37 @@
 export default {
   data: () => ({
     dialog: false,
+    items: ["1", "2", "3", "4"],
+
     headers: [
       {
         text: "نام پلن",
         align: "start",
         sortable: false,
-        value: "planName",
+        value: "title",
       },
 
-      { text: "تعداد گروه‌های کاری", value: "workGtoupCount" },
-      { text: "ارزش پلن", value: "planValue" },
-      { text: "تاریخ انقضا", value: "expired" },
+      { text: "تعداد گروه‌های کاری", value: "allowed_selection" },
+      { text: "ارزش پلن", value: "cost" },
+      { text: "تاریخ انقضا", value: "period" },
+      { text: "اولویت", value: "priorty" },
       { text: "عملیات", value: "actions", sortable: false },
     ],
     desserts: [],
     editedIndex: -1,
     editedItem: {
-      planName: "",
-      workGtoupCount: 0,
-      planValue: 0,
-      expired: 0,
+      title: "",
+      allowed_selection: 0,
+      cost: 0,
+      period: 0,
+      priorty: "",
     },
     defaultItem: {
-      planName: "",
-      workGtoupCount: 0,
-      planValue: 0,
-      expired: 0,
+      title: "",
+      allowed_selection: 0,
+      cost: 0,
+      period: 0,
+      priorty: "",
     },
   }),
 
@@ -105,14 +116,11 @@ export default {
 
   methods: {
     initialize() {
-      this.desserts = [
-        {
-          planName: "Frozen Yogurt",
-          workGtoupCount: 159,
-          planValue: 6.0,
-          expired: 24,
-        },
-      ];
+      return new Promise((resolve, reject) => {
+        this.$axios.$get("subscription").then((response) => {
+          console.log(response);
+        });
+      });
     },
 
     editItem(item) {
@@ -136,9 +144,17 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
+        console.log("test");
         Object.assign(this.desserts[this.editedIndex], this.editedItem);
       } else {
-        this.desserts.push(this.editedItem);
+        // this.desserts.push(this.editedItem);
+        return new Promise((resolve, reject) => {
+          this.$axios
+            .$post("subscription/create", this.editedItem)
+            .then((response) => {
+              console.log(response);
+            });
+        });
       }
       this.close();
     },

@@ -1,8 +1,7 @@
 import Vue from 'vue'
 
-import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 import {
   snackbarMixin
-} from "../mixins/snackbarMixin";
+} from "../mixins.js/snackbarMixin.js";
 
 Vue.mixin(snackbarMixin)
