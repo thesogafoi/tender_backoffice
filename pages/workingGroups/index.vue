@@ -1,51 +1,112 @@
 <template>
   <div>
     <v-dialog v-model="dialog" max-width="500px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">title</span>
-        </v-card-title>
+      <v-tabs
+        v-model="tab"
+        background-color="deep-purple accent-4"
+        class="elevation-2"
+        dark
+        :centered="centered"
+        :grow="grow"
+        :vertical="vertical"
+        :right="right"
+        :prev-icon="prevIcon ? 'mdi-arrow-left-bold-box-outline' : undefined"
+        :next-icon="nextIcon ? 'mdi-arrow-right-bold-box-outline' : undefined"
+        :icons-and-text="icons"
+      >
+        <v-tabs-slider></v-tabs-slider>
+        <v-tab v-for="i in tabs" :key="i" :href="`#tab-${i}`">
+          <div v-if="i == 1">اصلی</div>
+          <div v-if="i == 2">زیرگروه</div>
+        </v-tab>
+        <v-tab-item v-for="i in tabs" :key="i" :value="'tab-' + i">
+          <v-card-title>
+            <span v-if="i==1" class="headline">اصلی</span>
+            <span v-if="i==2" class="headline">زیرگروه</span>
+          </v-card-title>
+          <!-- main work form -->
+          <v-form v-if="i == 1" ref="form" v-model="valid">
+            <v-col cols="12" md="12">
+              <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="12">
+              <v-autocomplete
+                v-model="editedItem.subWorks"
+                item-text="title"
+                item-value="id"
+                :items="items"
+                small-chips
+                label="زیرگروه"
+                multiple
+              ></v-autocomplete>
+            </v-col>
+            <v-col cols="12">
+              <v-select
+                v-model="editedItem.type"
+                item-value="id"
+                item-text="value"
+                :items="listType"
+                :rules="[v => !!v || 'Item is required']"
+                label="نوع آگهی"
+                required
+              ></v-select>
+            </v-col>
+            <v-col cols="12" sm="12">
+              <ChooseWorkGroup
+                :work_groups="workGroups"
+                @selected_work_group_changed="selectedWorkGroupChanged"
+                ref="workGroups"
+              />
+            </v-col>
+            <v-col cols="12" sm="12">
+              <v-file-input
+                :rules="[v => !!v || 'You must agree to continue!']"
+                v-model="editedItem.image"
+                accept="image/*"
+                label="File input"
+              ></v-file-input>
+            </v-col>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+            </v-card-actions>
+          </v-form>
 
-        <v-card-text>
-          <v-container>
-            <v-form ref="form" v-model="valid">
-              <v-row>
-                <v-col cols="12" sm="12">
-                  <ChooseWorkGroup
-                    :work_groups="this.workGroups"
-                    @selected_work_group_changed="selectedWorkGroupChanged"
-                    ref="workGroups"
-                  />
-                </v-col>
-                <v-col cols="12" sm="12">
-                  <v-autocomplete
-                    v-model="editedItem.subWorks"
-                    item-text="title"
-                    item-value="id"
-                    :items="items"
-                    small-chips
-                    label="Outlined"
-                  ></v-autocomplete>
-                </v-col>
-                <v-col v-if="editedItem.subWorks.length === 0" cols="12" sm="12">
-                  <v-file-input
-                    :rules="[v => !!v || 'You must agree to continue!']"
-                    v-model="editedItem.image"
-                    accept="image/*"
-                    label="File input"
-                  ></v-file-input>
-                </v-col>
-              </v-row>
-            </v-form>
-          </v-container>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-        </v-card-actions>
-      </v-card>
+          <!-- sub works form -->
+          <v-form v-if="i == 2" ref="form" v-model="valid">
+            <v-col cols="12" md="12">
+              <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
+            </v-col>
+            <v-col cols="12" sm="12">
+              <v-autocomplete
+                v-model="editedItem.subWorks"
+                item-text="title"
+                item-value="id"
+                :items="items"
+                small-chips
+                label="زیرگروه"
+              ></v-autocomplete>
+            </v-col>
+            <v-col cols="12" sm="12">
+              <v-textarea v-model="editedItem.discription" label="توضیحات"></v-textarea>
+            </v-col>
+            <v-col cols="12" sm="12">
+              <v-file-input
+                :rules="[v => !!v || 'You must agree to continue!']"
+                v-model="editedItem.image"
+                accept="image/*"
+                label="File input"
+              ></v-file-input>
+            </v-col>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+            </v-card-actions>
+          </v-form>
+        </v-tab-item>
+      </v-tabs>
     </v-dialog>
+    <!-- table -->
     <v-row>
       <v-col cols="4" class="c-rtl">
         <v-text-field v-model="filters.title" label="عنوان آگهی"></v-text-field>
@@ -77,11 +138,6 @@
         ></v-select>
       </v-col>
     </v-row>
-    <select v-model="filters.type">
-      <option value="AUCTION">مزایده</option>
-      <option value="TENDER">مناقصه</option>
-      <option value="INQUIRY">استعلام</option>
-    </select>
     <v-data-table
       :headers="headers"
       :items="workGroups"
@@ -190,6 +246,20 @@ export default {
       valid: false,
       expanded: [],
       dialog: false,
+      listType: [
+        {
+          id: "AUCTION",
+          value: "مزایده",
+        },
+        {
+          id: "TENDER",
+          value: "مناقصه",
+        },
+        {
+          id: "INQUIRY",
+          value: "استعلام",
+        },
+      ],
       items: [
         {
           id: 1,
@@ -211,6 +281,8 @@ export default {
         imageUrl: "",
         image: null,
         subWorks: [],
+        type: "",
+        discription: "",
       },
       formData: {},
       headers: [
@@ -245,6 +317,18 @@ export default {
           ],
         },
       ],
+      // tab data
+      tab: null,
+      text:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      icons: false,
+      centered: true,
+      grow: false,
+      vertical: false,
+      prevIcon: false,
+      nextIcon: false,
+      right: false,
+      tabs: 2,
     };
   },
 };
