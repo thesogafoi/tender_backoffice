@@ -3,9 +3,9 @@ export default {
         clearSelectedWorkGroups() {
             this.$refs.workGroups.selected = [];
         },
-        fillSelected() {
+        fillSelected(nameOfForm) {
             this.clearSelectedWorkGroups();
-            this.formData.work_groups.map((newData) => {
+            this[nameOfForm].work_groups.map((newData) => {
                 this.$refs.workGroups.selected.push(newData.id);
             });
         },

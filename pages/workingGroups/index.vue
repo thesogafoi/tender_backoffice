@@ -16,8 +16,8 @@
       >
         <v-tabs-slider></v-tabs-slider>
         <v-tab v-for="i in tabs" :key="i" :href="`#tab-${i}`">
-          <div v-if="i == 1">اصلی</div>
-          <div v-if="i == 2">زیرگروه</div>
+          <div v-if="i == 1" @click="primarySelected">اصلی</div>
+          <div v-if="i == 2" @click="secondarySelected">زیرگروه</div>
         </v-tab>
         <v-tab-item v-for="i in tabs" :key="i" :value="'tab-' + i">
           <v-card-title>
@@ -30,15 +30,7 @@
               <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
             </v-col>
             <v-col cols="12" sm="12">
-              <v-autocomplete
-                v-model="editedItem.subWorks"
-                item-text="title"
-                item-value="id"
-                :items="items"
-                small-chips
-                label="زیرگروه"
-                multiple
-              ></v-autocomplete>
+              <ChooseWorkGroup :work_groups="workGroups" ref="secondaryWorkGroups" />
             </v-col>
             <v-col cols="12">
               <v-select
@@ -78,14 +70,7 @@
               <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
             </v-col>
             <v-col cols="12" sm="12">
-              <v-autocomplete
-                v-model="editedItem.subWorks"
-                item-text="title"
-                item-value="id"
-                :items="items"
-                small-chips
-                label="زیرگروه"
-              ></v-autocomplete>
+              <ChooseWorkGroup :work_groups="workGroups" ref="workGroups" />
             </v-col>
             <v-col cols="12" sm="12">
               <v-textarea v-model="editedItem.discription" label="توضیحات"></v-textarea>
@@ -217,6 +202,8 @@ import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 export default {
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
   methods: {
+    primarySelected() {},
+    secondarySelected() {},
     openDialog(item) {
       this.dialog = true;
       this.editedItem = item;
@@ -296,25 +283,12 @@ export default {
         { text: "Tools", value: "actions" },
         { text: "", value: "data-table-expand" },
       ],
+
       works: [
         {
           title: "test main",
           id: 2,
           imageUrl: "https://randomuser.me/api/portraits/men/85.jpg",
-          subWorks: [
-            {
-              id: 1,
-              title: "تست",
-            },
-            {
-              id: 2,
-              title: "تستس۱",
-            },
-            {
-              id: 3,
-              title: "تستستس",
-            },
-          ],
         },
       ],
       // tab data

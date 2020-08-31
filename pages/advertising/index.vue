@@ -96,7 +96,7 @@
 
           <v-col cols="4">
             <ChooseWorkGroup
-              :work_groups="this.workGroups"
+              :work_groups="workGroups"
               ref="workGroups"
               @selected_work_group_changed="selectedWorkGroupChanged"
             />
@@ -196,7 +196,6 @@
         <v-card-title>
           <span class="headline"></span>
         </v-card-title>
-
         <v-card-text>
           <v-container>
             <ul>
@@ -514,7 +513,7 @@ export default {
       this.advertiseId = item.id;
       this.$axios.$get("advertise/show/" + item.id).then(({ data }) => {
         this.formData = JSON.parse(JSON.stringify(data));
-        this.fillSelected();
+        this.fillSelected("formData");
       });
     },
     showItem(item) {

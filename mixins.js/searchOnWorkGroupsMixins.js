@@ -54,6 +54,7 @@ export default {
                 priorty: "",
                 status: "",
                 type: "",
+                isParent: "",
             }
         },
         workGroupSearch() {
