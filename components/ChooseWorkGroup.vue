@@ -4,7 +4,6 @@
       v-model="selected"
       :disabled="isUpdating"
       :items="workGroups"
-      filled
       chips
       label="Select"
       item-text="title"
