@@ -1,6 +1,13 @@
 <template>
   <div>
-    <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="elevation-1">
+    <v-data-table
+      :headers="headers"
+      :options.sync="options"
+      :loading="loading"
+      :items="desserts"
+      sort-by="calories"
+      class="elevation-1"
+    >
       <template v-slot:top>
         <v-toolbar flat color="white">
           <v-toolbar-title>پلن‌های فروش</v-toolbar-title>
@@ -65,6 +72,7 @@ export default {
   data: () => ({
     dialog: false,
     items: ["1", "2", "3", "4"],
+    options: {},
 
     headers: [
       {
@@ -89,6 +97,7 @@ export default {
       period: 0,
       priorty: "",
     },
+    loading: false,
     defaultItem: {
       title: "",
       allowed_selection: 0,
@@ -97,32 +106,49 @@ export default {
       priorty: "",
     },
   }),
-
+  watch: {
+    options: {
+      handler() {
+        this.getDataFromApi().then((data) => {
+          this.desserts = data.items;
+          this.totalDesserts = data.total;
+        });
+      },
+      deep: true,
+    },
+  },
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
   },
 
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-  },
-
   created() {
-    this.initialize();
+    this.getDataFromApi();
   },
 
   methods: {
-    initialize() {
+    getDataFromApi() {
+      console.log(this.options.page != undefined ? this.options.page : 1);
+      this.loading = true;
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options;
       return new Promise((resolve, reject) => {
-        this.$axios.$get("subscription").then((response) => {
-          console.log(response);
-        });
+        this.$axios
+          .$get(
+            `subscription?page=${
+              this.options.page === undefined ? 1 : this.options.page
+            }&items_per_page=${
+              this.options.itemsPerPage === undefined
+                ? 10
+                : this.options.itemsPerPage
+            }`
+          )
+          .then((response) => {
+            this.desserts = response.data;
+            this.loading = false;
+          });
       });
     },
-
     editItem(item) {
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
