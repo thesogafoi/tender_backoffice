@@ -77,11 +77,6 @@
         ></v-select>
       </v-col>
     </v-row>
-    <select v-model="filters.type">
-      <option value="AUCTION">مزایده</option>
-      <option value="TENDER">مناقصه</option>
-      <option value="INQUIRY">استعلام</option>
-    </select>
     <v-data-table
       :headers="headers"
       :items="workGroups"
