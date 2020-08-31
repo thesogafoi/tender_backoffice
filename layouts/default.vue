@@ -26,6 +26,17 @@
       </v-container>
     </v-main>
 
+    <v-snackbar v-model="$store.state.snackbar" :color="$store.state.snackbarColor">
+      <v-card-title
+        class="font-weight-regular pa-2"
+        style="word-spacing: 1.2px; text-align: center"
+      >{{ $store.state.snackbarText }}</v-card-title>
+
+      <v-btn icon @click="$store.state.snackbar = false">
+        <v-icon color="white">mdi-close-circle-outline</v-icon>
+      </v-btn>
+    </v-snackbar>
+
     <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
