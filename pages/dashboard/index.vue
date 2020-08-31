@@ -43,11 +43,27 @@
         <v-data-table :headers="headers" :items="desserts" :items-per-page="5" class="elevation-1"></v-data-table>
       </v-col>
     </v-row>
+
+    <v-btn @click="success">success</v-btn>
+    <v-btn @click="warning">warning</v-btn>
+    <v-btn @click="error">error</v-btn>
   </div>
 </template>   
 
 <script>
 export default {
+  methods: {
+    success() {
+      this.showSnackbar("success", "green");
+    },
+    warning() {
+      this.showSnackbar("warning", "yellow");
+    },
+    error() {
+      this.showSnackbar("error", "red");
+    },
+  },
+
   data() {
     return {
       headers: [
