@@ -1,9 +1,17 @@
 export const strict = false
 
 export const state = () => ({
-  baseUrl: 'http://api.aradmobile.matican.work/api/',
-  cityList: [
-    {
+  snackbarTextDeleteSuccessful: 'The Item was  deleted',
+  snackbarTextDeleteFailed: 'The Item were not deleted',
+  snackbarTextEditSuccessful: 'The Item was edited',
+  snackbarTextEditFailed: 'The Item was not edited',
+  snackbarTextAddSuccessful: 'The New Item was added',
+  snackbarTextAddFailed: 'The New Item was not added',
+  snackbarText: 'Oops something wrong',
+  snackbarColor: 'error',
+  snackbar: false,
+  baseUrl: 'http://asan.matican.work/api/',
+  cityList: [{
       id: 1,
       name: "آذربایجان شرقی",
 
@@ -181,11 +189,17 @@ export const mutations = {
 
 
 export const actions = {
-  async refreshWorkGroups({ commit }) {
-    let { data } = await this.$axios.$get('workgroup/component/index')
+  async refreshWorkGroups({
+    commit
+  }) {
+    let {
+      data
+    } = await this.$axios.$get('workgroup/component/index')
     commit('SET_WORK_GROUPS', data);
   },
-  async nuxtServerInit({ dispatch }) {
+  async nuxtServerInit({
+    dispatch
+  }) {
     await dispatch('refreshWorkGroups')
   },
 }
