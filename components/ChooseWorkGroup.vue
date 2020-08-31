@@ -11,6 +11,16 @@
       item-value="id"
       multiple
     >
+      <template v-slot:item="{ parent, item }">
+        <!--Highlight output item.name-->
+        {{item.title}} -
+        (
+        <span v-if="item.type=='AUCTION'">مزایده</span>
+        <span v-if="item.type=='TENDER'">مناقصه</span>
+        <span v-if="item.type=='INQUIRY'">استعلام</span>
+        <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
+      </template>
+
       <template v-slot:selection="data">
         <v-chip
           v-bind="data.attrs"
@@ -35,7 +45,7 @@ export default {
     };
   },
   created() {
-    this.fixWokrGroupData();
+    this.workGroups = this.work_groups;
   },
   watch: {
     selected() {
@@ -49,17 +59,17 @@ export default {
   },
 
   methods: {
-    fixWokrGroupData() {
-      for (let i = 0; i < this.work_groups.length; i++) {
-        if (i != 0) {
-          //   this.workGroups.push({ divider: true });
-        }
-        this.workGroups.push({ header: this.work_groups[i].header });
-        if (this.work_groups[i].children.length != 0) {
-          this.workGroups.push(...this.work_groups[i].children);
-        }
-      }
-    },
+    // fixWokrGroupData() {
+    //   for (let i = 0; i < this.work_groups.length; i++) {
+    //     if (i != 0) {
+    //       //   this.workGroups.push({ divider: true });
+    //     }
+    //     this.workGroups.push({ header: this.work_groups[i].header });
+    //     if (this.work_groups[i].children.length != 0) {
+    //       this.workGroups.push(...this.work_groups[i].children);
+    //     }
+    //   }
+    // },
     remove(item) {
       const index = this.selected.indexOf(item);
       this.selected = this.selected.filter((workGroup) => {

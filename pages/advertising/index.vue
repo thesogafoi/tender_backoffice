@@ -96,8 +96,9 @@
 
           <v-col cols="4">
             <ChooseWorkGroup
-              :work_groups="this.$store.getters.workGroups"
-              @selected_work_group_changed="fillSelected"
+              :work_groups="this.workGroups"
+              ref="workGroups"
+              @selected_work_group_changed="selectedWorkGroupChanged"
             />
             <!-- <v-combobox v-model="work_groups" :items="items" label="گروه های کاری" multiple></v-combobox> -->
           </v-col>
@@ -147,6 +148,7 @@
           >ذخیره</v-btn>
 
           <v-btn color="primary" class="mr-4" @click.prevent="search" type="button">جستجو</v-btn>
+          <v-btn color="warning" @click="resetFormData">پاک کردن فیلد ها</v-btn>
         </div>
       </v-card-actions>
     </v-card>
@@ -170,7 +172,7 @@
         </v-list>
       </v-menu>
       <v-data-table
-        class="mt-5"
+        class="mt-5 c-rtl"
         v-model="selected"
         :headers="headers"
         :items="advertises"
@@ -180,7 +182,7 @@
         show-select
       >
         <template v-slot:item.actions="{ item }">
-          <v-icon small class="mr-2" @click="showAsEditFile(item)">mdi-pencil</v-icon>
+          <v-icon small class="mr-2" @click="turnToEditMode(item)">mdi-pencil</v-icon>
           <v-icon small @click="showItem(item)">mdi-eye</v-icon>
         </template>
         <template v-slot:no-data>
@@ -304,7 +306,7 @@
                 <div
                   v-for="workGroup in singleAdvertise.work_groups"
                   :key="workGroup.id"
-                >{{workGroup.name}}</div>
+                >{{workGroup.title}}</div>
               </li>
               <li>
                 <div
@@ -346,9 +348,20 @@
 </template>
 
 <script>
+import searchOnWorkGroupsMixins from "~/mixins.js/searchOnWorkGroupsMixins.js";
+import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 export default {
-  created() {},
+  mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
+  computed: {
+    formDataType() {
+      return this.formData.type;
+    },
+  },
   watch: {
+    formDataType() {
+      this.filters.type = this.formData.type;
+      this.workGroupSearch();
+    },
     options: {
       handler() {
         this.getDataFromApi().then((data) => {
@@ -363,7 +376,6 @@ export default {
     excel_file: "",
     options: {},
     meta: [],
-    pagination: [],
     loading: true,
     menu: false,
     wgDialog: false,
@@ -373,13 +385,17 @@ export default {
       type: "",
       status: "",
       provinces: [],
+      work_groups: [],
       title: "",
       invitation_code: "",
       resource: "",
       adinviter_title: "",
       is_nerve_center: "",
       invitation_date: "",
-      work_groups: [],
+      submit_date: "",
+      receipt_date: "",
+      start_date: "",
+      free_date: "",
     },
     items: ["Programming", "Design", "Vue", "Vuetify"],
 
@@ -437,7 +453,6 @@ export default {
       { text: "تاریخ انتشار", value: "created_at" },
       { text: "آگهی گذار", value: "adinviter_title" },
       { text: " تاریخ فراخوان", value: "invitation_date" },
-      // { text: "دسته های کاری", value: "work_groups" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     advertises: [],
@@ -456,27 +471,59 @@ export default {
   }),
 
   methods: {
-    editItem() {
+    async editItem() {
       //send data to database
-      this.$axios.$put("advertise/update/" + this.advertiseId, this.formData);
+      await this.$axios.$put(
+        "advertise/update/" + this.advertiseId,
+        this.formData
+      );
       this.backToShowMode();
-      // this.$refs.form.resetValidation();
-      // this.editMode = false;
-      // this.advertiseId = ''
+      this.resetFormData();
+      this.editMode = false;
     },
     backToShowMode() {
-      this.formData = [];
-      this.$refs.form.resetValidation();
+      this.resetFormData();
       this.editMode = false;
       this.advertiseId = "";
       this.getDataFromApi();
     },
-    showAsEditFile(item) {
+    resetFormData() {
+      this.advertiseId = "";
+      this.clearSelectedWorkGroups();
+      this.formData = {
+        work_groups: [],
+        description: "",
+        type: "",
+        status: "",
+        provinces: [],
+        title: "",
+        invitation_code: "",
+        resource: "",
+        adinviter_title: "",
+        is_nerve_center: "",
+        invitation_date: "",
+        submit_date: "",
+        receipt_date: "",
+        start_date: "",
+        free_date: "",
+      };
+    },
+    turnToEditMode(item) {
+      this.resetFormData();
       this.editMode = true;
       this.advertiseId = item.id;
-      this.$axios.$get("advertise/show/" + item.id).then((response) => {
-        this.formData = response.data;
+      this.$axios.$get("advertise/show/" + item.id).then(({ data }) => {
+        this.formData = JSON.parse(JSON.stringify(data));
+        this.fillSelected();
       });
+    },
+    showItem(item) {
+      this.showItemDialog = true;
+      this.callShowAdvertise("singleAdvertise", item);
+    },
+    async callShowAdvertise(fillableValue, item) {
+      let something = await this.$axios.$get("advertise/show/" + item.id);
+      this[fillableValue] = something.data;
     },
     async onFileChange(e) {
       let formData = new FormData();
@@ -486,10 +533,6 @@ export default {
       await this.$axios
         .post("advertise/excel/create", formData)
         .then((response) => {});
-    },
-
-    fillSelected(data) {
-      this.formData.work_groups = data;
     },
     getDataFromApi() {
       this.loading = true;
@@ -520,7 +563,7 @@ export default {
         // do something here for show result
         this.getDataFromApi();
       });
-      // this.$refs.form.reset();
+
       // this.$refs.form.resetValidation();
       // send axios to backend and add refresh data
     },
@@ -535,12 +578,6 @@ export default {
         }
       });
       return obj;
-    },
-    showItem(item) {
-      this.showItemDialog = true;
-      this.$axios.$get("advertise/show/" + item.id).then((response) => {
-        this.singleAdvertise = response.data;
-      });
     },
     close() {
       this.singleAdvertise = "";
