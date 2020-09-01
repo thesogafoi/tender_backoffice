@@ -24,13 +24,11 @@
             <span v-if="i==1" class="headline">اصلی</span>
             <span v-if="i==2" class="headline">زیرگروه</span>
           </v-card-title>
+
           <!-- main work form -->
-          <v-form v-if="i == 1" ref="form" v-model="valid">
+          <v-form v-if="i == 1" ref="form1" v-model="valid1">
             <v-col cols="12" md="12">
               <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="12">
-              <ChooseWorkGroup :work_groups="workGroups" ref="secondaryWorkGroups" />
             </v-col>
             <v-col cols="12">
               <v-select
@@ -44,14 +42,42 @@
               ></v-select>
             </v-col>
             <v-col cols="12" sm="12">
-              <ChooseWorkGroup
+              <!-- ......... -->
+              <v-col cols="12">
+                <v-autocomplete
+                  v-model="editedItem.children"
+                  :items="$store.getters.workGroups"
+                  item-text="title"
+                  item-value="id"
+                  label="نوع دسته"
+                  multiple
+                  chips
+                >
+                  <template v-slot:item="{ parent, item }">
+                    <!--Highlight output item.name-->
+                    {{item.title}} -
+                    (
+                    <span v-if="item.type=='AUCTION'">مزایده</span>
+                    <span v-if="item.type=='TENDER'">مناقصه</span>
+                    <span v-if="item.type=='INQUIRY'">استعلام</span>
+                    <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
+                  </template>
+                </v-autocomplete>
+              </v-col>
+              <!-- ...... -->
+              <!-- <ChooseWorkGroup
                 :work_groups="workGroups"
                 @selected_work_group_changed="selectedWorkGroupChanged"
                 ref="workGroups"
-              />
+              />-->
+            </v-col>
+            <v-col cols="12" md="12">
+              <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
             </v-col>
             <v-col cols="12" sm="12">
+              {{editedItem.image}}
               <v-file-input
+                @change="onFileChange"
                 :rules="[v => !!v || 'You must agree to continue!']"
                 v-model="editedItem.image"
                 accept="image/*"
@@ -60,32 +86,62 @@
             </v-col>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" :disabled="!valid1" text @click="save">Save</v-btn>
             </v-card-actions>
           </v-form>
 
           <!-- sub works form -->
-          <v-form v-if="i == 2" ref="form" v-model="valid">
+          <v-form v-if="i == 2" ref="form2" v-model="valid2">
             <v-col cols="12" md="12">
               <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
             </v-col>
-            <v-col cols="12" sm="12">
-              <ChooseWorkGroup :work_groups="workGroups" ref="workGroups" />
+
+            <v-col cols="12">
+              <v-select
+                v-model="editedItem.type"
+                item-value="id"
+                item-text="value"
+                :items="listType"
+                :rules="[v => !!v || 'Item is required']"
+                label="نوع آگهی"
+                required
+              ></v-select>
             </v-col>
+            <!--....... -->
+            <v-col cols="12">
+              <v-autocomplete
+                v-model="editedItem.parent_id"
+                :items="$store.getters.workGroups"
+                chips
+                item-text="title"
+                item-value="id"
+                label="نوع دسته"
+              >
+                <template v-slot:item="{ parent, item }">
+                  <!--Highlight output item.name-->
+                  {{item.title}} -
+                  (
+                  <span v-if="item.type=='AUCTION'">مزایده</span>
+                  <span v-if="item.type=='TENDER'">مناقصه</span>
+                  <span v-if="item.type=='INQUIRY'">استعلام</span>
+                  <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
+                </template>
+              </v-autocomplete>
+            </v-col>
+            <!-- ......... -->
+            <!-- <v-col cols="12" sm="12">
+              <ChooseWorkGroup :work_groups="workGroups" ref="workGroups" />
+            </v-col>-->
             <v-col cols="12" sm="12">
               <v-textarea v-model="editedItem.discription" label="توضیحات"></v-textarea>
             </v-col>
-            <v-col cols="12" sm="12">
-              <v-file-input
-                :rules="[v => !!v || 'You must agree to continue!']"
-                v-model="editedItem.image"
-                accept="image/*"
-                label="File input"
-              ></v-file-input>
+            <v-col cols="12" md="12">
+              <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
             </v-col>
+
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" :disabled="!valid2" text @click="save">Save</v-btn>
             </v-card-actions>
           </v-form>
         </v-tab-item>
@@ -123,6 +179,7 @@
         ></v-select>
       </v-col>
     </v-row>
+    <!-- start table -->
     <v-data-table
       :headers="headers"
       :items="workGroups"
@@ -201,12 +258,23 @@ import searchOnWorkGroupsMixins from "~/mixins.js/searchOnWorkGroupsMixins.js";
 import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 export default {
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
+
   methods: {
     primarySelected() {},
     secondarySelected() {},
     openDialog(item) {
       this.dialog = true;
       this.editedItem = item;
+      if (item.parent_id == null) {
+        this.editedItem.children = this.$store.getters.workGroups.filter(
+          (element) => {
+            return element.parent_id == item.id;
+          }
+        );
+
+        this.editedItem.children = this.editedItem.children.map((x) => x.id);
+        console.log(this.editedItem);
+      }
     },
     openDialogSubWork(item, index) {
       console.log(item, index);
@@ -215,22 +283,27 @@ export default {
       this.editedItem.subWorks = item.subWorks[index];
       this.editedItem.subWorks = item.subWorks[index];
     },
+    onFileChange(e) {
+      const url = e;
+      // this.editedItem.image = URL.createObjectURL(url);
+      console.log(this.editedItem.image);
+    },
+    reloadPage() {
+      window.location.reload();
+    },
     save() {
-      var temp = this.$refs.form.validate();
-      if (temp) {
-        if (this.editedItem.subWork.length != 0) {
-          // add subWork here
-        } else {
-          // add Work group here
-        }
-      }
+      this.$axios.$post("workgroup/create", this.editedItem).then((res) => {
+        this.showSnackbar("success", "green");
+      });
+      this.reloadPage();
     },
   },
   data() {
     return {
       workGroups: [],
       selected: [],
-      valid: false,
+      valid1: false,
+      valid2: false,
       expanded: [],
       dialog: false,
       listType: [
@@ -267,9 +340,11 @@ export default {
         title: "",
         imageUrl: "",
         image: null,
-        subWorks: [],
         type: "",
         discription: "",
+        priorty: 1,
+        children: [],
+        parent_id: Number,
       },
       formData: {},
       headers: [
@@ -279,7 +354,6 @@ export default {
         { text: "وضعیت", value: "status" },
         { text: "دسته ی اصلی", value: "parent_id" },
         { text: "نوع دسته", value: "type" },
-
         { text: "Tools", value: "actions" },
         { text: "", value: "data-table-expand" },
       ],
