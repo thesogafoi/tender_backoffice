@@ -240,14 +240,6 @@ export default {
     },
     save() {
       this.$axios.$post("workgroup/create", this.editedItem);
-      // var temp = this.$refs.form.validate();
-      // if (temp) {
-      //   if (this.editedItem.subWork.length != 0) {
-      //     // add subWork here
-      //   } else {
-      //     // add Work group here
-      //   }
-      // }
     },
   },
   data() {

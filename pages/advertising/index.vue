@@ -480,6 +480,7 @@ export default {
       this.backToShowMode();
       this.resetFormData();
       this.editMode = false;
+      this.showSnackbar("آگهی به روز رسانی شد", "green");
     },
     backToShowMode() {
       this.resetFormData();
@@ -522,17 +523,31 @@ export default {
       this.callShowAdvertise("singleAdvertise", item);
     },
     async callShowAdvertise(fillableValue, item) {
-      let something = await this.$axios.$get("advertise/show/" + item.id);
-      this[fillableValue] = something.data;
+      try {
+        let something = await this.$axios.$get("advertise/show/" + item.id);
+        this[fillableValue] = something.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     async onFileChange(e) {
       let formData = new FormData();
       const file = e.target.files[0];
       formData.append("excel_file", file);
       e.target.value = "";
-      await this.$axios
-        .post("advertise/excel/create", formData)
-        .then((response) => {});
+      try {
+        await this.$axios
+          .$post("advertise/excel/create", formData)
+          .then((response) => {
+            this.showSnackbar("آگهی های اکسل با موفقیت اضافه شدند", "green");
+          });
+      } catch (error) {
+        Object.values(this.$store.getters["errorHandling/errors"]).map(
+          (error) => {
+            this.showSnackbar(error[0], "red");
+          }
+        );
+      }
     },
     getDataFromApi() {
       this.loading = true;
@@ -559,11 +574,24 @@ export default {
     },
     sendData() {
       this.$refs.form.validate();
-      this.$axios.$post("advertise/create", this.formData).then((response) => {
-        // do something here for show result
-        this.getDataFromApi();
-      });
-
+      try {
+        this.$axios
+          .$post("advertise/create", this.formData)
+          .then((response) => {
+            this.resetFormData();
+            this.showSnackbar("آگهی با موفقیت اضافه شد", "green");
+            this.getDataFromApi();
+          })
+          .catch((error) => {
+            Object.values(this.$store.getters["errorHandling/errors"]).map(
+              (error) => {
+                this.showSnackbar(error[0], "red");
+              }
+            );
+          });
+      } catch (error) {
+        this.showSnackbar("فیلد ها را به درستی کامل کنید", "red");
+      }
       // this.$refs.form.resetValidation();
       // send axios to backend and add refresh data
     },

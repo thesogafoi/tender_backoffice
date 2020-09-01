@@ -52,17 +52,7 @@
 
 <script>
 export default {
-  methods: {
-    success() {
-      this.showSnackbar("success", "green");
-    },
-    warning() {
-      this.showSnackbar("warning", "yellow");
-    },
-    error() {
-      this.showSnackbar("error", "red");
-    },
-  },
+  methods: {},
 
   data() {
     return {
