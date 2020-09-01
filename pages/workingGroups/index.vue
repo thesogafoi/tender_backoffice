@@ -193,7 +193,7 @@
         <v-toolbar flat>
           <v-toolbar-title>Expandable Table</v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color="primary" dark class="mb-2" @click="dialog = true">New Item</v-btn>
+          <v-btn color="primary" dark class="mb-2" @click="openAdd">New Item</v-btn>
           <v-btn color="primary" dark class="mb-2" @click="workGroupSearch">جستجو</v-btn>
           <v-btn
             color="warning"
@@ -262,7 +262,12 @@ export default {
   methods: {
     primarySelected() {},
     secondarySelected() {},
+    openAdd() {
+      this.dialog = true;
+      this.editMode = false;
+    },
     openDialog(item) {
+      this.editMode = true;
       this.dialog = true;
       this.editedItem = item;
       if (item.parent_id == null) {
@@ -300,6 +305,7 @@ export default {
   },
   data() {
     return {
+      editMode: true,
       workGroups: [],
       selected: [],
       valid1: false,
