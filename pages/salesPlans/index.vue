@@ -176,7 +176,7 @@ export default {
         // this.desserts.push(this.editedItem);
         return new Promise((resolve, reject) => {
           this.$axios
-            .$post("subscription/create", this.editedItem)
+            .$post("subscription", this.editedItem)
             .then((response) => {
               console.log(response);
             });

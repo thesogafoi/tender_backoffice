@@ -1,12 +1,12 @@
 export default {
     methods: {
-        clearSelectedWorkGroups() {
-            this.$refs.workGroups.selected = [];
+        clearSelectedWorkGroups(ref) {
+            this.$refs[ref].selected = [];
         },
-        fillSelected(nameOfForm) {
-            this.clearSelectedWorkGroups();
+        fillSelected(nameOfForm, ref) {
+            this.clearSelectedWorkGroups(ref);
             this[nameOfForm].work_groups.map((newData) => {
-                this.$refs.workGroups.selected.push(newData.id);
+                this.$refs[ref].selected.push(newData.id);
             });
         },
         selectedWorkGroupChanged(data) {

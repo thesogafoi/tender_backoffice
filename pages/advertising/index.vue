@@ -98,6 +98,7 @@
             <ChooseWorkGroup
               :work_groups="workGroups"
               ref="workGroups"
+              :multiple="true"
               @selected_work_group_changed="selectedWorkGroupChanged"
             />
             <!-- <v-combobox v-model="work_groups" :items="items" label="گروه های کاری" multiple></v-combobox> -->
@@ -488,7 +489,7 @@ export default {
     },
     resetFormData() {
       this.advertiseId = "";
-      this.clearSelectedWorkGroups();
+      this.clearSelectedWorkGroups("workGroups");
       this.formData = {
         work_groups: [],
         description: "",
@@ -513,7 +514,7 @@ export default {
       this.advertiseId = item.id;
       this.$axios.$get("advertise/show/" + item.id).then(({ data }) => {
         this.formData = JSON.parse(JSON.stringify(data));
-        this.fillSelected("formData");
+        this.fillSelected("formData", "workGroups");
       });
     },
     showItem(item) {

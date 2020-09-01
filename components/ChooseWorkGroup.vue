@@ -8,7 +8,7 @@
       label="Select"
       item-text="title"
       item-value="id"
-      multiple
+      :multiple="multiple"
     >
       <template v-slot:item="{ parent, item }">
         <!--Highlight output item.name-->
@@ -35,7 +35,7 @@
 
 <script>
 export default {
-  props: ["work_groups"],
+  props: ["work_groups", "multiple"],
   data() {
     return {
       selected: [],
@@ -44,6 +44,7 @@ export default {
     };
   },
   created() {
+    console.log(this.multiple);
     this.workGroups = this.work_groups;
   },
   watch: {

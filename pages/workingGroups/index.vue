@@ -16,8 +16,8 @@
       >
         <v-tabs-slider></v-tabs-slider>
         <v-tab v-for="i in tabs" :key="i" :href="`#tab-${i}`">
-          <div v-if="i == 1" @click="primarySelected">اصلی</div>
-          <div v-if="i == 2" @click="secondarySelected">زیرگروه</div>
+          <div v-if="i == 1">اصلی</div>
+          <div v-if="i == 2">زیرگروه</div>
         </v-tab>
         <v-tab-item v-for="i in tabs" :key="i" :value="'tab-' + i">
           <v-card-title>
@@ -26,7 +26,7 @@
           </v-card-title>
 
           <!-- main work form -->
-          <v-form v-if="i == 1" ref="form1" v-model="valid1">
+          <v-form v-if="i == 1" ref="form" v-model="valid1">
             <v-col cols="12" md="12">
               <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
             </v-col>
@@ -75,7 +75,6 @@
               <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
             </v-col>
             <v-col cols="12" sm="12">
-              {{editedItem.image}}
               <v-file-input
                 @change="onFileChange"
                 :rules="[v => !!v || 'You must agree to continue!']"
@@ -91,7 +90,7 @@
           </v-form>
 
           <!-- sub works form -->
-          <v-form v-if="i == 2" ref="form2" v-model="valid2">
+          <v-form v-if="i == 2" ref="form" v-model="valid2">
             <v-col cols="12" md="12">
               <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
             </v-col>
@@ -149,6 +148,14 @@
     </v-dialog>
     <!-- table -->
     <v-row>
+      <v-row class="c-header c-rtl">
+        <v-col cols="2">
+          <v-card-title>آگهی</v-card-title>
+        </v-col>
+        <v-col cols="5">
+          <input type="file" @change="onFileChange" class="button-uploader ml-5" />
+        </v-col>
+      </v-row>
       <v-col cols="4" class="c-rtl">
         <v-text-field v-model="filters.title" label="عنوان آگهی"></v-text-field>
       </v-col>
@@ -219,7 +226,7 @@
         <span v-if="item.status==1">انتشار یافته</span>
       </template>
       <template v-slot:item.parent_id="{ item }">
-        <span v-if="item.parent_id==null">سر گروه</span>
+        <span v-if="item.parent_id==null">اصلی</span>
         <span v-else>زیر گروه</span>
       </template>
       <template v-slot:item.actions="{ item }">
@@ -250,6 +257,10 @@
         </td>
       </template>
     </v-data-table>
+
+    <!-- edit main dialog -->
+
+    <!-- edit main dialog end -->
   </div>
 </template>
 
@@ -267,7 +278,6 @@ export default {
       this.editMode = false;
     },
     openDialog(item) {
-      this.editMode = true;
       this.dialog = true;
       this.editedItem = item;
       if (item.parent_id == null) {
@@ -282,9 +292,8 @@ export default {
       }
     },
     openDialogSubWork(item, index) {
-      console.log(item, index);
+      this.resetFormData();
       this.dialog = true;
-      console.log(item);
       this.editedItem.subWorks = item.subWorks[index];
       this.editedItem.subWorks = item.subWorks[index];
     },
@@ -301,12 +310,16 @@ export default {
         this.showSnackbar("success", "green");
       });
       this.reloadPage();
+      this.$refs.form.reset();
+      this.$refs.form.resetValidation();
     },
   },
   data() {
     return {
+      editMainDialog: false,
       editMode: true,
       workGroups: [],
+      excel_file: "",
       selected: [],
       valid1: false,
       valid2: false,
@@ -352,7 +365,6 @@ export default {
         children: [],
         parent_id: Number,
       },
-      formData: {},
       headers: [
         { text: "عکس", value: "image" },
         { text: "نام", value: "title" },
