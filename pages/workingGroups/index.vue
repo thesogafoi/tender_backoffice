@@ -223,40 +223,18 @@
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" :disabled="!valid1" text @click="save">Save</v-btn>
+                <v-btn color="blue darken-1" :disabled="!valid1" text @click="update">Update</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
         </div>
         <div v-else>
           <v-row class="c-header c-rtl">
-            <v-col cols="12">
-              <v-autocomplete
-                v-model="editedItem.parent_id"
-                :items="$store.getters.workGroups"
-                chips
-                item-text="title"
-                item-value="id"
-                label="نوع دسته"
-              >
-                <template v-slot:item="{ parent, item }">
-                  <!--Highlight output item.name-->
-                  {{item.title}} -
-                  (
-                  <span v-if="item.type=='AUCTION'">مزایده</span>
-                  <span v-if="item.type=='TENDER'">مناقصه</span>
-                  <span v-if="item.type=='INQUIRY'">استعلام</span>
-                  <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
-                </template>
-              </v-autocomplete>
-            </v-col>
-            <!-- ......... -->
-            <!-- <v-col cols="12" sm="12">
-              <ChooseWorkGroup :work_groups="workGroups" ref="workGroups" />
-            </v-col>-->
-            <v-col cols="12" md="12">
-              <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
-            </v-col>
+            <v-row class="c-header c-rtl">
+              <v-col cols="12">
+                <v-card-title>زیر گروه</v-card-title>
+              </v-col>
+            </v-row>
           </v-row>
           <v-container fluid>
             <v-form ref="form3" v-model="valid2">
@@ -312,7 +290,7 @@
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" :disabled="!valid2" text @click="save">Save</v-btn>
+                <v-btn color="blue darken-1" :disabled="!valid2" text @click="update">Update</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -507,7 +485,6 @@ export default {
       this.editedItem.subWorks = item.subWorks[index];
       this.editedItem.subWorks = item.subWorks[index];
     },
-
     resetFormData() {
       this.editedItem = {
         title: "",
@@ -531,16 +508,30 @@ export default {
     },
     save() {
       this.$axios.$post("workgroup/create", this.editedItem).then((res) => {
-        this.showSnackbar("success", "green");
+        this.showSnackbar("گروه کاری با موفقیت اضافه شد", "green");
         this.resetFormData();
         this.refreshWorkGroup();
-        this.workGroupSearch();
+        setTimeout(() => {
+          this.workGroupSearch();
+        }, 1500);
       });
-
       this.dialog = false;
       this.dialogEdit = false;
-
       // this.$refs.form.resetValidation();
+    },
+    async update() {
+      this.$axios
+        .$put("workgroup/" + this.editedItem.id, this.editedItem)
+        .then((res) => {
+          this.showSnackbar("گروه کاری با موفقیت تغییر یافت", "green");
+          this.resetFormData();
+          this.refreshWorkGroup();
+          setTimeout(() => {
+            this.workGroupSearch();
+          }, 1500);
+        });
+      this.dialog = false;
+      this.dialogEdit = false;
     },
     async onExcelFileChange(e) {
       let formData = new FormData();
@@ -551,11 +542,15 @@ export default {
         await this.$axios
           .$post("workgroup/excel/create", formData)
           .then((response) => {
-            this.refreshWorkGroup();
             this.showSnackbar(
               "دسته های کاری اکسل با موفقیت اضافه شدند",
               "green"
             );
+            this.resetFormData();
+            this.refreshWorkGroup();
+            setTimeout(() => {
+              this.workGroupSearch();
+            }, 1500);
           });
       } catch (error) {
         Object.values(this.$store.getters["errorHandling/errors"]).map(
@@ -564,7 +559,6 @@ export default {
           }
         );
       }
-      this.workGroupSearch();
     },
   },
   data() {

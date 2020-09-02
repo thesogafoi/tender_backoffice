@@ -164,17 +164,6 @@
     </v-card>
     <v-card class="table">
       <v-menu bottom origin="center center" transition="scale-transition">
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            class="mt-5 ml-5"
-            color="primary "
-            v-model="menu"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >Scale Transition</v-btn>
-        </template>
-
         <v-list>
           <v-list-item v-for="(item, i) in items" :key="i" @click="buttonActions(item.title)">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -486,10 +475,15 @@ export default {
         "advertise/update/" + this.advertiseId,
         this.formData
       );
+
       this.backToShowMode();
-      this.resetFormData();
+
       this.editMode = false;
       this.showSnackbar("آگهی به روز رسانی شد", "green");
+      setTimeout(() => {
+        this.resetFormData();
+        this.search();
+      }, 1500);
     },
     backToShowMode() {
       this.resetFormData();
@@ -548,6 +542,10 @@ export default {
         await this.$axios
           .$post("advertise/excel/create", formData)
           .then((response) => {
+            setTimeout(() => {
+              this.resetFormData();
+              this.search();
+            }, 1500);
             this.showSnackbar("آگهی های اکسل با موفقیت اضافه شدند", "green");
           });
       } catch (error) {
@@ -587,9 +585,11 @@ export default {
         this.$axios
           .$post("advertise/create", this.formData)
           .then((response) => {
-            this.resetFormData();
             this.showSnackbar("آگهی با موفقیت اضافه شد", "green");
-            this.getDataFromApi();
+            setTimeout(() => {
+              this.resetFormData();
+              this.search();
+            }, 1500);
           })
           .catch((error) => {
             Object.values(this.$store.getters["errorHandling/errors"]).map(
