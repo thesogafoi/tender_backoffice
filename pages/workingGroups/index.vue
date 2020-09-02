@@ -26,29 +26,8 @@
           </v-card-title>
 
           <!-- main work form -->
-<<<<<<< HEAD
-          <v-form v-if="i == 1" ref="form1" v-model="valid1">
-            <v-col cols="12" md="12">
-              <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
-            </v-col>
-
-            <v-col cols="12">
-              <v-select
-                v-model="editedItem.type"
-                item-value="id"
-                item-text="value"
-                :items="listType"
-                :rules="[v => !!v || 'Item is required']"
-                label="نوع آگهی"
-                required
-              ></v-select>
-            </v-col>
-
-            <v-col cols="12" sm="12">
-              <!-- ......... -->
-=======
           <v-container fluid>
-            <v-form v-if="i == 1" ref="form" v-model="valid1">
+            <v-form v-if="i == 1" ref="form4" v-model="valid1">
               <v-col cols="12" md="12">
                 <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
               </v-col>
@@ -73,7 +52,6 @@
                   required
                 ></v-select>
               </v-col>
->>>>>>> 78f4ca9e22d9f35c86cee92c8dccb76e9254356d
               <v-col cols="12">
                 <v-autocomplete
                   v-model="editedItem.children"
@@ -95,34 +73,6 @@
                   </template>
                 </v-autocomplete>
               </v-col>
-<<<<<<< HEAD
-              <!-- ...... -->
-              <!-- <ChooseWorkGroup
-                :work_groups="workGroups"
-                @selected_work_group_changed="selectedWorkGroupChanged"
-                ref="workGroups"
-              />-->
-            </v-col>
-            <v-col cols="12" md="12">
-              <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
-            </v-col>
-
-            <v-col cols="12" sm="12">
-              {{editedItem.image}}
-              <v-file-input
-                @change="onFileChange"
-                v-model="editedItem.image"
-                accept="image/*"
-                label="File input"
-              ></v-file-input>
-            </v-col>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" :disabled="!valid1" text @click="save">Save</v-btn>
-            </v-card-actions>
-          </v-form>
-=======
->>>>>>> 78f4ca9e22d9f35c86cee92c8dccb76e9254356d
 
               <v-col cols="12" md="12">
                 <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
@@ -142,14 +92,8 @@
             </v-form>
           </v-container>
           <!-- sub works form -->
-<<<<<<< HEAD
-          <v-form v-if="i == 2" ref="form2" v-model="valid2">
-            <v-col cols="12" md="12">
-              <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
-            </v-col>
-=======
           <v-container fluid>
-            <v-form v-if="i == 2" ref="form" v-model="valid2">
+            <v-form v-if="i == 2" ref="form1" v-model="valid2">
               <v-col cols="12" md="12">
                 <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
               </v-col>
@@ -200,12 +144,6 @@
               <v-col cols="12" md="12">
                 <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
               </v-col>
-
-              <v-col cols="12" sm="12">
-                <v-textarea v-model="editedItem.discription" label="توضیحات"></v-textarea>
-              </v-col>
->>>>>>> 78f4ca9e22d9f35c86cee92c8dccb76e9254356d
-
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" :disabled="!valid2" text @click="save">Save</v-btn>
@@ -225,7 +163,7 @@
             </v-col>
           </v-row>
           <v-container fluid>
-            <v-form ref="form" v-model="valid1">
+            <v-form ref="form2" v-model="valid1">
               <v-col cols="12" md="12">
                 <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
               </v-col>
@@ -293,7 +231,6 @@
         <div v-else>
           <v-row class="c-header c-rtl">
             <v-col cols="12">
-<<<<<<< HEAD
               <v-autocomplete
                 v-model="editedItem.parent_id"
                 :items="$store.getters.workGroups"
@@ -317,18 +254,12 @@
             <!-- <v-col cols="12" sm="12">
               <ChooseWorkGroup :work_groups="workGroups" ref="workGroups" />
             </v-col>-->
-            <v-col cols="12" sm="12">
-              <v-textarea v-model="editedItem.discription" label="توضیحات"></v-textarea>
-            </v-col>
             <v-col cols="12" md="12">
               <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
-=======
-              <v-card-title>زیرگروه</v-card-title>
->>>>>>> 78f4ca9e22d9f35c86cee92c8dccb76e9254356d
             </v-col>
           </v-row>
           <v-container fluid>
-            <v-form ref="form" v-model="valid2">
+            <v-form ref="form3" v-model="valid2">
               <v-col cols="12" md="12">
                 <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
               </v-col>
@@ -379,11 +310,6 @@
               <v-col cols="12" md="12">
                 <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
               </v-col>
-
-              <v-col cols="12" sm="12">
-                <v-textarea v-model="editedItem.discription" label="توضیحات"></v-textarea>
-              </v-col>
-
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" :disabled="!valid2" text @click="save">Save</v-btn>
@@ -406,7 +332,7 @@
             type="file"
             name="uploadfile"
             id="img"
-            @change="onFileChange"
+            @change="onExcelFileChange"
             style="display:none;"
           />
           <label for="img" class="upLoader">ورود اطلاعت با اکسل</label>
@@ -525,6 +451,9 @@ import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
 
 export default {
+  mounted() {
+    console.log(this.$refs);
+  },
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
   components: {
     deleteConfirmationDialog,
@@ -541,20 +470,16 @@ export default {
     },
   },
   methods: {
-    deleteItem() {
-      console.log("delete");
-      // return this.$axios
-      //   .$delete(this.$store.state.baseUrl + `specification_groups/${id}`)
-      //   .then((res) => {
-      //     this.$store.state.repositories.groups.splice(index, 1);
-
-      //     //delete Successful snackbar
-      //     this.showSnackbar("The group was deleted", "green");
-      //   })
-      //   .catch((e) => {
-      //     //delete Failed snackbar
-      //     this.showSnackbar(" The group was not deleted", "red");
-      //   });
+    deleteItem(item) {
+      return this.$axios
+        .$delete("workgroup/delete/" + item.id)
+        .then((res) => {
+          this.workGroups.splice(this.workGroups.indexOf(item), 1);
+          this.showSnackbar("دسته ی کاری با موفقیت حذف شد", "green");
+        })
+        .catch((e) => {
+          this.showSnackbar("مشکلی پیش آمده دوباره تلاش کنید ", "red");
+        });
     },
     primarySelected() {},
     secondarySelected() {},
@@ -582,21 +507,20 @@ export default {
       this.editedItem.subWorks = item.subWorks[index];
       this.editedItem.subWorks = item.subWorks[index];
     },
-<<<<<<< HEAD
 
     resetFormData() {
       this.editedItem = {
         title: "",
         imageUrl: "",
         image: null,
-        subWorks: [],
         type: "",
         discription: "",
+        priorty: 1,
+        children: [],
+        parent_id: Number,
+        status: 0,
       };
     },
-
-=======
->>>>>>> 78f4ca9e22d9f35c86cee92c8dccb76e9254356d
     onFileChange(e) {
       const url = e;
       // this.editedItem.image = URL.createObjectURL(url);
@@ -608,17 +532,39 @@ export default {
     save() {
       this.$axios.$post("workgroup/create", this.editedItem).then((res) => {
         this.showSnackbar("success", "green");
+        this.resetFormData();
+        this.refreshWorkGroup();
+        this.workGroupSearch();
       });
-<<<<<<< HEAD
-      this.reloadPage();
-=======
-      this.$store.dispatch("refreshWorkGroups");
+
       this.dialog = false;
       this.dialogEdit = false;
-      // this.workGroups = this.$store.getters.workGroups;
-      // this.$refs.form.reset();
+
       // this.$refs.form.resetValidation();
->>>>>>> 78f4ca9e22d9f35c86cee92c8dccb76e9254356d
+    },
+    async onExcelFileChange(e) {
+      let formData = new FormData();
+      const file = e.target.files[0];
+      formData.append("excel_file", file);
+      e.target.value = "";
+      try {
+        await this.$axios
+          .$post("workgroup/excel/create", formData)
+          .then((response) => {
+            this.refreshWorkGroup();
+            this.showSnackbar(
+              "دسته های کاری اکسل با موفقیت اضافه شدند",
+              "green"
+            );
+          });
+      } catch (error) {
+        Object.values(this.$store.getters["errorHandling/errors"]).map(
+          (error) => {
+            this.showSnackbar(error[0], "red");
+          }
+        );
+      }
+      this.workGroupSearch();
     },
   },
   data() {

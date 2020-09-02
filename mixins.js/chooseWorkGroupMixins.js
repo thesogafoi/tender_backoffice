@@ -12,5 +12,9 @@ export default {
         selectedWorkGroupChanged(data) {
             this.formData.work_groups = data;
         },
+        refreshWorkGroup() {
+            this.$store.dispatch("refreshWorkGroups");
+            this.workGroups = this.$store.getters.workGroups;
+        }
     }
 }
