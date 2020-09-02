@@ -307,15 +307,23 @@
       </v-card>
     </v-dialog>
     <!-- table -->
-    <v-row>
-      <v-row class="c-header c-rtl">
-        <v-col cols="2">
-          <v-card-title>آگهی</v-card-title>
+    <v-card>
+      <v-toolbar :color="$store.state.toolbarColor" dark flat>
+        <v-toolbar-title>آگهی</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-col cols="5" style="    text-align: left;">
+          <!-- <input type="file" @change="onFileChange" class="button-uploader ml-5" /> -->
+
+          <input
+            type="file"
+            name="uploadfile"
+            id="img"
+            @change="onFileChange"
+            style="display:none;"
+          />
+          <label for="img" class="upLoader">ورود اطلاعت با اکسل</label>
         </v-col>
-        <v-col cols="5">
-          <input type="file" @change="onFileChange" class="button-uploader ml-5" />
-        </v-col>
-      </v-row>
+      </v-toolbar>
       <v-container>
         <v-row>
           <v-col cols="6" class="c-rtl">
@@ -348,47 +356,51 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-row>
-    <!-- start table -->
-    <v-data-table :headers="headers" :items="workGroups" item-key="name" class="elevation-1">
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title>Expandable Table</v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" dark class="mb-2" @click="openAdd">New Item</v-btn>
-          <v-btn color="primary" dark class="mb-2" @click="workGroupSearch">جستجو</v-btn>
-          <v-btn
-            color="warning"
-            dark
-            class="mb-2"
-            @click="resetWorkGroupSearchForm"
-          >پاک کردن فیلد ها</v-btn>
-        </v-toolbar>
-      </template>
-      <template v-slot:item.image="{ item }">
-        <v-avatar size="36px">
-          <img :src="item.image" alt="John" />
-        </v-avatar>
-      </template>
-      <template v-slot:item.type="{ item }">
-        <span v-if="item.type=='AUCTION'">مزایده</span>
-        <span v-if="item.type=='TENDER'">مناقصه</span>
-        <span v-if="item.type=='INQUIRY'">استعلام</span>
-      </template>
+      <!-- start table -->
+      <v-data-table :headers="headers" :items="workGroups" item-key="name" class="elevation-1">
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>لیست گروه های کاری</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" dark class="mb-2" @click="openAdd">مورد جدید</v-btn>
+            <v-btn color="primary" dark class="mr-2 ml-2 mb-2" @click="workGroupSearch">جستجو</v-btn>
+            <v-btn
+              color="warning"
+              dark
+              class="mb-2"
+              @click="resetWorkGroupSearchForm"
+            >پاک کردن فیلد ها</v-btn>
+          </v-toolbar>
+        </template>
+        <template v-slot:item.image="{ item }">
+          <v-avatar size="36px">
+            <img :src="item.image" alt="John" />
+          </v-avatar>
+        </template>
+        <template v-slot:item.type="{ item }">
+          <span v-if="item.type=='AUCTION'">مزایده</span>
+          <span v-if="item.type=='TENDER'">مناقصه</span>
+          <span v-if="item.type=='INQUIRY'">استعلام</span>
+        </template>
 
-      <template v-slot:item.status="{ item }">
-        <span v-if="item.status==0">در دست بررسی</span>
-        <span v-if="item.status==1">انتشار یافته</span>
-      </template>
-      <template v-slot:item.parent_id="{ item }">
-        <span v-if="item.parent_id==null">اصلی</span>
-        <span v-else>زیر گروه</span>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="openDialog(item)">mdi-pencil</v-icon>
-        <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-      </template>
-      <!-- <template v-slot:expanded-item="{ headers, item }">
+        <template v-slot:item.status="{ item }">
+          <span v-if="item.status==0">در دست بررسی</span>
+          <span v-if="item.status==1">انتشار یافته</span>
+        </template>
+        <template v-slot:item.parent_id="{ item }">
+          <span v-if="item.parent_id==null">اصلی</span>
+          <span v-else>زیر گروه</span>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <div class="buttons-container">
+            <v-btn icon color="primary" @click="openDialog(item)">
+              <v-icon>mdi-square-edit-outline</v-icon>
+            </v-btn>
+
+            <deleteConfirmationDialog @delete="deleteItem(item)" />
+          </div>
+        </template>
+        <!-- <template v-slot:expanded-item="{ headers, item }">
         <td style="    padding: 0;" :colspan="headers.length">
           <v-simple-table>
             <template v-slot:default>
@@ -410,9 +422,9 @@
             </template>
           </v-simple-table>
         </td>
-      </template>-->
-    </v-data-table>
-
+        </template>-->
+      </v-data-table>
+    </v-card>
     <!-- edit main dialog -->
 
     <!-- edit main dialog end -->
@@ -422,8 +434,13 @@
 <script>
 import searchOnWorkGroupsMixins from "~/mixins.js/searchOnWorkGroupsMixins.js";
 import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
+import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
+
 export default {
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
+  components: {
+    deleteConfirmationDialog,
+  },
   computed: {
     editedItemType() {
       return this.editedItem.type;
@@ -436,6 +453,21 @@ export default {
     },
   },
   methods: {
+    deleteItem() {
+      console.log("delete");
+      // return this.$axios
+      //   .$delete(this.$store.state.baseUrl + `specification_groups/${id}`)
+      //   .then((res) => {
+      //     this.$store.state.repositories.groups.splice(index, 1);
+
+      //     //delete Successful snackbar
+      //     this.showSnackbar("The group was deleted", "green");
+      //   })
+      //   .catch((e) => {
+      //     //delete Failed snackbar
+      //     this.showSnackbar(" The group was not deleted", "red");
+      //   });
+    },
     primarySelected() {},
     secondarySelected() {},
     openAdd() {
@@ -546,14 +578,14 @@ export default {
         status: 0,
       },
       headers: [
-        { text: "عکس", value: "image" },
-        { text: "نام", value: "title" },
-        { text: "اولویت", value: "priorty" },
-        { text: "وضعیت", value: "status" },
+        { text: "عکس", value: "image", sortable: false },
+        { text: "نام", value: "title", sortable: false, width: "30%" },
+        { text: "اولویت", value: "priorty", sortable: false },
+        { text: "وضعیت", value: "status", sortable: false },
         { text: "دسته ی اصلی", value: "parent_id" },
-        { text: "نوع دسته", value: "type" },
-        { text: "Tools", value: "actions" },
-        { text: "", value: "data-table-expand" },
+        { text: "نوع دسته", value: "type", sortable: true },
+        { text: "", value: "data-table-expand", sortable: false },
+        { text: "Tools", value: "actions", sortable: false, align: "center" },
       ],
 
       works: [
@@ -579,3 +611,22 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.upLoader {
+  border: #fff solid 1px;
+  padding: 9px;
+  transition: background-color 500ms ease;
+  transition: color 500ms ease;
+
+  &:hover {
+    background-color: #fff;
+    color: #000;
+  }
+}
+</style>
