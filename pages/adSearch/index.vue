@@ -146,6 +146,7 @@
 
     <v-data-table
       class="mt-5"
+      @click:row="handleClick"
       v-model="selected"
       :headers="headers"
       :items="advertises"
@@ -167,10 +168,124 @@
         <v-card-title>
           <span class="headline"></span>
         </v-card-title>
-
         <v-card-text>
           <v-container>
-            <ul></ul>
+            <ul>
+              <li>
+                <div>
+                  <span>عنوان آگهی گذار</span>
+                  <span>{{singleAdvertise.adinviter_title}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ انتشار :</span>
+                  <span>{{singleAdvertise.created_at}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>شرح :</span>
+                  <span>{{singleAdvertise.description}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ بازگشایی :</span>
+                  <span>{{singleAdvertise.free_date}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>آی دی :</span>
+                  <span>{{singleAdvertise.id}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>عکس :‌</span>
+                  <span>{{singleAdvertise.image}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>ستاد :</span>
+                  <span>{{singleAdvertise.is_nerve_center}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>لینک :</span>
+                  <span>{{singleAdvertise.link}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ دریافت :</span>
+                  <span>{{singleAdvertise.receipt_date}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ فراخوان :</span>
+                  <span>{{singleAdvertise.invitation_date}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>منبع :‌</span>
+                  <span>{{singleAdvertise.resource}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ شروع :‌</span>
+                  <span>{{singleAdvertise.start_date}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>وضعیت :‌</span>
+                  <span>{{singleAdvertise.status}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>تاریخ ارسال :</span>
+                  <span>{{singleAdvertise.submit_date}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>کد آگهی :‌</span>
+                  <span>{{singleAdvertise.tender_code}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>عنوان :‌</span>
+                  <span>{{singleAdvertise.title}}</span>
+                </div>
+              </li>
+              <li>
+                <div>
+                  <span>نوع آگهی :</span>
+                  <span>{{singleAdvertise.type}}</span>
+                </div>
+              </li>
+              <li>
+                <div
+                  v-for="workGroup in singleAdvertise.work_groups"
+                  :key="workGroup.id"
+                >{{workGroup.title}}</div>
+              </li>
+              <li>
+                <div
+                  v-for="province in singleAdvertise.provinces"
+                  :key="province.id"
+                >{{province.name}}</div>
+              </li>
+            </ul>
           </v-container>
         </v-card-text>
 
@@ -325,7 +440,11 @@ export default {
           .then((response) => {
             this.meta = response.meta;
             this.advertises = response.data;
+
             this.loading = false;
+            this.advertises.length == 0
+              ? this.showSnackbar("آگهی یافت نشد", "yellow")
+              : "";
           });
       });
     },
@@ -338,7 +457,7 @@ export default {
       this.getDataFromApi();
     },
     resetFormData() {
-      this.clearSelectedWorkGroups();
+      this.clearSelectedWorkGroups("workGroups");
       this.formData = {
         range_submit_date: {
           first: "",
@@ -399,6 +518,10 @@ export default {
     close() {
       this.singleAdvertise = "";
       this.showItemDialog = false;
+    },
+
+    handleClick(e) {
+      this.showItem(e);
     },
   },
 };
