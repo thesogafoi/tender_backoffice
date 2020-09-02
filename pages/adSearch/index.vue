@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-row class="c-header c-rtl">
-        <v-col cols="2">
+        <v-col cols="12">
           <v-card-title>جستجوی آگهی</v-card-title>
         </v-col>
       </v-row>
