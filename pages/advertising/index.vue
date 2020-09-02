@@ -1,14 +1,23 @@
 <template>
   <div>
     <v-card>
-      <v-row class="c-header c-rtl">
-        <v-col cols="2">
-          <v-card-title>آگهی</v-card-title>
+      <v-toolbar :color="$store.state.toolbarColor" dark flat>
+        <v-toolbar-title>آگهی</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-col cols="5" style="    text-align: left;">
+          <!-- <input type="file" @change="onFileChange" class="button-uploader ml-5" /> -->
+
+          <input
+            type="file"
+            name="uploadfile"
+            id="img"
+            @change="onFileChange"
+            style="display:none;"
+          />
+          <label for="img" class="upLoader">ورود اطلاعت با اکسل</label>
         </v-col>
-        <v-col cols="5">
-          <input type="file" @change="onFileChange" class="button-uploader ml-5" />
-        </v-col>
-      </v-row>
+      </v-toolbar>
+
       <v-form class="c-form" ref="form" v-model="valid" lazy-validation>
         <v-row class="c-rtl">
           <v-col class="c-rtl" cols="4">
@@ -633,5 +642,16 @@ export default {
 .wg-dialog {
   padding: 50px;
   width: 800px;
+}
+.upLoader {
+  border: #fff solid 1px;
+  padding: 9px;
+  transition: background-color 500ms ease;
+  transition: color 500ms ease;
+
+  &:hover {
+    background-color: #fff;
+    color: #000;
+  }
 }
 </style>

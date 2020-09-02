@@ -1,11 +1,10 @@
 <template>
   <div>
     <v-card>
-      <v-row class="c-header c-rtl">
-        <v-col cols="2">
-          <v-card-title>جستجوی آگهی</v-card-title>
-        </v-col>
-      </v-row>
+      <v-toolbar :color="$store.state.toolbarColor" dark flat>
+        <v-toolbar-title>جستجوی آگهی</v-toolbar-title>
+      </v-toolbar>
+
       <!-- <v-form class="c-form" ref="form" v-model="valid" lazy-validation> -->
       <v-form class="c-form" ref="form" lazy-validation>
         <v-row>
@@ -395,8 +394,6 @@ export default {
       { text: "تاریخ انتشار", value: "created_at" },
       { text: "آگهی گذار", value: "adinviter_title" },
       { text: " تاریخ فراخوان", value: "invitation_date" },
-      // { text: "دسته های کاری", value: "work_groups" },
-      { text: "Actions", value: "actions", sortable: false },
     ],
     advertises: [],
     editedIndex: -1,
