@@ -16,8 +16,8 @@
       >
         <v-tabs-slider></v-tabs-slider>
         <v-tab v-for="i in tabs" :key="i" :href="`#tab-${i}`">
-          <div v-if="i == 1">اصلی</div>
-          <div v-if="i == 2">زیرگروه</div>
+          <div v-if="i == 1" @click="primarySelected">اصلی</div>
+          <div v-if="i == 2" @click="secondarySelected">زیرگروه</div>
         </v-tab>
         <v-tab-item v-for="i in tabs" :key="i" :value="'tab-' + i">
           <v-card-title>
@@ -38,7 +38,7 @@
                   item-text="value"
                   :items="listType"
                   :rules="[v => !!v || 'Item is required']"
-                  label="نوع آگهی"
+                  label="نوع دسته"
                   required
                 ></v-select>
               </v-col>
@@ -48,46 +48,25 @@
                   :items="statusList"
                   item-value="id"
                   item-text="value"
-                  label="وضعیت آگهی"
+                  label="وضعیت دسته"
                   required
                 ></v-select>
-              </v-col>
-              <v-col cols="12">
-                <v-autocomplete
-                  v-model="editedItem.children"
-                  :items="$store.getters.workGroups"
-                  item-text="title"
-                  item-value="id"
-                  label="نوع دسته"
-                  multiple
-                  chips
-                >
-                  <template v-slot:item="{ parent, item }">
-                    <!--Highlight output item.name-->
-                    {{item.title}} -
-                    (
-                    <span v-if="item.type=='AUCTION'">مزایده</span>
-                    <span v-if="item.type=='TENDER'">مناقصه</span>
-                    <span v-if="item.type=='INQUIRY'">استعلام</span>
-                    <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
-                  </template>
-                </v-autocomplete>
               </v-col>
 
               <v-col cols="12" md="12">
                 <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="12">
-                <v-file-input
+                <!-- <v-file-input
                   @change="onFileChange"
                   v-model="editedItem.image"
                   accept="image/*"
                   label="File input"
-                ></v-file-input>
+                ></v-file-input>-->
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" :disabled="!valid1" text @click="save">Save</v-btn>
+                <v-btn color="blue darken-1" :disabled="!valid1" text @click="save('parent')">Save</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -105,8 +84,8 @@
                   item-text="value"
                   :items="listType"
                   :rules="[v => !!v || 'Item is required']"
-                  label="نوع آگهی"
                   required
+                  label="نوع دسته"
                 ></v-select>
               </v-col>
               <v-col class="c-rtl" cols="12">
@@ -115,19 +94,19 @@
                   :items="statusList"
                   item-value="id"
                   item-text="value"
-                  label="وضعیت آگهی"
+                  label="وضعیت دسته"
                   required
                 ></v-select>
               </v-col>
               <!--....... -->
               <v-col cols="12">
-                <v-autocomplete
+                <v-combobox
                   v-model="editedItem.parent_id"
-                  :items="$store.getters.workGroups"
+                  :items="workGroups"
                   chips
                   item-text="title"
                   item-value="id"
-                  label="نوع دسته"
+                  label="انتخاب سر گروه"
                 >
                   <template v-slot:item="{ parent, item }">
                     <!--Highlight output item.name-->
@@ -136,9 +115,9 @@
                     <span v-if="item.type=='AUCTION'">مزایده</span>
                     <span v-if="item.type=='TENDER'">مناقصه</span>
                     <span v-if="item.type=='INQUIRY'">استعلام</span>
-                    <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
+                    <span v-if="item.parent_id==null">دسته ی اصلی</span>)
                   </template>
-                </v-autocomplete>
+                </v-combobox>
               </v-col>
 
               <v-col cols="12" md="12">
@@ -146,7 +125,7 @@
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" :disabled="!valid2" text @click="save">Save</v-btn>
+                <v-btn color="blue darken-1" :disabled="!valid2" text @click="save('child')">Save</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -158,6 +137,7 @@
         <!-- main work form -->
         <div v-if="editedItem.parent_id === null">
           <v-row class="c-header c-rtl">
+            <input type="hidden" name="parent" value="false" />
             <v-col cols="12">
               <v-card-title>اصلی</v-card-title>
             </v-col>
@@ -174,7 +154,7 @@
                   item-text="value"
                   :items="listType"
                   :rules="[v => !!v || 'Item is required']"
-                  label="نوع آگهی"
+                  label="نوع دسته"
                   required
                 ></v-select>
               </v-col>
@@ -184,32 +164,10 @@
                   :items="statusList"
                   item-value="id"
                   item-text="value"
-                  label="وضعیت آگهی"
+                  label="وضعیت دسته"
                   required
                 ></v-select>
               </v-col>
-              <v-col cols="12">
-                <v-autocomplete
-                  v-model="editedItem.children"
-                  :items="$store.getters.workGroups"
-                  item-text="title"
-                  item-value="id"
-                  label="نوع دسته"
-                  multiple
-                  chips
-                >
-                  <template v-slot:item="{ parent, item }">
-                    <!--Highlight output item.name-->
-                    {{item.title}} -
-                    (
-                    <span v-if="item.type=='AUCTION'">مزایده</span>
-                    <span v-if="item.type=='TENDER'">مناقصه</span>
-                    <span v-if="item.type=='INQUIRY'">استعلام</span>
-                    <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
-                  </template>
-                </v-autocomplete>
-              </v-col>
-
               <v-col cols="12" md="12">
                 <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
               </v-col>
@@ -223,13 +181,19 @@
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" :disabled="!valid1" text @click="update">Update</v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  :disabled="!valid1"
+                  text
+                  @click="update('parent')"
+                >Update</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
         </div>
         <div v-else>
           <v-row class="c-header c-rtl">
+            <input type="hidden" name="parent" value="false" />
             <v-row class="c-header c-rtl">
               <v-col cols="12">
                 <v-card-title>زیر گروه</v-card-title>
@@ -249,7 +213,7 @@
                   item-text="value"
                   :items="listType"
                   :rules="[v => !!v || 'Item is required']"
-                  label="نوع آگهی"
+                  label="نوع دسته"
                   required
                 ></v-select>
               </v-col>
@@ -259,19 +223,19 @@
                   :items="statusList"
                   item-value="id"
                   item-text="value"
-                  label="وضعیت آگهی"
+                  label="وضعیت دسته"
                   required
                 ></v-select>
               </v-col>
               <!--....... -->
               <v-col cols="12">
-                <v-autocomplete
+                <v-combobox
                   v-model="editedItem.parent_id"
-                  :items="$store.getters.workGroups"
+                  :items="workGroups"
                   chips
                   item-text="title"
                   item-value="id"
-                  label="نوع دسته"
+                  label="انتخاب سر گروه"
                 >
                   <template v-slot:item="{ parent, item }">
                     <!--Highlight output item.name-->
@@ -280,9 +244,9 @@
                     <span v-if="item.type=='AUCTION'">مزایده</span>
                     <span v-if="item.type=='TENDER'">مناقصه</span>
                     <span v-if="item.type=='INQUIRY'">استعلام</span>
-                    <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
+                    <span v-if="item.parent_id==null">دسته ی اصلی</span>)
                   </template>
-                </v-autocomplete>
+                </v-combobox>
               </v-col>
 
               <v-col cols="12" md="12">
@@ -290,7 +254,12 @@
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" :disabled="!valid2" text @click="update">Update</v-btn>
+                <v-btn
+                  color="blue darken-1"
+                  :disabled="!valid2"
+                  text
+                  @click="update('child')"
+                >Update</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -301,7 +270,7 @@
     <!-- table -->
     <v-card>
       <v-toolbar :color="$store.state.toolbarColor" dark flat>
-        <v-toolbar-title>آگهی</v-toolbar-title>
+        <v-toolbar-title>دسته های کاری</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-col cols="5" style="    text-align: left;">
           <!-- <input type="file" @change="onFileChange" class="button-uploader ml-5" /> -->
@@ -319,7 +288,7 @@
       <v-container>
         <v-row>
           <v-col cols="6" class="c-rtl">
-            <v-text-field v-model="filters.title" label="عنوان آگهی"></v-text-field>
+            <v-text-field v-model="filters.title" label="نام دسته"></v-text-field>
           </v-col>
 
           <v-col cols="6" class="c-rtl">
@@ -332,7 +301,7 @@
               :items="statusList"
               item-value="id"
               item-text="value"
-              label="وضعیت آگهی"
+              label="وضعیت دسته"
               required
             ></v-select>
           </v-col>
@@ -448,42 +417,50 @@ export default {
     },
   },
   methods: {
-    deleteItem(item) {
-      return this.$axios
-        .$delete("workgroup/delete/" + item.id)
-        .then((res) => {
-          this.workGroups.splice(this.workGroups.indexOf(item), 1);
-          this.showSnackbar("دسته ی کاری با موفقیت حذف شد", "green");
-        })
-        .catch((e) => {
-          this.showSnackbar("مشکلی پیش آمده دوباره تلاش کنید ", "red");
-        });
+    chooseParentsWithType() {
+      this.filters.allParents = true;
+      this.filters.type = this.editedItem.type;
+      this.workGroupSearch();
     },
-    primarySelected() {},
-    secondarySelected() {},
+    deleteItem(item) {
+      try {
+        this.$axios
+          .$delete("workgroup/delete/" + item.id)
+          .then((res) => {
+            this.$store.getters.workGroups.splice(
+              this.$store.getters.workGroups.indexOf(item),
+              1
+            );
+            this.showSnackbar("دسته ی کاری با موفقیت حذف شد", "green");
+          })
+          .catch((e) => {
+            Object.values(this.$store.getters["errorHandling/errors"]).map(
+              (error) => {
+                this.showSnackbar(error[0], "red");
+              }
+            );
+          });
+      } catch (error) {
+        this.showSnackbar("مشکلی پیش آمده دوباره تلاش کنید ", "red");
+      }
+    },
+    primarySelected() {
+      this.resetFormData();
+    },
+    secondarySelected() {
+      this.resetFormData();
+      this.chooseParentsWithType();
+    },
     openAdd() {
       this.dialog = true;
+      this.resetFormData();
       this.editMode = false;
     },
     openDialog(item) {
       this.dialogEdit = true;
-      this.editedItem = item;
-      if (item.parent_id == null) {
-        this.editedItem.children = this.$store.getters.workGroups.filter(
-          (element) => {
-            return element.parent_id == item.id;
-          }
-        );
-
-        this.editedItem.children = this.editedItem.children.map((x) => x.id);
-        console.log(this.editedItem);
-      }
-    },
-    openDialogSubWork(item, index) {
       this.resetFormData();
-      this.dialog = true;
-      this.editedItem.subWorks = item.subWorks[index];
-      this.editedItem.subWorks = item.subWorks[index];
+      this.chooseParentsWithType();
+      this.editedItem = item;
     },
     resetFormData() {
       this.editedItem = {
@@ -494,7 +471,7 @@ export default {
         discription: "",
         priorty: 1,
         children: [],
-        parent_id: Number,
+        parent_id: "",
         status: 0,
       };
     },
@@ -506,32 +483,85 @@ export default {
     reloadPage() {
       window.location.reload();
     },
-    save() {
-      this.$axios.$post("workgroup/create", this.editedItem).then((res) => {
-        this.showSnackbar("گروه کاری با موفقیت اضافه شد", "green");
-        this.resetFormData();
-        this.refreshWorkGroup();
-        setTimeout(() => {
-          this.workGroupSearch();
-        }, 1500);
-      });
-      this.dialog = false;
-      this.dialogEdit = false;
+    save(type) {
+      if (type == "child") {
+        if (
+          this.editedItem.parent_id == "" ||
+          this.editedItem.parent_id == null ||
+          this.editedItem.parent_id.length == 0
+        ) {
+          this.showSnackbar("لطفا سرگروه را انتخاب کنید", "red");
+          return;
+        } else {
+          Object.keys(this.editedItem.parent_id).forEach((key) => {
+            if (key == "id") {
+              this.editedItem.parent_id = this.editedItem.parent_id[key];
+            }
+          });
+        }
+      }
+
+      try {
+        this.$axios
+          .$post("workgroup/create", this.editedItem)
+          .then((res) => {
+            this.showSnackbar("گروه کاری با موفقیت اضافه شد", "green");
+            this.resetFormData();
+            this.refreshWorkGroup();
+            this.dialog = false;
+            this.dialogEdit = false;
+            setTimeout(() => {
+              this.workGroupSearch();
+            }, 1500);
+          })
+          .catch((errors) => {
+            Object.values(this.$store.getters["errorHandling/errors"]).map(
+              (error) => {
+                this.showSnackbar(error[0], "red");
+              }
+            );
+          });
+      } catch (error) {}
       // this.$refs.form.resetValidation();
     },
-    async update() {
-      this.$axios
-        .$put("workgroup/" + this.editedItem.id, this.editedItem)
-        .then((res) => {
-          this.showSnackbar("گروه کاری با موفقیت تغییر یافت", "green");
-          this.resetFormData();
-          this.refreshWorkGroup();
-          setTimeout(() => {
-            this.workGroupSearch();
-          }, 1500);
-        });
-      this.dialog = false;
-      this.dialogEdit = false;
+    async update(type) {
+      if (type == "child") {
+        if (
+          this.editedItem.parent_id == "" ||
+          this.editedItem.parent_id == null ||
+          this.editedItem.parent_id.length == 0
+        ) {
+          this.showSnackbar("لطفا سرگروه را انتخاب کنید", "red");
+          return;
+        } else {
+          Object.keys(this.editedItem.parent_id).forEach((key) => {
+            if (key == "id") {
+              this.editedItem.parent_id = this.editedItem.parent_id[key];
+            }
+          });
+        }
+      }
+      try {
+        this.$axios
+          .$put("workgroup/" + this.editedItem.id, this.editedItem)
+          .then((res) => {
+            this.showSnackbar("گروه کاری با موفقیت تغییر یافت", "green");
+            this.dialog = false;
+            this.dialogEdit = false;
+            this.resetFormData();
+            this.refreshWorkGroup();
+            setTimeout(() => {
+              this.workGroupSearch();
+            }, 1500);
+          })
+          .catch((errors) => {
+            Object.values(this.$store.getters["errorHandling/errors"]).map(
+              (error) => {
+                this.showSnackbar(error[0], "red");
+              }
+            );
+          });
+      } catch (error) {}
     },
     async onExcelFileChange(e) {
       let formData = new FormData();
@@ -551,13 +581,16 @@ export default {
             setTimeout(() => {
               this.workGroupSearch();
             }, 1500);
+          })
+          .catch((errors) => {
+            Object.values(this.$store.getters["errorHandling/errors"]).map(
+              (error) => {
+                this.showSnackbar(error[0], "red");
+              }
+            );
           });
       } catch (error) {
-        Object.values(this.$store.getters["errorHandling/errors"]).map(
-          (error) => {
-            this.showSnackbar(error[0], "red");
-          }
-        );
+        this.showSnackbar("مشکلی پیش آمده دوباره تلاش کنید ", "red");
       }
     },
   },
@@ -576,7 +609,6 @@ export default {
       ],
       editMainDialog: false,
       editMode: true,
-      workGroups: [],
       excel_file: "",
       selected: [],
       valid1: false,
@@ -621,7 +653,7 @@ export default {
         discription: "",
         priorty: 1,
         children: [],
-        parent_id: Number,
+        parent_id: "",
         status: 0,
       },
       headers: [

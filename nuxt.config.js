@@ -48,6 +48,7 @@ export default {
    */
   plugins: [
     './plugins/errorHandling.js',
+    './plugins/moment.js',
     {
       src: '~plugins/jalaliCalender.js',
       ssr: false
@@ -80,7 +81,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'http://asan.matican.work/api/',
+    baseURL: 'http://tender-backend.localhost/api/',
   },
   /*
    ** vuetify module configuration

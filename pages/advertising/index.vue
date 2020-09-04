@@ -71,20 +71,10 @@
             ></v-text-field>
           </v-col>
           <v-col cols="4">
-            <v-text-field
-              v-model="formData.resource"
-              :rules="[v => !!v || 'Item is required']"
-              label="منبع"
-              required
-            ></v-text-field>
+            <v-text-field v-model="formData.resource" label="منبع" required></v-text-field>
           </v-col>
           <v-col cols="4">
-            <v-text-field
-              v-model="formData.adinviter_title"
-              :rules="[v => !!v || 'Item is required']"
-              label="عنوان آگهی گذار "
-              required
-            ></v-text-field>
+            <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی گذار " required></v-text-field>
           </v-col>
 
           <v-col cols="4">
@@ -180,9 +170,11 @@
         :options.sync="options"
         show-select
       >
+        <template v-slot:item.created_at="{ item }">{{ item.created_at | moment("jYY/jM/jD") }}</template>
         <template v-slot:item.actions="{ item }">
-          <v-icon small class="mr-2" @click="turnToEditMode(item)">mdi-pencil</v-icon>
-          <v-icon small @click="showItem(item)">mdi-eye</v-icon>
+          <v-icon small class="mr-1" color="blue lighten-2" @click="turnToEditMode(item)">mdi-pencil</v-icon>
+          <v-icon small class="mr-1" @click="showItem(item)">mdi-eye</v-icon>
+          <v-icon small class="mr-1" color="red lighten-2" @click="deleteItem(item)">mdi-delete</v-icon>
         </template>
         <template v-slot:no-data>
           <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
@@ -450,7 +442,6 @@ export default {
       { text: "عنوان آگهی", value: "title" },
       { text: "تاریخ انتشار", value: "created_at" },
       { text: "آگهی گذار", value: "adinviter_title" },
-      { text: " تاریخ فراخوان", value: "invitation_date" },
       { text: "Actions", value: "actions", sortable: false },
     ],
     advertises: [],
@@ -470,26 +461,64 @@ export default {
 
   methods: {
     async editItem() {
-      //send data to database
-      await this.$axios.$put(
-        "advertise/update/" + this.advertiseId,
-        this.formData
-      );
-
-      this.backToShowMode();
-
-      this.editMode = false;
-      this.showSnackbar("آگهی به روز رسانی شد", "green");
-      setTimeout(() => {
-        this.resetFormData();
-        this.search();
-      }, 1500);
+      if (
+        false
+        // this.formData.status == 1
+        // !this.isWorkGruopsSelected("workGroups")
+      ) {
+        this.showSnackbar(
+          "آگهی انتشار یافته نمیتواند فاقد دسته ی کاری باشد",
+          "red"
+        );
+      } else {
+        try {
+          await this.$axios
+            .$put("advertise/update/" + this.advertiseId, this.formData)
+            .then(() => {
+              this.showSnackbar("آگهی به روز رسانی شد", "green");
+              this.backToShowMode();
+              this.editMode = false;
+              setTimeout(() => {
+                this.resetFormData();
+                this.search();
+              }, 1500);
+            })
+            .catch(() => {
+              Object.values(this.$store.getters["errorHandling/errors"]).map(
+                (error) => {
+                  this.showSnackbar(error[0], "red");
+                }
+              );
+            });
+        } catch (error) {}
+      }
     },
     backToShowMode() {
       this.resetFormData();
       this.editMode = false;
       this.advertiseId = "";
       this.getDataFromApi();
+    },
+    resetFormDataWithoutType() {
+      this.advertiseId = "";
+      this.clearSelectedWorkGroups("workGroups");
+      this.formData = {
+        work_groups: [],
+        description: "",
+        type: this.formData.type,
+        status: "",
+        provinces: [],
+        title: "",
+        invitation_code: "",
+        resource: "",
+        adinviter_title: "",
+        is_nerve_center: "",
+        invitation_date: "",
+        submit_date: "",
+        receipt_date: "",
+        start_date: "",
+        free_date: "",
+      };
     },
     resetFormData() {
       this.advertiseId = "";
@@ -524,6 +553,29 @@ export default {
     showItem(item) {
       this.showItemDialog = true;
       this.callShowAdvertise("singleAdvertise", item);
+    },
+    deleteItem(item) {
+      try {
+        this.advertises.splice(this.advertises.indexOf(item), 1);
+        this.$axios
+          .$delete("advertise/" + item.id)
+          .then((response) => {
+            setTimeout(() => {
+              this.resetFormData();
+              this.search();
+            }, 1500);
+            this.showSnackbar("آگهی با موفقیت حذف شد", "success");
+          })
+          .catch((error) => {
+            Object.values(this.$store.getters["errorHandling/errors"]).map(
+              (error) => {
+                this.showSnackbar(error[0], "red");
+              }
+            );
+          });
+      } catch (error) {
+        console.log(error);
+      }
     },
     async callShowAdvertise(fillableValue, item) {
       try {
@@ -581,25 +633,35 @@ export default {
     },
     sendData() {
       this.$refs.form.validate();
-      try {
-        this.$axios
-          .$post("advertise/create", this.formData)
-          .then((response) => {
-            this.showSnackbar("آگهی با موفقیت اضافه شد", "green");
-            setTimeout(() => {
-              this.resetFormData();
-              this.search();
-            }, 1500);
-          })
-          .catch((error) => {
-            Object.values(this.$store.getters["errorHandling/errors"]).map(
-              (error) => {
-                this.showSnackbar(error[0], "red");
-              }
-            );
-          });
-      } catch (error) {
-        this.showSnackbar("فیلد ها را به درستی کامل کنید", "red");
+      if (
+        this.formData.status == 1 &&
+        !this.isWorkGruopsSelected("workGroups")
+      ) {
+        this.showSnackbar(
+          "آگهی انتشار یافته نمیتواند فاقد دسته ی کاری باشد",
+          "red"
+        );
+      } else {
+        try {
+          this.$axios
+            .$post("advertise/create", this.formData)
+            .then((response) => {
+              this.showSnackbar("آگهی با موفقیت اضافه شد", "green");
+              setTimeout(() => {
+                this.resetFormDataWithoutType();
+                this.search();
+              }, 1500);
+            })
+            .catch((error) => {
+              Object.values(this.$store.getters["errorHandling/errors"]).map(
+                (error) => {
+                  this.showSnackbar(error[0], "red");
+                }
+              );
+            });
+        } catch (error) {
+          this.showSnackbar("فیلد ها را به درستی کامل کنید", "red");
+        }
       }
       // this.$refs.form.resetValidation();
       // send axios to backend and add refresh data
@@ -620,9 +682,7 @@ export default {
       this.singleAdvertise = "";
       this.showItemDialog = false;
     },
-    deleteItem() {
-      this.advertises.splice(selected, 1);
-    },
+
     buttonActions(title) {
       if (title === "حذف") {
         confirm("آیا میخواهید پاک شود؟") && this.deleteItem();

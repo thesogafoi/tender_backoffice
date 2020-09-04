@@ -15,6 +15,9 @@ export default {
         refreshWorkGroup() {
             this.$store.dispatch("refreshWorkGroups");
             this.workGroups = this.$store.getters.workGroups;
-        }
+        },
+        isWorkGruopsSelected(ref) {
+            return !!this.$refs[ref].selected.length;
+        },
     }
 }

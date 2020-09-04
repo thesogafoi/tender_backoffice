@@ -44,6 +44,7 @@ export default {
                 priorty: "",
                 status: "",
                 type: "",
+                allParents: ""
             }
         }
     },
@@ -109,6 +110,16 @@ export default {
             });
             if (this.$refs.workGroups != undefined) {
                 this.$refs.workGroups.workGroups = this.workGroups;
+            }
+        },
+        allParents() {
+            if (this.filters.allParents == true) {
+                this.workGroups = Object.values(this.workGroups).filter(workGroup => {
+                    return workGroup.parent_id == null
+                });
+                if (this.$refs.workGroups != undefined) {
+                    this.$refs.workGroups.workGroups = this.workGroups;
+                }
             }
         },
     }
