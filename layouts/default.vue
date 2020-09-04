@@ -2,7 +2,9 @@
   <v-app>
     <v-navigation-drawer v-model="drawer" right :clipped="clipped" fixed app>
       <v-list>
-        <v-toolbar-title v-text="title" class="nav-title" />
+        <v-toolbar-title class="nav-title" >
+          <img src="/Asan-2.png" alt="">
+        </v-toolbar-title>
 
         <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router>
           <v-list-item-title class="nav-icon" v-text="item.title" />
@@ -11,19 +13,21 @@
       </v-list>
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
-      <v-list-item-avatar>
-        <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
-      </v-list-item-avatar>
-
-      <v-spacer />
       <v-btn icon @click.stop="drawer = !drawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
+      <v-spacer />
+      <div class="d-flex align-center justify-center">
+        <p class="c-mb-0 c-user-name">خانم کهشیدی</p>
+        <v-list-item-avatar>
+          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+        </v-list-item-avatar>
+      </div>
     </v-app-bar>
     <v-main>
-      <v-container>
+      <div class="c-container">
         <nuxt />
-      </v-container>
+      </div>
     </v-main>
 
     <v-snackbar v-model="$store.state.snackbar" :color="$store.state.snackbarColor">
@@ -129,9 +133,6 @@ export default {
   display: flex;
   justify-content: center;
   margin: 13px;
-}
-.c-rtl {
-  direction: rtl !important;
 }
 .c-header {
   background-color: #ccc;

@@ -41,7 +41,9 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: [
+    '@/assets/sass/style.scss'
+  ],
   /*
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
@@ -81,7 +83,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'http://tender-backend.localhost/api/',
+    baseURL: 'http://asan.matican.work/api/',
   },
   /*
    ** vuetify module configuration

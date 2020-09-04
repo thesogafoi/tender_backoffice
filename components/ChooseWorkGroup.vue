@@ -1,36 +1,35 @@
 <template>
-  <v-col cols="12">
-    <v-autocomplete
-      v-model="selected"
-      :disabled="isUpdating"
-      :items="workGroups"
-      chips
-      label="Select"
-      item-text="title"
-      item-value="id"
-      :multiple="multiple"
-    >
-      <template v-slot:item="{ parent, item }">
-        <!--Highlight output item.name-->
-        {{item.title}} -
-        (
-        <span v-if="item.type=='AUCTION'">مزایده</span>
-        <span v-if="item.type=='TENDER'">مناقصه</span>
-        <span v-if="item.type=='INQUIRY'">استعلام</span>
-        <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
-      </template>
+  <v-autocomplete
+    v-model="selected"
+    :disabled="isUpdating"
+    :items="workGroups"
+    chips
+    dense
+    label="انتخاب دسته‌های کاربری"
+    item-text="title"
+    item-value="id"
+    :multiple="multiple"
+  >
+    <template v-slot:item="{ parent, item }">
+      <!--Highlight output item.name-->
+      {{item.title}} -
+      (
+      <span v-if="item.type=='AUCTION'">مزایده</span>
+      <span v-if="item.type=='TENDER'">مناقصه</span>
+      <span v-if="item.type=='INQUIRY'">استعلام</span>
+      <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
+    </template>
 
-      <template v-slot:selection="data">
-        <v-chip
-          v-bind="data.attrs"
-          :input-value="data.selected"
-          close
-          @click="data.select"
-          @click:close="remove(data.item)"
-        >{{ data.item.title }}</v-chip>
-      </template>
-    </v-autocomplete>
-  </v-col>
+    <template v-slot:selection="data">
+      <v-chip
+        v-bind="data.attrs"
+        :input-value="data.selected"
+        close
+        @click="data.select"
+        @click:close="remove(data.item)"
+      >{{ data.item.title }}</v-chip>
+    </template>
+  </v-autocomplete>
 </template>
 
 <script>

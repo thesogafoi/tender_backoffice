@@ -3,7 +3,7 @@
     <v-dialog v-model="dialog" max-width="500px">
       <v-tabs
         v-model="tab"
-        background-color="deep-purple accent-4"
+        background-color="primary accent-4"
         class="elevation-2"
         dark
         :centered="centered"
@@ -21,8 +21,8 @@
         </v-tab>
         <v-tab-item v-for="i in tabs" :key="i" :value="'tab-' + i">
           <v-card-title>
-            <span v-if="i==1" class="headline">اصلی</span>
-            <span v-if="i==2" class="headline">زیرگروه</span>
+            <span v-if="i==1">اصلی</span>
+            <span v-if="i==2">زیرگروه</span>
           </v-card-title>
 
           <!-- main work form -->
@@ -42,7 +42,7 @@
                   required
                 ></v-select>
               </v-col>
-              <v-col class="c-rtl" cols="12">
+              <v-col class="rtl" cols="12">
                 <v-select
                   v-model="editedItem.status"
                   :items="statusList"
@@ -88,7 +88,7 @@
                   label="نوع دسته"
                 ></v-select>
               </v-col>
-              <v-col class="c-rtl" cols="12">
+              <v-col class="rtl" cols="12">
                 <v-select
                   v-model="editedItem.status"
                   :items="statusList"
@@ -136,12 +136,10 @@
       <v-card>
         <!-- main work form -->
         <div v-if="editedItem.parent_id === null">
-          <v-row class="c-header c-rtl">
-            <input type="hidden" name="parent" value="false" />
-            <v-col cols="12">
-              <v-card-title>اصلی</v-card-title>
-            </v-col>
-          </v-row>
+          <input type="hidden" name="parent" value="false" />
+
+          <v-card-title>اصلی</v-card-title>
+
           <v-container fluid>
             <v-form ref="form2" v-model="valid1">
               <v-col cols="12" md="12">
@@ -158,7 +156,7 @@
                   required
                 ></v-select>
               </v-col>
-              <v-col class="c-rtl" cols="12">
+              <v-col class="rtl" cols="12">
                 <v-select
                   v-model="editedItem.status"
                   :items="statusList"
@@ -192,14 +190,10 @@
           </v-container>
         </div>
         <div v-else>
-          <v-row class="c-header c-rtl">
-            <input type="hidden" name="parent" value="false" />
-            <v-row class="c-header c-rtl">
-              <v-col cols="12">
-                <v-card-title>زیر گروه</v-card-title>
-              </v-col>
-            </v-row>
-          </v-row>
+          <input type="hidden" name="parent" value="false" />
+
+          <v-card-title>زیر گروه</v-card-title>
+
           <v-container fluid>
             <v-form ref="form3" v-model="valid2">
               <v-col cols="12" md="12">
@@ -217,7 +211,7 @@
                   required
                 ></v-select>
               </v-col>
-              <v-col class="c-rtl" cols="12">
+              <v-col class="rtl" cols="12">
                 <v-select
                   v-model="editedItem.status"
                   :items="statusList"
@@ -268,8 +262,8 @@
       </v-card>
     </v-dialog>
     <!-- table -->
-    <v-card>
-      <v-toolbar :color="$store.state.toolbarColor" dark flat>
+    <v-card class="c-pa-20">
+      <v-toolbar flat>
         <v-toolbar-title>دسته های کاری</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-col cols="5" style="    text-align: left;">
@@ -282,43 +276,49 @@
             @change="onExcelFileChange"
             style="display:none;"
           />
-          <label for="img" class="upLoader">ورود اطلاعت با اکسل</label>
+          <label for="img" class="uploader-button">ورود اطلاعت با اکسل</label>
         </v-col>
       </v-toolbar>
-      <v-container>
-        <v-row>
-          <v-col cols="6" class="c-rtl">
-            <v-text-field v-model="filters.title" label="نام دسته"></v-text-field>
-          </v-col>
+      <v-row>
+        <v-col cols="6" class="rtl">
+          <v-text-field v-model="filters.title" label="نام دسته"></v-text-field>
+        </v-col>
 
-          <v-col cols="6" class="c-rtl">
-            <v-text-field v-model="filters.priorty" label="اولویت"></v-text-field>
-          </v-col>
+        <v-col cols="6" class="rtl">
+          <v-text-field v-model="filters.priorty" label="اولویت"></v-text-field>
+        </v-col>
 
-          <v-col class="c-rtl" cols="6">
-            <v-select
-              v-model="filters.status"
-              :items="statusList"
-              item-value="id"
-              item-text="value"
-              label="وضعیت دسته"
-              required
-            ></v-select>
-          </v-col>
-          <v-col class="c-rtl" cols="6">
-            <v-select
-              v-model="filters.type"
-              item-value="id"
-              item-text="value"
-              :items="listType"
-              label="نوع دسته ی کاری"
-              required
-            ></v-select>
-          </v-col>
-        </v-row>
-      </v-container>
+        <v-col class="rtl" cols="6">
+          <v-select
+            v-model="filters.status"
+            :items="statusList"
+            item-value="id"
+            item-text="value"
+            label="وضعیت دسته"
+            required
+          ></v-select>
+        </v-col>
+        <v-col class="rtl" cols="6">
+          <v-select
+            v-model="filters.type"
+            item-value="id"
+            item-text="value"
+            :items="listType"
+            label="نوع دسته ی کاری"
+            required
+          ></v-select>
+        </v-col>
+      </v-row>
+    </v-card>
+    <v-card class="c-mt-20">
       <!-- start table -->
-      <v-data-table :headers="headers" :items="workGroups" item-key="name" class="elevation-1">
+      <v-data-table
+        :headers="headers"
+        disable-sort
+        :items="workGroups"
+        item-key="name"
+        class="c-table"
+      >
         <template v-slot:top>
           <v-toolbar flat>
             <v-toolbar-title>لیست گروه های کاری</v-toolbar-title>
@@ -335,7 +335,7 @@
         </template>
         <template v-slot:item.image="{ item }">
           <v-avatar size="36px">
-            <img :src="item.image" alt="John" />
+            <img src="https://placehold.co/30x30" alt="John" />
           </v-avatar>
         </template>
         <template v-slot:item.type="{ item }">
@@ -521,7 +521,7 @@ export default {
               }
             );
           });
-      } catch (error) {}
+      } catch (error) { }
       // this.$refs.form.resetValidation();
     },
     async update(type) {
@@ -561,7 +561,7 @@ export default {
               }
             );
           });
-      } catch (error) {}
+      } catch (error) { }
     },
     async onExcelFileChange(e) {
       let formData = new FormData();
@@ -664,7 +664,7 @@ export default {
         { text: "دسته ی اصلی", value: "parent_id" },
         { text: "نوع دسته", value: "type", sortable: true },
         { text: "", value: "data-table-expand", sortable: false },
-        { text: "Tools", value: "actions", sortable: false, align: "center" },
+        { text: "Actions", value: "actions", sortable: false, align: "center" },
       ],
 
       works: [

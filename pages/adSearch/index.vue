@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-card>
-      <v-toolbar :color="$store.state.toolbarColor" dark flat>
+    <v-card class="c-pa-20">
+      <v-toolbar flat>
         <v-toolbar-title>جستجوی آگهی</v-toolbar-title>
       </v-toolbar>
 
@@ -50,65 +50,136 @@
             <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی گذار "></v-text-field>
           </v-col>
 
-          <v-col cols="4">
-            <custom-date-picker
-              placeholder="شروع "
-              label="تاریخ فراخوان "
-              v-model="formData.range_invitation_date['first']"
-            ></custom-date-picker>
-            <custom-date-picker
-              placeholder="پایان"
-              label="تاریخ فراخوان"
-              v-model="formData.range_invitation_date['second']"
-            ></custom-date-picker>
+          <v-col cols="4" class="d-flex flex-row justify-center">
+            <div class="c-ml-5">
+              <v-text-field
+                id="start-call-date"
+                prepend-inner-icon="mdi-calendar"
+                label="شروع فراخوان"
+                v-model="formData.range_invitation_date['first']"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_invitation_date['first']"
+                element="start-call-date"
+              ></custom-date-picker>
+            </div>
+            <div class="c-mr-5">
+              <v-text-field
+                id="end-call-date"
+                prepend-inner-icon="mdi-calendar"
+                label="پایان فراخوان"
+                v-model="formData.range_invitation_date['second']"
+              ></v-text-field>
+
+              <custom-date-picker
+                v-model="formData.range_invitation_date['second']"
+                element="end-call-date"
+              ></custom-date-picker>
+            </div>
           </v-col>
-          <v-col cols="4">
-            <custom-date-picker
-              placeholder="شروع "
-              label="تاریخ ارسال"
-              v-model="formData.range_submit_date['first']"
-            ></custom-date-picker>
-            <custom-date-picker
-              placeholder="پایان "
-              label="تاریخ ارسال"
-              v-model="formData.range_submit_date['second']"
-            ></custom-date-picker>
+          <v-col cols="4" class="d-flex flex-row justify-center">
+            <div class="c-ml-5">
+              <v-text-field
+                id="start-send-date"
+                prepend-inner-icon="mdi-calendar"
+                label="شروع ارسال"
+                v-model="formData.range_submit_date['first']"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_submit_date['first']"
+                element="start-send-date"
+              ></custom-date-picker>
+            </div>
+            <div class="c-mr-5">
+              <v-text-field
+                id="end-send-date"
+                prepend-inner-icon="mdi-calendar"
+                label="پایان ارسال"
+                v-model="formData.range_submit_date['second']"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_submit_date['second']"
+                element="end-send-date"
+              ></custom-date-picker>
+            </div>
           </v-col>
-          <v-col cols="4">
-            <custom-date-picker
-              placeholder="شروع "
-              label="تاریخ دریافت"
-              v-model="formData.range_receipt_date['first']"
-            ></custom-date-picker>
-            <custom-date-picker
-              placeholder="پایان "
-              label="تاریخ دریافت"
-              v-model="formData.range_receipt_date['second']"
-            ></custom-date-picker>
+          <v-col cols="4" class="d-flex flex-row justify-center">
+            <div class="c-ml-5">
+              <v-text-field
+                id="start-receive-date"
+                prepend-inner-icon="mdi-calendar"
+                label="شروع دریافت"
+                v-model="formData.range_receipt_date['first']"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_receipt_date['first']"
+                element="start-send-date"
+              ></custom-date-picker>
+            </div>
+            <div class="c-mr-5">
+              <v-text-field
+                id="end-receive-date"
+                prepend-inner-icon="mdi-calendar"
+                label="پایان دریافت"
+                v-model="formData.range_receipt_date['second']"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_receipt_date['second']"
+                element="end-receive-date"
+              ></custom-date-picker>
+            </div>
           </v-col>
-          <v-col cols="4">
-            <custom-date-picker
-              placeholder="شروع "
-              label="تاریخ بازگشایی"
-              v-model="formData.range_start_date['first']"
-            ></custom-date-picker>
-            <custom-date-picker
-              placeholder="پایان "
-              label="تاریخ بازگشایی"
-              v-model="formData.range_start_date['second']"
-            ></custom-date-picker>
+          <v-col cols="4" class="d-flex flex-row justify-center">
+            <div class="c-ml-5">
+              <v-text-field
+                id="start-open-date"
+                prepend-inner-icon="mdi-calendar"
+                label="شروع بازگشایی"
+                v-model="formData.range_start_date['first']"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_start_date['first']"
+                element="start-open-date"
+              ></custom-date-picker>
+            </div>
+            <div class="c-mr-5">
+              <v-text-field
+                id="end-open-date"
+                prepend-inner-icon="mdi-calendar"
+                label="پایان بازگشایی"
+                v-model="formData.range_start_date['second']"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_start_date['second']"
+                element="end-open-date"
+              ></custom-date-picker>
+            </div>
           </v-col>
-          <v-col cols="4">
-            <custom-date-picker
-              placeholder="شروع "
-              label="رایگان از تاریخ"
-              v-model="formData.range_free_date['first']"
-            ></custom-date-picker>
-            <custom-date-picker
-              placeholder="پایان "
-              label="رایگان تا تاریخ"
-              v-model="formData.range_free_date['second']"
-            ></custom-date-picker>
+          <v-col cols="4" class="d-flex flex-row justify-center">
+            <div class="c-ml-5">
+              <v-text-field
+                id="start-free-date"
+                prepend-inner-icon="mdi-calendar"
+                label="شروع رایگان"
+                v-model="formData.range_free_date['first']"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_free_date['first']"
+                element="start-free-date"
+              ></custom-date-picker>
+            </div>
+            <div class="c-mr-5">
+              <v-text-field
+                id="end-free-date"
+                prepend-inner-icon="mdi-calendar"
+                label="پایان رایگان"
+                v-model="formData.range_free_date['second']"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_free_date['second']"
+                element="free-free-date"
+              ></custom-date-picker>
+            </div>
           </v-col>
 
           <v-col cols="4">
@@ -120,7 +191,13 @@
           </v-col>
 
           <v-col cols="4">
-            <v-file-input prepend-icon="mdi-camera" chips multiple label="آپلود عکس"></v-file-input>
+            <v-file-input
+              prepend-icon
+              prepend-inner-icon="mdi-camera"
+              chips
+              multiple
+              label="آپلود عکس"
+            ></v-file-input>
           </v-col>
           <v-col cols="4">
             <v-select
@@ -133,7 +210,7 @@
             ></v-select>
           </v-col>
           <v-col cols="12">
-            <v-textarea name="input-7-1" label="توضیحات" v-model="formData.description"></v-textarea>
+            <v-textarea name="input-7-1" label="توضیحات" v-model="formData.description" outlined></v-textarea>
           </v-col>
           <v-card-actions>
             <v-btn color="primary" @click="search">جستجو</v-btn>
@@ -142,155 +219,136 @@
         </v-row>
       </v-form>
     </v-card>
-
-    <v-data-table
-      class="mt-5"
-      @click:row="handleClick"
-      v-model="selected"
-      :headers="headers"
-      :items="advertises"
-      :server-items-length="meta.total"
-      :loading="loading"
-      :options.sync="options"
-      show-select
-    >
-      <template v-slot:item.actions="{ item }">
-        <v-icon small @click="showItem(item)">mdi-eye</v-icon>
-      </template>
-      <template v-slot:no-data>
-        <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
-      </template>
-    </v-data-table>
+    <v-card class="c-mt-20">
+      <v-toolbar flat>
+        <v-toolbar-title>لیست آگهی‌ها</v-toolbar-title>
+      </v-toolbar>
+      <v-data-table
+        class="mt-5 c-table clickable-table"
+        @click:row="handleClick"
+        disable-sort
+        v-model="selected"
+        :headers="headers"
+        :items="advertises"
+        :server-items-length="meta.total"
+        :loading="loading"
+        :options.sync="options"
+        show-select
+      >
+        <template v-slot:item.actions="{ item }">
+          <v-icon small @click="showItem(item)">mdi-eye</v-icon>
+        </template>
+        <template v-slot:item.created_at="{ item }">{{ item.created_at | moment("jYY/jM/jD") }}</template>
+        <template v-slot:no-data>
+          <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
+        </template>
+      </v-data-table>
+    </v-card>
     <!-- dialog for show item in table -->
-    <v-dialog v-model="showItemDialog" max-width="500px">
-      <v-card>
-        <v-card-title>
-          <span class="headline"></span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <ul>
-              <li>
-                <div>
-                  <span>عنوان آگهی گذار</span>
-                  <span>{{singleAdvertise.adinviter_title}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ انتشار :</span>
-                  <span>{{singleAdvertise.created_at}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>شرح :</span>
-                  <span>{{singleAdvertise.description}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ بازگشایی :</span>
-                  <span>{{singleAdvertise.free_date}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>آی دی :</span>
-                  <span>{{singleAdvertise.id}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>عکس :‌</span>
-                  <span>{{singleAdvertise.image}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>ستاد :</span>
-                  <span>{{singleAdvertise.is_nerve_center}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>لینک :</span>
-                  <span>{{singleAdvertise.link}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ دریافت :</span>
-                  <span>{{singleAdvertise.receipt_date}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ فراخوان :</span>
-                  <span>{{singleAdvertise.invitation_date}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>منبع :‌</span>
-                  <span>{{singleAdvertise.resource}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ شروع :‌</span>
-                  <span>{{singleAdvertise.start_date}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>وضعیت :‌</span>
-                  <span>{{singleAdvertise.status}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ ارسال :</span>
-                  <span>{{singleAdvertise.submit_date}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>کد آگهی :‌</span>
-                  <span>{{singleAdvertise.tender_code}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>عنوان :‌</span>
-                  <span>{{singleAdvertise.title}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>نوع آگهی :</span>
-                  <span>{{singleAdvertise.type}}</span>
-                </div>
-              </li>
-              <li>
-                <div
-                  v-for="workGroup in singleAdvertise.work_groups"
-                  :key="workGroup.id"
-                >{{workGroup.title}}</div>
-              </li>
-              <li>
-                <div
-                  v-for="province in singleAdvertise.provinces"
-                  :key="province.id"
-                >{{province.name}}</div>
-              </li>
-            </ul>
-          </v-container>
-        </v-card-text>
+    <v-dialog v-model="showItemDialog" max-width="95%">
+      <v-card class="c-pa-20">
+        <v-toolbar flat color="white">
+          <v-btn icon @click="close">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>اطلاعات آگهی</v-toolbar-title>
+        </v-toolbar>
 
+        <v-row>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>ID</v-card-title>
+              <v-card-text>{{singleAdvertise.id}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="6">
+            <v-card>
+              <v-card-title>عنوان</v-card-title>
+              <v-card-text>{{singleAdvertise.title}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="4">
+            <v-card>
+              <v-card-title>کد آسان‌تندر</v-card-title>
+              <v-card-text>{{singleAdvertise.tender_code}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="3">
+            <v-card>
+              <v-card-title>وضعیت</v-card-title>
+              <v-card-text>{{singleAdvertise.status}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="6">
+            <v-card>
+              <v-card-title>عنوان آگهی گذار</v-card-title>
+              <v-card-text>{{singleAdvertise.adinviter_title}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="3">
+            <v-card>
+              <v-card-title>منبع</v-card-title>
+              <v-card-text>{{singleAdvertise.resource}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ انتشار</v-card-title>
+              <v-card-text>{{singleAdvertise.created_at}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ بازگشایی</v-card-title>
+              <v-card-text>{{singleAdvertise.free_date}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ دریافت</v-card-title>
+              <v-card-text>{{singleAdvertise.receipt_date}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ فراخوان</v-card-title>
+              <v-card-text>{{singleAdvertise.invitation_date}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ شروع</v-card-title>
+              <v-card-text>{{singleAdvertise.start_date}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ ارسال</v-card-title>
+              <v-card-text>{{singleAdvertise.submit_date}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="9">
+            <v-card>
+              <v-card-title>شرح</v-card-title>
+              <v-card-text>{{singleAdvertise.description}}</v-card-text>
+            </v-card>
+            <v-card class="c-mt-20">
+              <v-card-title>لینک</v-card-title>
+              <v-card-text>{{singleAdvertise.link}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="3">
+            <v-card>
+              <v-card-title>عکس ضمیمه</v-card-title>
+              <v-card-text>
+                <img class="thumbnaail-image" src="https://placehold.co/300x300" alt />
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="close">بستن</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -427,9 +485,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-              this.options.page +
-              "&items_per_page=" +
-              this.options.itemsPerPage,
+            this.options.page +
+            "&items_per_page=" +
+            this.options.itemsPerPage,
             {
               ...this.formData,
             }

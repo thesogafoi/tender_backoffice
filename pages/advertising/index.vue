@@ -1,12 +1,10 @@
 <template>
   <div>
-    <v-card>
-      <v-toolbar :color="$store.state.toolbarColor" dark flat>
+    <v-card class="c-pa-20">
+      <v-toolbar flat>
         <v-toolbar-title>آگهی</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-col cols="5" style="    text-align: left;">
-          <!-- <input type="file" @change="onFileChange" class="button-uploader ml-5" /> -->
-
           <input
             type="file"
             name="uploadfile"
@@ -14,13 +12,13 @@
             @change="onFileChange"
             style="display:none;"
           />
-          <label for="img" class="upLoader">ورود اطلاعت با اکسل</label>
+          <label for="img" class="uploader-button">ورود اطلاعت با اکسل</label>
         </v-col>
       </v-toolbar>
 
       <v-form class="c-form" ref="form" v-model="valid" lazy-validation>
-        <v-row class="c-rtl">
-          <v-col class="c-rtl" cols="4">
+        <v-row class="rtl">
+          <v-col class="rtl" cols="4">
             <v-select
               v-model="formData.type"
               item-value="id"
@@ -78,19 +76,32 @@
           </v-col>
 
           <v-col cols="4">
-            <custom-date-picker label="تاریخ فراخوان" v-model="formData.invitation_date"></custom-date-picker>
+            <v-text-field id="call-date" v-model="formData.invitation_date" prepend-inner-icon="mdi-calendar" label="تاریخ فراخوان"></v-text-field>
+            <custom-date-picker v-model="formData.invitation_date" element="call-date"></custom-date-picker>
           </v-col>
           <v-col cols="4">
-            <custom-date-picker label="تاریخ ارسال" v-model="formData.submit_date"></custom-date-picker>
+            <v-text-field id="send-date" v-model="formData.submit_date" prepend-inner-icon="mdi-calendar" label="تاریخ ارسال"></v-text-field>
+            <custom-date-picker v-model="formData.submit_date" element="send-date"></custom-date-picker>
           </v-col>
           <v-col cols="4">
-            <custom-date-picker label="تاریخ دریافت" v-model="formData.receipt_date"></custom-date-picker>
+            <v-text-field id="receive-date" v-model="formData.receipt_date" prepend-inner-icon="mdi-calendar" label="تاریخ دریافت"></v-text-field>
+            <custom-date-picker v-model="formData.receipt_date" element="receive-date"></custom-date-picker>
           </v-col>
           <v-col cols="4">
-            <custom-date-picker label="تاریخ بازگشایی" v-model="formData.start_date"></custom-date-picker>
+            <v-text-field id="open-date" v-model="formData.start_date" prepend-inner-icon="mdi-calendar" label="تاریخ بازگشایی"></v-text-field>
+            <custom-date-picker
+              placeholder="تاریخ بازگشایی"
+              v-model="formData.start_date"
+              element="open-date"
+            ></custom-date-picker>
           </v-col>
           <v-col cols="4">
-            <custom-date-picker label="رایگان از تاریخ" v-model="formData.free_date"></custom-date-picker>
+            <v-text-field id="free-date" v-model="formData.free_date" prepend-inner-icon="mdi-calendar" label="رایگان از تاریخ"></v-text-field>
+            <custom-date-picker
+              placeholder="رایگان از تاریخ"
+              v-model="formData.free_date"
+              element="free-date"
+            ></custom-date-picker>
           </v-col>
 
           <v-col cols="4">
@@ -104,7 +115,13 @@
           </v-col>
 
           <v-col cols="4">
-            <v-file-input prepend-icon="mdi-camera" chips multiple label="آپلود عکس"></v-file-input>
+            <v-file-input
+              prepend-inner-icon="mdi-camera"
+              prepend-icon
+              chips
+              multiple
+              label="آپلود عکس"
+            ></v-file-input>
           </v-col>
           <v-col cols="4">
             <v-select
@@ -120,6 +137,7 @@
           <v-col cols="12">
             <v-textarea
               name="input-7-1"
+              outlined
               :rules="[v => !!v || 'Item is required']"
               label="توضیحات"
               v-model="formData.description"
@@ -152,7 +170,11 @@
         </div>
       </v-card-actions>
     </v-card>
-    <v-card class="table">
+    <v-card class="c-pa-20 c-mt-20">
+      <v-toolbar flat>
+        <v-toolbar-title>لیست آگهی‌ها</v-toolbar-title>
+      </v-toolbar>
+
       <v-menu bottom origin="center center" transition="scale-transition">
         <v-list>
           <v-list-item v-for="(item, i) in items" :key="i" @click="buttonActions(item.title)">
@@ -161,8 +183,9 @@
         </v-list>
       </v-menu>
       <v-data-table
-        class="mt-5 c-rtl"
+        class="mt-5 rtl c-table"
         v-model="selected"
+        disable-sort
         :headers="headers"
         :items="advertises"
         :server-items-length="meta.total"
@@ -172,9 +195,16 @@
       >
         <template v-slot:item.created_at="{ item }">{{ item.created_at | moment("jYY/jM/jD") }}</template>
         <template v-slot:item.actions="{ item }">
-          <v-icon small class="mr-1" color="blue lighten-2" @click="turnToEditMode(item)">mdi-pencil</v-icon>
-          <v-icon small class="mr-1" @click="showItem(item)">mdi-eye</v-icon>
-          <v-icon small class="mr-1" color="red lighten-2" @click="deleteItem(item)">mdi-delete</v-icon>
+          <div class="d-flex">
+            <v-icon
+              small
+              class="mr-1"
+              color="blue lighten-2"
+              @click="turnToEditMode(item)"
+            >mdi-pencil</v-icon>
+            <v-icon small class="mr-1" color="red lighten-2" @click="deleteItem(item)">mdi-delete</v-icon>
+            <v-icon small class="mr-1" @click="showItem(item)">mdi-eye</v-icon>
+          </div>
         </template>
         <template v-slot:no-data>
           <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
@@ -182,135 +212,110 @@
       </v-data-table>
     </v-card>
     <!-- dialog for show item in table -->
-    <v-dialog v-model="showItemDialog" max-width="500px">
-      <v-card>
-        <v-card-title>
-          <span class="headline"></span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <ul>
-              <li>
-                <div>
-                  <span>عنوان آگهی گذار</span>
-                  <span>{{singleAdvertise.adinviter_title}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ انتشار :</span>
-                  <span>{{singleAdvertise.created_at}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>شرح :</span>
-                  <span>{{singleAdvertise.description}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ بازگشایی :</span>
-                  <span>{{singleAdvertise.free_date}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>آی دی :</span>
-                  <span>{{singleAdvertise.id}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>عکس :‌</span>
-                  <span>{{singleAdvertise.image}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>ستاد :</span>
-                  <span>{{singleAdvertise.is_nerve_center}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>لینک :</span>
-                  <span>{{singleAdvertise.link}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ دریافت :</span>
-                  <span>{{singleAdvertise.receipt_date}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ فراخوان :</span>
-                  <span>{{singleAdvertise.invitation_date}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>منبع :‌</span>
-                  <span>{{singleAdvertise.resource}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ شروع :‌</span>
-                  <span>{{singleAdvertise.start_date}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>وضعیت :‌</span>
-                  <span>{{singleAdvertise.status}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>تاریخ ارسال :</span>
-                  <span>{{singleAdvertise.submit_date}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>کد آگهی :‌</span>
-                  <span>{{singleAdvertise.tender_code}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>عنوان :‌</span>
-                  <span>{{singleAdvertise.title}}</span>
-                </div>
-              </li>
-              <li>
-                <div>
-                  <span>نوع آگهی :</span>
-                  <span>{{singleAdvertise.type}}</span>
-                </div>
-              </li>
-              <li>
-                <div
-                  v-for="workGroup in singleAdvertise.work_groups"
-                  :key="workGroup.id"
-                >{{workGroup.title}}</div>
-              </li>
-              <li>
-                <div
-                  v-for="province in singleAdvertise.provinces"
-                  :key="province.id"
-                >{{province.name}}</div>
-              </li>
-            </ul>
-          </v-container>
-        </v-card-text>
+    <v-dialog v-model="showItemDialog" max-width="95%">
+      <v-card class="c-pa-20">
+        <v-toolbar flat color="white">
+          <v-btn icon @click="close">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>اطلاعات آگهی</v-toolbar-title>
+        </v-toolbar>
 
+        <v-row>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>ID</v-card-title>
+              <v-card-text>{{singleAdvertise.id}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="6">
+            <v-card>
+              <v-card-title>عنوان</v-card-title>
+              <v-card-text>{{singleAdvertise.title}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="4">
+            <v-card>
+              <v-card-title>کد آسان‌تندر</v-card-title>
+              <v-card-text>{{singleAdvertise.tender_code}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="3">
+            <v-card>
+              <v-card-title>وضعیت</v-card-title>
+              <v-card-text>{{singleAdvertise.status}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="6">
+            <v-card>
+              <v-card-title>عنوان آگهی گذار</v-card-title>
+              <v-card-text>{{singleAdvertise.adinviter_title}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="3">
+            <v-card>
+              <v-card-title>منبع</v-card-title>
+              <v-card-text>{{singleAdvertise.resource}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ انتشار</v-card-title>
+              <v-card-text>{{singleAdvertise.created_at}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ بازگشایی</v-card-title>
+              <v-card-text>{{singleAdvertise.free_date}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ دریافت</v-card-title>
+              <v-card-text>{{singleAdvertise.receipt_date}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ فراخوان</v-card-title>
+              <v-card-text>{{singleAdvertise.invitation_date}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ شروع</v-card-title>
+              <v-card-text>{{singleAdvertise.start_date}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="2">
+            <v-card>
+              <v-card-title>تاریخ ارسال</v-card-title>
+              <v-card-text>{{singleAdvertise.submit_date}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="9">
+            <v-card>
+              <v-card-title>شرح</v-card-title>
+              <v-card-text>{{singleAdvertise.description}}</v-card-text>
+            </v-card>
+            <v-card class="c-mt-20">
+              <v-card-title>لینک</v-card-title>
+              <v-card-text>{{singleAdvertise.link}}</v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="3">
+            <v-card>
+              <v-card-title>عکس ضمیمه</v-card-title>
+              <v-card-text>
+                <img class="thumbnaail-image" src="https://placehold.co/300x300" alt />
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
+          <v-btn color="blue darken-1" text @click="close">بستن</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -442,7 +447,7 @@ export default {
       { text: "عنوان آگهی", value: "title" },
       { text: "تاریخ انتشار", value: "created_at" },
       { text: "آگهی گذار", value: "adinviter_title" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "Actions", value: "actions", sortable: false, align: 'left' },
     ],
     advertises: [],
     editedIndex: -1,
@@ -490,7 +495,7 @@ export default {
                 }
               );
             });
-        } catch (error) {}
+        } catch (error) { }
       }
     },
     backToShowMode() {
@@ -617,9 +622,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-              this.options.page +
-              "&items_per_page=" +
-              this.options.itemsPerPage,
+            this.options.page +
+            "&items_per_page=" +
+            this.options.itemsPerPage,
             {
               ...this.formData,
             }
@@ -702,16 +707,5 @@ export default {
 .wg-dialog {
   padding: 50px;
   width: 800px;
-}
-.upLoader {
-  border: #fff solid 1px;
-  padding: 9px;
-  transition: background-color 500ms ease;
-  transition: color 500ms ease;
-
-  &:hover {
-    background-color: #fff;
-    color: #000;
-  }
 }
 </style>

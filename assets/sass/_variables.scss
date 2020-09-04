@@ -1,0 +1,44 @@
+$mainTitleSize: 22px;
+$titleSize:20px;
+$smallTitle:18px;
+$paragraphSize:16px;
+$metaSize:14px;
+$smallestSize:12px;
+$defaultRadius: 5px;
+
+
+// COLORS
+$primaryColor:#FF9600;
+$secondaryColor: #333333;
+$lightestColor:#ffffff;
+
+
+.c-main-title {
+  font-size: $mainTitleSize !important;
+  font-weight: 500 !important;
+}
+
+.c-title {
+  font-size: $titleSize !important;
+  font-weight: 500 !important;
+}
+
+.c-small-title {
+  font-size: $smallTitle !important;
+  font-weight: 500 !important;
+}
+
+.c-paragraph {
+  font-size: $paragraphSize !important;
+  font-weight: 500 !important;
+}
+
+.c-meta {
+  font-size: $metaSize !important;
+  font-weight: 300 !important;
+}
+
+.c-smallest-size-title {
+  font-size: $smallestSize !important;
+  font-weight: 300 !important;
+}
