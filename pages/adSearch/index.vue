@@ -8,7 +8,7 @@
       <!-- <v-form class="c-form" ref="form" v-model="valid" lazy-validation> -->
       <v-form class="c-form" ref="form" lazy-validation>
         <v-row>
-          <v-col cols="4">
+          <v-col cols="3">
             <v-select
               v-model="formData.type"
               item-value="id"
@@ -17,7 +17,7 @@
               label="نوع آگهی"
             ></v-select>
           </v-col>
-          <v-col cols="4">
+          <v-col cols="3">
             <v-select
               v-model="formData.status"
               :items="statusList"
@@ -26,8 +26,11 @@
               label="وضعیت آگهی"
             ></v-select>
           </v-col>
-          <v-col cols="4">
-            <v-text-field v-model="formData.title" label="عنوان آگهی" required></v-text-field>
+          <v-col cols="3">
+            <v-text-field v-model="formData.title" label="عنوان آگهی"></v-text-field>
+          </v-col>
+          <v-col cols="3">
+            <v-text-field v-model="formData.tender_code" label="کد آسان تندر"></v-text-field>
           </v-col>
           <v-col cols="4">
             <v-combobox
@@ -61,6 +64,8 @@
               <custom-date-picker
                 v-model="formData.range_invitation_date['first']"
                 element="start-call-date"
+                :clear="true"
+                :autoSubmit="true"
               ></custom-date-picker>
             </div>
             <div class="c-mr-5">
@@ -74,7 +79,9 @@
               <custom-date-picker
                 v-model="formData.range_invitation_date['second']"
                 element="end-call-date"
-              ></custom-date-picker>
+              >
+                <template v-slot:header-date="{ vm, formattedDate }">qwd</template>
+              </custom-date-picker>
             </div>
           </v-col>
           <v-col cols="4" class="d-flex flex-row justify-center">
@@ -390,6 +397,7 @@ export default {
       status: "",
       provinces: [],
       title: "",
+      tender_code: "",
       invitation_code: "",
       resource: "",
       adinviter_title: "",
@@ -485,9 +493,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-            this.options.page +
-            "&items_per_page=" +
-            this.options.itemsPerPage,
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage,
             {
               ...this.formData,
             }

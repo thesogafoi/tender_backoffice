@@ -240,6 +240,15 @@
                     <span v-if="item.type=='INQUIRY'">استعلام</span>
                     <span v-if="item.parent_id==null">دسته ی اصلی</span>)
                   </template>
+                  <template v-slot:selection="data">
+                    <v-chip
+                      v-bind="data.attrs"
+                      :input-value="data.selected"
+                      close
+                      @click="data.select"
+                      @click:close="removeSelected(data.item)"
+                    >{{ data.item.title }}</v-chip>
+                  </template>
                 </v-combobox>
               </v-col>
 
@@ -398,9 +407,7 @@ import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
 
 export default {
-  mounted() {
-    console.log(this.$refs);
-  },
+  mounted() {},
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
   components: {
     deleteConfirmationDialog,
@@ -409,14 +416,41 @@ export default {
     editedItemType() {
       return this.editedItem.type;
     },
+    parentId() {
+      return this.editedItem.parent_id;
+    },
   },
   watch: {
+    parentId() {
+      console.log(typeof this.editedItem.parent_id);
+      if (
+        typeof this.editedItem.parent_id == "number" ||
+        typeof this.editedItem.parent_id == "string"
+      ) {
+        this.editedItem.parent_id = this.getParentTitleWithId(
+          this.editedItem.parent_id
+        );
+      }
+    },
     editedItemType() {
       this.filters.type = this.editedItem.type;
       this.workGroupSearch();
     },
   },
   methods: {
+    getParentTitleWithId(id) {
+      let data = Object.values(this.workGroups).find((workGroup) => {
+        return workGroup.id == id;
+      });
+      return data;
+    },
+    removeSelected(item) {
+      console.log(item);
+      // const index = this.selected.indexOf(item);
+      // this.selected = this.selected.filter((workGroup) => {
+      //   return workGroup != item.id;
+      // });
+    },
     chooseParentsWithType() {
       this.filters.allParents = true;
       this.filters.type = this.editedItem.type;
@@ -521,7 +555,7 @@ export default {
               }
             );
           });
-      } catch (error) { }
+      } catch (error) {}
       // this.$refs.form.resetValidation();
     },
     async update(type) {
@@ -561,7 +595,7 @@ export default {
               }
             );
           });
-      } catch (error) { }
+      } catch (error) {}
     },
     async onExcelFileChange(e) {
       let formData = new FormData();
