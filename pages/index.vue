@@ -39,8 +39,10 @@
 </template>
 <script>
 export default {
+  beforeCreate() {
+    this.$router.push(`/dashboard`);
+  },
   layout: "plain",
-  // middleware: ['authLogin'],
   data() {
     return {
       show3: false,
