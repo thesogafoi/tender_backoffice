@@ -8,5 +8,7 @@ Vue.use(VuePersianDatetimePicker, {
     editable: false,
     altFormat: 'YYYY-MM-DD',
     autoSubmit: false,
+    clearable: true,
+    autoSubmit: false,
   }
 });
