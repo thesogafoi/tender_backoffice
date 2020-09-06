@@ -422,7 +422,6 @@ export default {
   },
   watch: {
     parentId() {
-      console.log(typeof this.editedItem.parent_id);
       if (
         typeof this.editedItem.parent_id == "number" ||
         typeof this.editedItem.parent_id == "string"
@@ -445,7 +444,6 @@ export default {
       return data;
     },
     removeSelected(item) {
-      console.log(item);
       // const index = this.selected.indexOf(item);
       // this.selected = this.selected.filter((workGroup) => {
       //   return workGroup != item.id;
@@ -512,30 +510,26 @@ export default {
     onFileChange(e) {
       const url = e;
       // this.editedItem.image = URL.createObjectURL(url);
-      console.log(this.editedItem.image);
+      // console.log(this.editedItem.image);
     },
     reloadPage() {
       window.location.reload();
     },
     save(type) {
-      if (type == "child") {
-        if (
-          this.editedItem.parent_id == "" ||
-          this.editedItem.parent_id == null ||
-          this.editedItem.parent_id.length == 0
-        ) {
-          this.showSnackbar("لطفا سرگروه را انتخاب کنید", "red");
-          return;
-        } else {
-          Object.keys(this.editedItem.parent_id).forEach((key) => {
-            if (key == "id") {
-              this.editedItem.parent_id = this.editedItem.parent_id[key];
-            }
-          });
-        }
-      }
-
       try {
+        if (type == "child") {
+          if (
+            this.editedItem.parent_id == "" ||
+            this.editedItem.parent_id == null ||
+            this.editedItem.parent_id.length == 0
+          ) {
+            this.showSnackbar("لطفا سرگروه را انتخاب کنید", "red");
+            return;
+          } else {
+            this.editedItem.parent_id = this.editedItem.parent_id.id;
+          }
+        }
+
         this.$axios
           .$post("workgroup/create", this.editedItem)
           .then((res) => {
@@ -568,20 +562,17 @@ export default {
           this.showSnackbar("لطفا سرگروه را انتخاب کنید", "red");
           return;
         } else {
-          Object.keys(this.editedItem.parent_id).forEach((key) => {
-            if (key == "id") {
-              this.editedItem.parent_id = this.editedItem.parent_id[key];
-            }
-          });
+          this.editedItem.parent_id = this.editedItem.parent_id.id;
         }
       }
       try {
+        this.dialog = false;
+        this.dialogEdit = false;
+
         this.$axios
           .$put("workgroup/" + this.editedItem.id, this.editedItem)
           .then((res) => {
             this.showSnackbar("گروه کاری با موفقیت تغییر یافت", "green");
-            this.dialog = false;
-            this.dialogEdit = false;
             this.resetFormData();
             this.refreshWorkGroup();
             setTimeout(() => {
