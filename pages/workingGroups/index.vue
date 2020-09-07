@@ -76,7 +76,6 @@
               <v-col cols="12" md="12">
                 <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
               </v-col>
-
               <v-col cols="12">
                 <v-select
                   v-model="editedItem.type"
@@ -332,12 +331,19 @@
           <v-toolbar flat>
             <v-toolbar-title>لیست گروه های کاری</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn color="primary" dark class="mb-2" @click="openAdd">مورد جدید</v-btn>
-            <v-btn color="primary" dark class="mr-2 ml-2 mb-2" @click="workGroupSearch">جستجو</v-btn>
+            <v-btn color="primary" dark class="mx-2 mb-2" @click="openAdd" width="120">مورد جدید</v-btn>
+            <v-btn
+              color="primary"
+              dark
+              class="mx-2 ml-2 mb-2"
+              @click="workGroupSearch"
+              width="120"
+            >جستجو</v-btn>
             <v-btn
               color="warning"
               dark
-              class="mb-2"
+              class="mx-2 mb-2"
+              width="120"
               @click="resetWorkGroupSearchForm"
             >پاک کردن فیلد ها</v-btn>
           </v-toolbar>

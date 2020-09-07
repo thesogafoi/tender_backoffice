@@ -37,15 +37,7 @@
     </div>
     <v-row>
       <v-col cols="6">
-        asdfasfd
-        <v-data-table
-          :headers="headers"
-          :footer-props="{
-    'items-per-page-options': [10, 20, 30, 40, 50]
-  }"
-          :items="desserts"
-          class="elevation-1"
-        ></v-data-table>
+        <v-data-table :headers="headers" :items="desserts" class="elevation-1"></v-data-table>
       </v-col>
       <v-col cols="6">
         <v-data-table :headers="headers" :items="desserts" :items-per-page="5" class="elevation-1"></v-data-table>

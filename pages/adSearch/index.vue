@@ -8,7 +8,7 @@
       <!-- <v-form class="c-form" ref="form" v-model="valid" lazy-validation> -->
       <v-form class="c-form" ref="form" lazy-validation>
         <v-row>
-          <v-col cols="3">
+          <v-col cols="2">
             <v-select
               v-model="formData.type"
               item-value="id"
@@ -17,7 +17,10 @@
               label="نوع آگهی"
             ></v-select>
           </v-col>
-          <v-col cols="3">
+          <v-col cols="4">
+            <v-text-field v-model="formData.title" label="عنوان آگهی"></v-text-field>
+          </v-col>
+          <v-col cols="2">
             <v-select
               v-model="formData.status"
               :items="statusList"
@@ -25,12 +28,6 @@
               item-text="value"
               label="وضعیت آگهی"
             ></v-select>
-          </v-col>
-          <v-col cols="3">
-            <v-text-field v-model="formData.title" label="عنوان آگهی"></v-text-field>
-          </v-col>
-          <v-col cols="3">
-            <v-text-field v-model="formData.tender_code" label="کد آسان تندر"></v-text-field>
           </v-col>
           <v-col cols="4">
             <v-combobox
@@ -43,124 +40,14 @@
               required
             ></v-combobox>
           </v-col>
-          <v-col cols="4">
+          <v-col cols="2">
+            <v-text-field v-model="formData.tender_code" label="کد آسان تندر"></v-text-field>
+          </v-col>
+          <v-col cols="2">
             <v-text-field v-model="formData.invitation_code" label="کد فراخوان" required></v-text-field>
           </v-col>
           <v-col cols="4">
-            <v-text-field v-model="formData.resource" label="منبع"></v-text-field>
-          </v-col>
-          <v-col cols="4">
             <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی گذار "></v-text-field>
-          </v-col>
-
-          <v-col cols="4" class="d-flex flex-row justify-center">
-            <div class="c-ml-5">
-              <v-text-field
-                id="start-call-date"
-                prepend-inner-icon="mdi-calendar"
-                label="شروع فراخوان"
-                v-model="formData.range_invitation_date['first']"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_invitation_date['first']"
-                element="start-call-date"
-                :clear="true"
-                :autoSubmit="true"
-              ></custom-date-picker>
-            </div>
-            <div class="c-mr-5">
-              <v-text-field
-                id="end-call-date"
-                prepend-inner-icon="mdi-calendar"
-                label="پایان فراخوان"
-                v-model="formData.range_invitation_date['second']"
-              ></v-text-field>
-
-              <custom-date-picker
-                v-model="formData.range_invitation_date['second']"
-                element="end-call-date"
-              >
-                <template v-slot:header-date="{ vm, formattedDate }">qwd</template>
-              </custom-date-picker>
-            </div>
-          </v-col>
-          <v-col cols="4" class="d-flex flex-row justify-center">
-            <div class="c-ml-5">
-              <v-text-field
-                id="start-send-date"
-                prepend-inner-icon="mdi-calendar"
-                label="شروع ارسال"
-                v-model="formData.range_submit_date['first']"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_submit_date['first']"
-                element="start-send-date"
-              ></custom-date-picker>
-            </div>
-            <div class="c-mr-5">
-              <v-text-field
-                id="end-send-date"
-                prepend-inner-icon="mdi-calendar"
-                label="پایان ارسال"
-                v-model="formData.range_submit_date['second']"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_submit_date['second']"
-                element="end-send-date"
-              ></custom-date-picker>
-            </div>
-          </v-col>
-          <v-col cols="4" class="d-flex flex-row justify-center">
-            <div class="c-ml-5">
-              <v-text-field
-                id="start-receive-date"
-                prepend-inner-icon="mdi-calendar"
-                label="شروع دریافت"
-                v-model="formData.range_receipt_date['first']"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_receipt_date['first']"
-                element="start-send-date"
-              ></custom-date-picker>
-            </div>
-            <div class="c-mr-5">
-              <v-text-field
-                id="end-receive-date"
-                prepend-inner-icon="mdi-calendar"
-                label="پایان دریافت"
-                v-model="formData.range_receipt_date['second']"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_receipt_date['second']"
-                element="end-receive-date"
-              ></custom-date-picker>
-            </div>
-          </v-col>
-          <v-col cols="4" class="d-flex flex-row justify-center">
-            <div class="c-ml-5">
-              <v-text-field
-                id="start-open-date"
-                prepend-inner-icon="mdi-calendar"
-                label="شروع بازگشایی"
-                v-model="formData.range_start_date['first']"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_start_date['first']"
-                element="start-open-date"
-              ></custom-date-picker>
-            </div>
-            <div class="c-mr-5">
-              <v-text-field
-                id="end-open-date"
-                prepend-inner-icon="mdi-calendar"
-                label="پایان بازگشایی"
-                v-model="formData.range_start_date['second']"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_start_date['second']"
-                element="end-open-date"
-              ></custom-date-picker>
-            </div>
           </v-col>
           <v-col cols="4" class="d-flex flex-row justify-center">
             <div class="c-ml-5">
@@ -169,6 +56,7 @@
                 prepend-inner-icon="mdi-calendar"
                 label="شروع رایگان"
                 v-model="formData.range_free_date['first']"
+                :clearable="true"
               ></v-text-field>
               <custom-date-picker
                 v-model="formData.range_free_date['first']"
@@ -181,55 +69,71 @@
                 prepend-inner-icon="mdi-calendar"
                 label="پایان رایگان"
                 v-model="formData.range_free_date['second']"
+                :clearable="true"
               ></v-text-field>
               <custom-date-picker
                 v-model="formData.range_free_date['second']"
-                element="free-free-date"
+                element="end-free-date"
               ></custom-date-picker>
             </div>
           </v-col>
 
-          <v-col cols="4">
+          <v-col cols="4" class="d-flex flex-row justify-center">
+            <div class="c-ml-5">
+              <v-text-field
+                id="created-at-first"
+                prepend-inner-icon="mdi-calendar"
+                label="تاریخ انتشار از"
+                v-model="formData.range_created_at['first']"
+                :clearable="true"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_created_at['first']"
+                element="created-at-first"
+              ></custom-date-picker>
+            </div>
+            <div class="c-mr-5">
+              <v-text-field
+                id="created-at-second"
+                prepend-inner-icon="mdi-calendar"
+                label="تاریخ انتشار تا"
+                v-model="formData.range_created_at['second']"
+                :clearable="true"
+              ></v-text-field>
+              <custom-date-picker
+                v-model="formData.range_created_at['second']"
+                element="created-at-second"
+              ></custom-date-picker>
+            </div>
+          </v-col>
+          <v-col cols="3">
             <ChooseWorkGroup
               :work_groups="this.$store.getters.workGroups"
               @selected_work_group_changed="fillSelected"
               ref="workGroups"
             />
           </v-col>
-
-          <v-col cols="4">
-            <v-file-input
-              prepend-icon
-              prepend-inner-icon="mdi-camera"
-              chips
-              multiple
-              label="آپلود عکس"
-            ></v-file-input>
+          <v-col cols="3">
+            <v-text-field v-model="formData.title" label="شرح"></v-text-field>
           </v-col>
-          <v-col cols="4">
-            <v-select
-              :items="staffStatusList"
+          <v-col cols="2">
+            <v-switch
               v-model="formData.is_nerve_center"
-              item-text="value"
-              item-value="id"
-              label="وضعیت ستاد"
-              required
-            ></v-select>
+              :label=" 
+             formData.is_nerve_center ? 'ستاد' : 'غیر ستاد'"
+            ></v-switch>
           </v-col>
-          <v-col cols="12">
+          <!-- <v-col cols="12">
             <v-textarea name="input-7-1" label="توضیحات" v-model="formData.description" outlined></v-textarea>
-          </v-col>
-          <v-card-actions>
-            <v-btn color="primary" @click="search">جستجو</v-btn>
-            <v-btn color="warning" @click="resetFormData">پاک کردن فیلد ها</v-btn>
+          </v-col>-->
+          <v-card-actions class="mr-auto">
+            <v-btn color="primary" @click="search" width="120" class="mx-2">جستجو</v-btn>
+            <v-btn color="warning" @click="resetFormData" width="120">پاک کردن فیلد ها</v-btn>
           </v-card-actions>
         </v-row>
       </v-form>
     </v-card>
     <v-card class="c-mt-20">
-      <v-toolbar flat>
-        <v-toolbar-title>لیست آگهی‌ها</v-toolbar-title>
-      </v-toolbar>
       <v-data-table
         class="mt-5 c-table clickable-table"
         @click:row="handleClick"
@@ -241,6 +145,9 @@
         :loading="loading"
         :options.sync="options"
         show-select
+        :footer-props="{
+          'items-per-page-options': [10, 20, 30, 40, 50]
+        }"
       >
         <template v-slot:item.actions="{ item }">
           <v-icon small @click="showItem(item)">mdi-eye</v-icon>
@@ -344,14 +251,6 @@
               <v-card-text>{{singleAdvertise.link}}</v-card-text>
             </v-card>
           </v-col>
-          <v-col cols="3">
-            <v-card>
-              <v-card-title>عکس ضمیمه</v-card-title>
-              <v-card-text>
-                <img class="thumbnaail-image" src="https://placehold.co/300x300" alt />
-              </v-card-text>
-            </v-card>
-          </v-col>
         </v-row>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -372,19 +271,7 @@ export default {
     loading: true,
     valid: true,
     formData: {
-      range_submit_date: {
-        first: "",
-        second: "",
-      },
-      range_receipt_date: {
-        first: "",
-        second: "",
-      },
-      range_invitation_date: {
-        first: "",
-        second: "",
-      },
-      range_start_date: {
+      range_created_at: {
         first: "",
         second: "",
       },
@@ -454,7 +341,7 @@ export default {
     checkbox: false,
     singleSelect: false,
     headers: [
-      { text: "کد آگهی", value: "tender_code" },
+      { text: "کد آسان تندر", value: "tender_code" },
       { text: "کد فراخوان", value: "invitation_code" },
       { text: "عنوان آگهی", value: "title" },
       { text: "تاریخ انتشار", value: "created_at" },
@@ -522,19 +409,7 @@ export default {
     resetFormData() {
       this.clearSelectedWorkGroups("workGroups");
       this.formData = {
-        range_submit_date: {
-          first: "",
-          second: "",
-        },
-        range_receipt_date: {
-          first: "",
-          second: "",
-        },
-        range_invitation_date: {
-          first: "",
-          second: "",
-        },
-        range_start_date: {
+        range_created_at: {
           first: "",
           second: "",
         },

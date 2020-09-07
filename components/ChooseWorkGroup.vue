@@ -17,7 +17,7 @@
       <span v-if="item.type=='AUCTION'">مزایده</span>
       <span v-if="item.type=='TENDER'">مناقصه</span>
       <span v-if="item.type=='INQUIRY'">استعلام</span>
-      <span v-if="item.parent_id!=null">دسته ی اصلی</span>)
+      <span v-if="item.parent_id==null">دسته ی اصلی</span>)
     </template>
 
     <template v-slot:selection="data">

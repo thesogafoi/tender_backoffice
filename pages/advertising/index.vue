@@ -18,7 +18,7 @@
 
       <v-form class="c-form" ref="form" v-model="valid" lazy-validation>
         <v-row class="rtl">
-          <v-col class="rtl" cols="4">
+          <v-col class="rtl" cols="2">
             <v-select
               v-model="formData.type"
               item-value="id"
@@ -30,6 +30,14 @@
             ></v-select>
           </v-col>
           <v-col cols="4">
+            <v-text-field
+              v-model="formData.title"
+              :rules="[v => !!v || 'Item is required']"
+              label="عنوان آگهی"
+              required
+            ></v-text-field>
+          </v-col>
+          <v-col cols="2">
             <v-select
               v-model="formData.status"
               :items="statusList"
@@ -39,14 +47,6 @@
               label="وضعیت آگهی"
               required
             ></v-select>
-          </v-col>
-          <v-col cols="4">
-            <v-text-field
-              v-model="formData.title"
-              :rules="[v => !!v || 'Item is required']"
-              label="عنوان آگهی"
-              required
-            ></v-text-field>
           </v-col>
           <v-col cols="4">
             <v-select
@@ -68,48 +68,80 @@
               required
             ></v-text-field>
           </v-col>
-          <v-col cols="4">
-            <v-text-field v-model="formData.resource" label="منبع" required></v-text-field>
-          </v-col>
+
           <v-col cols="4">
             <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی گذار " required></v-text-field>
           </v-col>
-
           <v-col cols="4">
-            <v-text-field id="call-date" v-model="formData.invitation_date" prepend-inner-icon="mdi-calendar" label="تاریخ فراخوان"></v-text-field>
+            <v-text-field v-model="formData.resource" label="منبع" required></v-text-field>
+          </v-col>
+
+          <v-col cols="2">
+            <v-text-field
+              id="call-date"
+              v-model="formData.invitation_date"
+              prepend-inner-icon="mdi-calendar"
+              label="تاریخ فراخوان"
+            ></v-text-field>
             <custom-date-picker v-model="formData.invitation_date" element="call-date"></custom-date-picker>
           </v-col>
-          <v-col cols="4">
-            <v-text-field id="send-date" v-model="formData.submit_date" prepend-inner-icon="mdi-calendar" label="تاریخ ارسال"></v-text-field>
+          <v-col cols="2">
+            <v-text-field
+              id="send-date"
+              v-model="formData.submit_date"
+              prepend-inner-icon="mdi-calendar"
+              label="تاریخ ارسال"
+            ></v-text-field>
             <custom-date-picker v-model="formData.submit_date" element="send-date"></custom-date-picker>
           </v-col>
-          <v-col cols="4">
-            <v-text-field id="receive-date" v-model="formData.receipt_date" prepend-inner-icon="mdi-calendar" label="تاریخ دریافت"></v-text-field>
+          <v-col cols="2">
+            <v-text-field
+              id="receive-date"
+              v-model="formData.receipt_date"
+              prepend-inner-icon="mdi-calendar"
+              label="تاریخ دریافت"
+            ></v-text-field>
             <custom-date-picker v-model="formData.receipt_date" element="receive-date"></custom-date-picker>
           </v-col>
-          <v-col cols="4">
-            <v-text-field id="open-date" v-model="formData.start_date" prepend-inner-icon="mdi-calendar" label="تاریخ بازگشایی"></v-text-field>
+          <v-col cols="2">
+            <v-text-field
+              id="open-date"
+              v-model="formData.start_date"
+              prepend-inner-icon="mdi-calendar"
+              label="تاریخ بازگشایی"
+            ></v-text-field>
             <custom-date-picker
               placeholder="تاریخ بازگشایی"
               v-model="formData.start_date"
               element="open-date"
             ></custom-date-picker>
           </v-col>
-          <v-col cols="4">
-            <v-text-field id="free-date" v-model="formData.free_date" prepend-inner-icon="mdi-calendar" label="رایگان از تاریخ"></v-text-field>
+          <v-col cols="2">
+            <v-text-field
+              id="free-date"
+              v-model="formData.free_date"
+              prepend-inner-icon="mdi-calendar"
+              label="رایگان از تاریخ"
+            ></v-text-field>
             <custom-date-picker
               placeholder="رایگان از تاریخ"
               v-model="formData.free_date"
               element="free-date"
             ></custom-date-picker>
           </v-col>
-
-          <v-col cols="4">
+          <v-col cols="2">
+            <v-switch
+              v-model="formData.is_nerve_center"
+              :label=" 
+             formData.is_nerve_center ? 'ستاد' : 'غیر ستاد'"
+            ></v-switch>
+          </v-col>
+          <v-col cols="8">
             <ChooseWorkGroup
               :work_groups="workGroups"
               ref="workGroups"
-              :multiple="true"
               @selected_work_group_changed="selectedWorkGroupChanged"
+              :multiple="true"
             />
             <!-- <v-combobox v-model="work_groups" :items="items" label="گروه های کاری" multiple></v-combobox> -->
           </v-col>
@@ -122,17 +154,6 @@
               multiple
               label="آپلود عکس"
             ></v-file-input>
-          </v-col>
-          <v-col cols="4">
-            <v-select
-              :items="staffStatusList"
-              v-model="formData.is_nerve_center"
-              item-text="value"
-              item-value="id"
-              :rules="[v => !!v || 'Item is required']"
-              label="وضعیت ستاد"
-              required
-            ></v-select>
           </v-col>
           <v-col cols="12">
             <v-textarea
@@ -160,13 +181,20 @@
           <v-btn
             :disabled="!valid"
             color="success"
-            class="mr-4"
+            class="mx-4"
             type="button"
+            width="120"
             @click.prevent="sendData"
           >ذخیره</v-btn>
 
-          <v-btn color="primary" class="mr-4" @click.prevent="search" type="button">جستجو</v-btn>
-          <v-btn color="warning" @click="resetFormData">پاک کردن فیلد ها</v-btn>
+          <v-btn
+            color="primary"
+            class="mx-4"
+            @click.prevent="search"
+            type="button"
+            width="120"
+          >جستجو</v-btn>
+          <v-btn width="120" class="mx-4" color="warning" @click="resetFormData">پاک کردن فیلد ها</v-btn>
         </div>
       </v-card-actions>
     </v-card>
@@ -192,6 +220,9 @@
         :loading="loading"
         :options.sync="options"
         show-select
+        :footer-props="{
+          'items-per-page-options': [10, 20, 30, 40, 50]
+        }"
       >
         <template v-slot:item.created_at="{ item }">{{ item.created_at | moment("jYY/jM/jD") }}</template>
         <template v-slot:item.actions="{ item }">
@@ -442,12 +473,12 @@ export default {
     checkbox: false,
     singleSelect: false,
     headers: [
-      { text: "کد آگهی", value: "tender_code" },
+      { text: "کد آسان تندر", value: "tender_code" },
       { text: "کد فراخوان", value: "invitation_code" },
       { text: "عنوان آگهی", value: "title" },
       { text: "تاریخ انتشار", value: "created_at" },
       { text: "آگهی گذار", value: "adinviter_title" },
-      { text: "Actions", value: "actions", sortable: false, align: 'left' },
+      { text: "Actions", value: "actions", sortable: false, align: "left" },
     ],
     advertises: [],
     editedIndex: -1,
@@ -495,7 +526,7 @@ export default {
                 }
               );
             });
-        } catch (error) { }
+        } catch (error) {}
       }
     },
     backToShowMode() {
@@ -622,9 +653,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-            this.options.page +
-            "&items_per_page=" +
-            this.options.itemsPerPage,
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage,
             {
               ...this.formData,
             }
