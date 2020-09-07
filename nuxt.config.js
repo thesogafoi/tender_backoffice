@@ -77,6 +77,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    '@nuxtjs/auth-next'
   ],
   /*
    ** Axios module configuration
@@ -105,6 +106,33 @@ export default {
         }
       }
     }
+  },
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'token',
+        },
+        user: {
+          property: 'data',
+        },
+        endpoints: {
+          login: { url: 'login', method: 'post', },
+          logout: { url: 'logout', method: 'post' },
+          user: { url: 'user', method: 'get', }
+        }
+      }
+    },
+    redirect: {
+      login: '/',
+      logout: '/',
+      // callback: '/dashboard',
+      home: '/dashboard'
+    }
+  },
+  router: {
+    middleware: ['auth']
   },
   /*
    ** Build configuration

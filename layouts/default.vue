@@ -17,7 +17,8 @@
       </v-btn>
       <v-spacer />
       <div class="d-flex align-center justify-center">
-        <p class="c-mb-0 c-user-name">خانم کهشیدی</p>
+        <p class="c-mb-0 c-user-name">{{$auth.user.name}}</p>
+        <p class="c-mb-0 c-user-name mr-2" style="cursor: pointer;" @click.prevent="logOut">خروج</p>
         <v-list-item-avatar>
           <v-img src="https://randomuser.me/api/portraits/men/85.jpg" width="20"></v-img>
         </v-list-item-avatar>
@@ -48,6 +49,11 @@
 
 <script>
 export default {
+  methods: {
+    async logOut() {
+      await this.$auth.logout();
+    },
+  },
   data() {
     return {
       clipped: false,

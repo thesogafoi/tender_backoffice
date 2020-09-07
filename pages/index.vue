@@ -15,16 +15,16 @@
               class="form-style"
               ref="form"
               v-model="validLogin"
-              @submit.prevent="validateLogin"
+              @submit.prevent="login"
             >
               <h2 class="welcome mt-4 mb-4">Welcome Back</h2>
-              <v-text-field v-model="username" label="Username" outlined :rules="required"></v-text-field>
+              <v-text-field v-model="loginData.mobile" label="Username" outlined :rules="required"></v-text-field>
               <v-text-field
                 :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
                 outlined
                 :rules="required"
                 :type="show3 ? 'text' : 'password'"
-                v-model="password"
+                v-model="loginData.password"
                 label="Password"
                 @click:append="show3 = !show3"
               ></v-text-field>
@@ -39,19 +39,19 @@
 </template>
 <script>
 export default {
-  beforeCreate() {
-    this.$router.push(`/dashboard`);
-  },
   layout: "plain",
+  middleware: ["isLoggedIn"],
+  auth: false,
   data() {
     return {
       show3: false,
       validLogin: true,
       validForgotPassword: true,
       forgotPassword: true,
-      email: "",
-      username: "",
-      password: "",
+      loginData: {
+        mobile: "",
+        password: "",
+      },
       required: [(v) => !!v || "This Field Is Required"],
       usernameRules: [(v) => !!v || "This Field Is Required"],
       passwordRules: [(v) => !!v || "This Field Is Required"],
@@ -68,39 +68,18 @@ export default {
     validateForgotPassword() {
       this.$refs.form.validate();
     },
-    validateLogin() {
+    async login() {
       var validate = this.$refs.form.validate();
-      var data = {
-        username: this.username,
-        password: this.password,
-      };
-      if (validate) {
-        console.log(1);
 
-        this.$store
-          .dispatch("authenticateUser", {
-            isLogin: this.forgotPassword,
-            username: this.username,
-            password: this.password,
-          })
-          .then(() => {
-            console.log(2);
-            this.$store.state.snackbarText =
-              "Welcome to Arad Mobile admin panel";
-            this.$store.state.snackbarColor = "green";
-            this.$store.state.snackbar = true;
-            setTimeout(() => {
-              this.$router.push("./dashboard");
-            }, 500);
-          })
-          .catch(() => {
-            console.log("www", this.$store.state.snackbar);
+      if (!validate) return;
 
-            this.$store.state.snackbarText =
-              "Bad credentials, please verify that your username/password are correctly set";
-            this.$store.state.snackbarColor = "red";
-            this.$store.state.snackbar = true;
-          });
+      try {
+        let response = await this.$auth.loginWith("local", {
+          data: this.loginData,
+        });
+        this.$router.push("/dashboard");
+      } catch (err) {
+        console.log(err);
       }
     },
   },

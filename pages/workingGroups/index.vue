@@ -326,6 +326,9 @@
         :items="workGroups"
         item-key="name"
         class="c-table"
+        :footer-props="{
+          'items-per-page-options': [10, 20, 30, 40, 50]
+        }"
       >
         <template v-slot:top>
           <v-toolbar flat>
