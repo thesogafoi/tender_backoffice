@@ -87,7 +87,7 @@ export default {
         },
         {
           icon: "mdi-format-list-text",
-          title: "پلن های فروش",
+          title: "طرح های اشتراکی ",
           to: "/salesPlans",
         },
         {

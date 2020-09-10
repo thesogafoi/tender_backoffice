@@ -459,9 +459,9 @@ export default {
       // });
     },
     chooseParentsWithType() {
-      this.filters.allParents = true;
-      this.filters.type = this.editedItem.type;
-      this.workGroupSearch();
+      // this.filters.allParents = true;
+      // this.filters.type = this.editedItem.type;
+      // this.workGroupSearch();
     },
     deleteItem(item) {
       try {
@@ -501,6 +501,7 @@ export default {
       this.dialogEdit = true;
       this.resetFormData();
       this.chooseParentsWithType();
+      console.log(item);
       this.editedItem = item;
     },
     resetFormData() {

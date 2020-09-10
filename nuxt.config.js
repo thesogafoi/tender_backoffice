@@ -84,7 +84,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: 'http://asan.matican.work/api/',
+    baseURL: 'http://tender-backend.localhost/api/',
   },
   /*
    ** vuetify module configuration
