@@ -4,11 +4,11 @@
       <v-col cols="12" align="center" justify="center">
         <div class="c-loading-wrapper">
           <div class="left">
-            <!-- <img src="/03.svg" alt="Arad Mobile Logo" /> -->
+            <img src="/30462.jpg" alt="Arad Mobile Logo" />
           </div>
           <div class="right">
             <div class="right-logo mb-4">
-              <!-- <img class="animatedLogo" src="/02.png" alt /> -->
+              <img class="animatedLogo" src="/Asan-2.png" alt />
             </div>
             <v-form
               v-if="forgotPassword"
@@ -86,7 +86,7 @@ export default {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .main-container {
   width: 100%;
   height: 100%;
@@ -124,17 +124,22 @@ export default {
   background-size: cover;
   background-position: bottom;
   position: relative;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 .c-loading-wrapper .left img {
   position: absolute;
-  max-width: 400px;
-  width: 80%;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
   z-index: 33;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scaleX(-1);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  object-fit: cover;
+  object-position: left center;
 }
 .c-loading-wrapper .left:after {
   background-color: rgba(17, 98, 153, 0.5);
@@ -143,8 +148,9 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  z-index: 999;
 }
 .c-loading-wrapper .right {
   width: 40%;
@@ -160,8 +166,8 @@ export default {
   color: #696969;
 }
 .c-loading-wrapper .right .right-logo img {
-  max-width: 100px;
-  width: 80%;
+  max-width: 200px;
+  width: 100%;
   height: auto;
 }
 @media (max-width: 1444px) {

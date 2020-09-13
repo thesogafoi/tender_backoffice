@@ -69,6 +69,8 @@ export default {
     ['@nuxtjs/vuetify', {
       rtl: true
     }],
+
+    '@nuxtjs/auth-next'
   ],
   /*
    ** Nuxt.js modules

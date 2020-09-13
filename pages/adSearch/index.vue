@@ -226,7 +226,7 @@
           <v-col cols="2">
             <v-card>
               <v-card-title>تاریخ فراخوان</v-card-title>
-              <v-card-text>{{singleAdvertise.invitation_date}}</v-card-text>
+              <v-card-text>{{$moment(singleAdvertise.invitation_date, "Y-m-d")}}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="2">
@@ -433,7 +433,10 @@ export default {
       Object.keys(obj).map((key) => {
         if (key.includes("range")) {
           Object.keys(obj[key]).map((firstOrSecond) => {
-            if (obj[key][firstOrSecond] == "") {
+            if (
+              obj[key][firstOrSecond] == "" ||
+              obj[key][firstOrSecond] == null
+            ) {
               obj[key][firstOrSecond] = undefined;
             }
           });
