@@ -123,7 +123,6 @@
               :items="isNerveCenterList"
               item-value="id"
               item-text="value"
-              :rules="[v => !!v || 'Item is required']"
               label="وضعیت ستاد"
               required
             ></v-select>

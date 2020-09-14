@@ -44,14 +44,18 @@
                     <v-col cols="12" sm="6" md="5">
                       <v-text-field
                         v-model="editedItem.allowed_selection"
+                        :rules="[v => !!v || 'Item is Number']"
+                        type="number"
                         label="تعداد گروه‌های کاری"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.cost" label="ارزش پلن"></v-text-field>
+                      <v-text-field type="number" v-model="editedItem.cost"   :rules="[v => !!v || 'Item is Number']" label="ارزش پلن"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="3">
-                      <v-text-field v-model="editedItem.priorty" label="اولویت"></v-text-field>
+                      
+                    <v-text-field v-model="editedItem.priorty" type="number" :rules="[v => !!v || 'Item is Number']" label="اولویت"></v-text-field>
+
                     </v-col>
                     <v-col cols="12" sm="6" md="12">
                       <custom-date-picker label="تاریخ انقضا" v-model="editedItem.period"></custom-date-picker>
@@ -96,14 +100,15 @@
                     <v-col cols="12" sm="6" md="5">
                       <v-text-field
                         v-model="editedItem.allowed_selection"
+                        type="number"
                         label="تعداد گروه‌های کاری"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.cost" label="ارزش پلن"></v-text-field>
+                      <v-text-field v-model="editedItem.cost" type="number" label="ارزش پلن"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="3">
-                      <v-text-field v-model="editedItem.priorty" label="اولویت"></v-text-field>
+                      <v-text-field v-model="editedItem.priorty" type="number" label="اولویت"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="12">
                       <custom-date-picker label="تاریخ انقضا" v-model="editedItem.period"></custom-date-picker>
