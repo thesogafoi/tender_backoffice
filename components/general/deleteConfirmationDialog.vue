@@ -11,8 +11,8 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-3" small outlined @click="emitToParent">Yes</v-btn>
-          <v-btn color="blue darken-3 " small outlined @click="childDialog = !childDialog">Cancel</v-btn>
+          <v-btn color="red darken-3" small outlined @click="emitToParent">بله</v-btn>
+          <v-btn color="blue darken-3 " small outlined @click="childDialog = !childDialog">انصراف</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
