@@ -152,7 +152,7 @@
         <template v-slot:item.actions="{ item }">
           <v-icon small @click="showItem(item)">mdi-eye</v-icon>
         </template>
-        <template v-slot:item.created_at="{ item }">{{ item.created_at | moment("jYY/jM/jD") }}</template>
+        <template v-slot:item.created_at="{ item }">{{ item.created_at }}</template>
         <template v-slot:no-data>
           <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
         </template>
@@ -226,7 +226,7 @@
           <v-col cols="2">
             <v-card>
               <v-card-title>تاریخ فراخوان</v-card-title>
-              <v-card-text>{{$moment(singleAdvertise.invitation_date, "Y-m-d")}}</v-card-text>
+              <v-card-text>{{singleAdvertise.invitation_date}}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="2">
