@@ -65,8 +65,8 @@
                 ></v-file-input>-->
               </v-col>
               <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" :disabled="!valid1" text @click="save('parent')">Save</v-btn>
+                <v-spacer></v-spacer> 
+                <v-btn color="blue darken-1" :disabled="!valid1 || isLoading" text @click="save('parent')">ذخیره</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -124,7 +124,7 @@
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" :disabled="!valid2" text @click="save('child')">Save</v-btn>
+                <v-btn color="blue darken-1" :disabled="!valid2 || isLoading" text @click="save('child')">ذخیره</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -180,10 +180,10 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   color="blue darken-1"
-                  :disabled="!valid1"
+                  :disabled="!valid1 || isLoading"
                   text
                   @click="update('parent')"
-                >Update</v-btn>
+                >به روز رسانی اطلاعات</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -258,10 +258,10 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   color="blue darken-1"
-                  :disabled="!valid2"
+                  :disabled="!valid2 || isLoading"
                   text
                   @click="update('child')"
-                >Update</v-btn>
+                >به روز رسانی اطلاعات</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -526,6 +526,7 @@ export default {
       window.location.reload();
     },
     save(type) {
+      this.isLoading = true
       try {
         if (type == "child") {
           if (
@@ -543,6 +544,7 @@ export default {
         this.$axios
           .$post("workgroup/create", this.editedItem)
           .then((res) => {
+            this.isLoading = false
             this.showSnackbar("گروه کاری با موفقیت اضافه شد", "green");
             this.resetFormData();
             this.refreshWorkGroup();
@@ -553,6 +555,7 @@ export default {
             }, 1500);
           })
           .catch((errors) => {
+            this.isLoading = false
             Object.values(this.$store.getters["errorHandling/errors"]).map(
               (error) => {
                 this.showSnackbar(error[0], "red");
@@ -562,7 +565,8 @@ export default {
       } catch (error) {}
       // this.$refs.form.resetValidation();
     },
-    async update(type) {
+    async update(type) { 
+      this.isLoading = true
       if (type == "child") {
         if (
           this.editedItem.parent_id == "" ||
@@ -582,6 +586,7 @@ export default {
         this.$axios
           .$put("workgroup/" + this.editedItem.id, this.editedItem)
           .then((res) => {
+            this.isLoading = false
             this.showSnackbar("گروه کاری با موفقیت تغییر یافت", "green");
             this.resetFormData();
             this.refreshWorkGroup();
@@ -590,6 +595,7 @@ export default {
             }, 1500);
           })
           .catch((errors) => {
+            this.isLoading = false
             Object.values(this.$store.getters["errorHandling/errors"]).map(
               (error) => {
                 this.showSnackbar(error[0], "red");
@@ -631,6 +637,7 @@ export default {
   },
   data() {
     return {
+      isLoading: false,
       dialogEdit: false,
       statusList: [
         {

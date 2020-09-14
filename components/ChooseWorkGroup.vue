@@ -1,7 +1,8 @@
 <template>
   <v-autocomplete
+
     v-model="selected"
-    :disabled="isUpdating"
+    :disabled="isUpdating || dis"
     :items="workGroups"
     chips
     dense
@@ -34,7 +35,7 @@
 
 <script>
 export default {
-  props: ["work_groups", "multiple"],
+  props: ["work_groups", "multiple",'dis'],
   data() {
     return {
       selected: [],

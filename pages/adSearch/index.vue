@@ -111,17 +111,21 @@
               :work_groups="this.$store.getters.workGroups"
               @selected_work_group_changed="fillSelected"
               ref="workGroups"
+              :multiple="true"
             />
           </v-col>
           <v-col cols="3">
-            <v-text-field v-model="formData.title" label="شرح"></v-text-field>
+            <v-text-field v-model="formData.description" label="شرح"></v-text-field>
           </v-col>
           <v-col cols="2">
-            <v-switch
+             <v-select
               v-model="formData.is_nerve_center"
-              :label=" 
-             formData.is_nerve_center ? 'ستاد' : 'غیر ستاد'"
-            ></v-switch>
+              :items="isNerveCenterList"
+              item-value="id"
+              item-text="value"
+              label="وضعیت ستاد"
+              required
+            ></v-select>
           </v-col>
           <!-- <v-col cols="12">
             <v-textarea name="input-7-1" label="توضیحات" v-model="formData.description" outlined></v-textarea>
@@ -288,7 +292,7 @@ export default {
       invitation_code: "",
       resource: "",
       adinviter_title: "",
-      is_nerve_center: "",
+      is_nerve_center: false,
       work_groups: [],
     },
     items: ["Programming", "Design", "Vue", "Vuetify"],
@@ -337,6 +341,19 @@ export default {
         id: "0",
       },
     ],
+
+       isNerveCenterList: [
+      {
+        id: 1,
+        value: "ستادی",
+      },
+      {
+        id: 0,
+        value: "غیر ستادی",
+      },
+    ],
+
+    isLoading: false,
 
     checkbox: false,
     singleSelect: false,
@@ -425,7 +442,7 @@ export default {
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: "",
+        is_nerve_center: false,
         work_groups: [],
       };
     },

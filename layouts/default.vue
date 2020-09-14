@@ -143,6 +143,11 @@ export default {
 };
 </script>
 <style lang="css">
+.buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .nav-icon {
   direction: rtl;
   padding-right: 22px;
