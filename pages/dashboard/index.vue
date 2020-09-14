@@ -5,11 +5,13 @@
         <v-card class="card" color="rgba(0, 143, 251, 0.85)">
           <v-row>
 
-            <v-col class="inside-card" cols="12" lg="6">
+            <v-col class="inside-card" cols="12" lg="6" md="6" sm="6">
               <v-icon class="icon">mdi-human-male</v-icon>
+              
               <h5>مشتری</h5>
+              
             </v-col>
-            <v-col class="inside-card" cols="12" lg="6">
+            <v-col class="inside-card" cols="12" lg="6" md="6" sm="6">
               <h6>130</h6>
             </v-col>
 
@@ -19,12 +21,12 @@
       <v-col cols="12" lg="4" md="4" sm="12">
         <v-card class="card" color="rgba(255, 69, 96, 0.85)">
           <v-row>
-            <v-col class="inside-card" cols="12" lg="6">
+            <v-col class="inside-card" cols="12" lg="6" md="6" sm="6">
               <v-icon class="icon">mdi-human-male</v-icon>
               <h5>مشتری</h5>
             </v-col>
 
-            <v-col class="inside-card" cols="12" lg="6">
+            <v-col class="inside-card" cols="12" lg="6" md="6" sm="6">
               <h6>130</h6>
             </v-col>
 
@@ -34,11 +36,11 @@
       <v-col cols="12" lg="4" md="4" sm="12">
         <v-card class="card" color="rgba(254, 176, 25, 0.85)">
           <v-row>
-            <v-col class="inside-card" cols="12" lg="6">
+            <v-col class="inside-card" cols="12" lg="6" md="6" sm="6">
               <v-icon class="icon">mdi-human-male</v-icon>
               <h5>مشتری</h5>
             </v-col>
-            <v-col class="inside-card" cols="12" lg="6">
+            <v-col class="inside-card" cols="12" lg="6" md="6" sm="6">
               
               <h6>130</h6>
             </v-col>
@@ -51,7 +53,7 @@
       <v-col cols="12" lg="6" md="12" sm="12">
         <v-data-table :headers="headers" :items="desserts" class="elevation-1"></v-data-table>
       </v-col>
-      <v-col cols="6" lg="6" md="12" sm="12">
+      <v-col cols="12" lg="6" md="12" sm="12">
         <v-data-table :headers="headers" :items="desserts" :items-per-page="5" class="elevation-1"></v-data-table>
       </v-col>
     </v-row>
@@ -383,7 +385,7 @@
   }
 
   .card {
-    height: 150px;
+    height: 115px;
     display: flex;
     align-items: center;
   }
