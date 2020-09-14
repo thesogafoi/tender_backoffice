@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>{{this.formData.is_nerve_center}}</h1>
     <v-card class="c-pa-20">
       <v-toolbar flat>
         <v-toolbar-title>آگهی</v-toolbar-title>
@@ -121,6 +122,7 @@
               id="free-date"
               v-model="formData.free_date"
               prepend-inner-icon="mdi-calendar"
+              :clearable="true"
               label="رایگان از تاریخ"
             ></v-text-field>
             <custom-date-picker
@@ -224,7 +226,7 @@
           'items-per-page-options': [10, 20, 30, 40, 50]
         }"
       >
-        <template v-slot:item.created_at="{ item }">{{ item.created_at | moment("jYY/jM/jD") }}</template>
+        <template v-slot:item.created_at="{ item }">{{item.created_at}}</template>
         <template v-slot:item.actions="{ item }">
           <div class="d-flex">
             <v-icon
@@ -378,6 +380,9 @@ import searchOnWorkGroupsMixins from "~/mixins.js/searchOnWorkGroupsMixins.js";
 import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 export default {
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
+  mounted() {
+    this.formData.is_nerve_center = false;
+  },
   computed: {
     formDataType() {
       return this.formData.type;
@@ -416,7 +421,7 @@ export default {
       invitation_code: "",
       resource: "",
       adinviter_title: "",
-      is_nerve_center: 0,
+      is_nerve_center: false,
       invitation_date: "",
       submit_date: "",
       receipt_date: "",
@@ -548,7 +553,7 @@ export default {
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: 0,
+        is_nerve_center: false,
         invitation_date: "",
         submit_date: "",
         receipt_date: "",
@@ -569,7 +574,7 @@ export default {
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: 0,
+        is_nerve_center: false,
         invitation_date: "",
         submit_date: "",
         receipt_date: "",

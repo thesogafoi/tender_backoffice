@@ -89,7 +89,11 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
+<<<<<<< HEAD
     baseURL: "http://asan.matican.work/api/"
+=======
+    baseURL: 'http://asan.matican.work/api/',
+>>>>>>> c22ed4a5d2511a633c78ecb468abca619363f6cf
   },
   /*
    ** vuetify module configuration
