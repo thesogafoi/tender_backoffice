@@ -44,14 +44,18 @@
                     <v-col cols="12" sm="6" md="5">
                       <v-text-field
                         v-model="editedItem.allowed_selection"
+                        :rules="[v => !!v || 'Item is Number']"
+                        type="number"
                         label="تعداد گروه‌های کاری"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.cost" label="ارزش پلن"></v-text-field>
+                      <v-text-field type="number" v-model="editedItem.cost"   :rules="[v => !!v || 'Item is Number']" label="ارزش پلن"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="3">
-                      <v-text-field v-model="editedItem.priorty" label="اولویت"></v-text-field>
+                      
+                    <v-text-field v-model="editedItem.priorty" type="number" :rules="[v => !!v || 'Item is Number']" label="اولویت"></v-text-field>
+
                     </v-col>
                     <v-col cols="12" sm="6" md="12">
                       <custom-date-picker label="تاریخ انقضا" v-model="editedItem.period"></custom-date-picker>
@@ -63,7 +67,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="red" text @click="closeEditDialog">انصراف</v-btn>
-                <v-btn color="green" text @click="updateItem">ذخیره</v-btn>
+                <v-btn color="green" :disabled="isLoading" text @click="updateItem">ذخیره</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -96,14 +100,15 @@
                     <v-col cols="12" sm="6" md="5">
                       <v-text-field
                         v-model="editedItem.allowed_selection"
+                        type="number"
                         label="تعداد گروه‌های کاری"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.cost" label="ارزش پلن"></v-text-field>
+                      <v-text-field v-model="editedItem.cost" type="number" label="ارزش پلن"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="3">
-                      <v-text-field v-model="editedItem.priorty" label="اولویت"></v-text-field>
+                      <v-text-field v-model="editedItem.priorty" type="number" label="اولویت"></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="12">
                       <custom-date-picker label="تاریخ انقضا" v-model="editedItem.period"></custom-date-picker>
@@ -115,23 +120,31 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="red" text @click="closeAddItem">انصراف</v-btn>
-                <v-btn color="green" text @click="save">ذخیره</v-btn>
+                <v-btn color="green" :disabled="isLoading" text @click="save">ذخیره</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
+          <div class="buttons-container">
         <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+                    <deleteConfirmationDialog @delete="deleteItem(item)" />
+          </div>
       </template>
     </v-data-table>
   </div>
 </template>
 
 <script>
+import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
+
 export default {
+    components: {
+    deleteConfirmationDialog,
+  },
   data: () => ({
+    isLoading: false,
     statusList: [
       {
         id: 0,
@@ -270,6 +283,7 @@ export default {
       });
     },
     save() {
+      this.isLoading = true
       if (this.editedIndex > -1) {
         Object.assign(this.subscriptions[this.editedIndex], this.editedItem);
       } else {
@@ -278,11 +292,13 @@ export default {
           this.$axios
             .$post("subscription", this.editedItem)
             .then((response) => {
+              this.isLoading = false
               this.showSnackbar("طرح اشتراکی با موفقیت اضافه شد", "green");
               this.getDataFromApi();
               this.closeAddItem();
             })
             .catch((error) => {
+              this.isLoading = false
               Object.values(this.$store.getters["errorHandling/errors"]).map(
                 (error) => {
                   this.showSnackbar(error[0], "red");
@@ -294,6 +310,7 @@ export default {
     },
 
     updateItem() {
+      this.isLoading = true
       if (this.editedIndex > -1) {
         Object.assign(this.subscriptions[this.editedIndex], this.editedItem);
       } else {
@@ -302,11 +319,13 @@ export default {
           this.$axios
             .$put("subscription/" + this.editedItem.id, this.editedItem)
             .then((response) => {
+              this.isLoading = false
               this.showSnackbar("طرح اشتراکی با موفقیت تغییر یافت", "green");
               this.getDataFromApi();
               this.closeEditDialog();
             })
             .catch((error) => {
+              this.isLoading = false
               Object.values(this.$store.getters["errorHandling/errors"]).map(
                 (error) => {
                   this.showSnackbar(error[0], "red");

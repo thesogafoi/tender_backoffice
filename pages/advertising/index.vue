@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>{{this.formData.is_nerve_center}}</h1>
     <v-card class="c-pa-20">
       <v-toolbar flat>
         <v-toolbar-title>آگهی</v-toolbar-title>
@@ -71,7 +70,7 @@
           </v-col>
 
           <v-col cols="4">
-            <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی گذار " required></v-text-field>
+            <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی گذار " :rules="[v => !!v || 'Item is required']" required></v-text-field>
           </v-col>
           <v-col cols="4">
             <v-text-field v-model="formData.resource" label="منبع" required></v-text-field>
@@ -132,14 +131,19 @@
             ></custom-date-picker>
           </v-col>
           <v-col cols="2">
-            <v-switch
+             <v-select
               v-model="formData.is_nerve_center"
-              :label=" 
-             formData.is_nerve_center ? 'ستاد' : 'غیر ستاد'"
-            ></v-switch>
+              :items="isNerveCenterList"
+              item-value="id"
+              item-text="value"
+              :rules="[v => !!v || 'Item is required']"
+              label="وضعیت ستاد"
+              required
+            ></v-select>
           </v-col>
           <v-col cols="8">
             <ChooseWorkGroup
+      :dis='formData.type == undefined'
               :work_groups="workGroups"
               ref="workGroups"
               @selected_work_group_changed="selectedWorkGroupChanged"
@@ -171,7 +175,7 @@
       <v-card-actions>
         <div v-if="editMode">
           <v-btn
-            :disabled="!valid"
+            :disabled="!valid || isLoading"
             color="success"
             class="mr-4"
             type="button"
@@ -181,7 +185,7 @@
         </div>
         <div v-else>
           <v-btn
-            :disabled="!valid"
+            :disabled="!valid || isLoading"
             color="success"
             class="mx-4"
             type="button"
@@ -228,14 +232,15 @@
       >
         <template v-slot:item.created_at="{ item }">{{item.created_at}}</template>
         <template v-slot:item.actions="{ item }">
-          <div class="d-flex">
+          <div class="buttons-container">
             <v-icon
               small
               class="mr-1"
               color="blue lighten-2"
               @click="turnToEditMode(item)"
             >mdi-pencil</v-icon>
-            <v-icon small class="mr-1" color="red lighten-2" @click="deleteItem(item)">mdi-delete</v-icon>
+                                <deleteConfirmationDialog @delete="deleteItem(item)" />
+
             <v-icon small class="mr-1" @click="showItem(item)">mdi-eye</v-icon>
           </div>
         </template>
@@ -378,10 +383,12 @@
 <script>
 import searchOnWorkGroupsMixins from "~/mixins.js/searchOnWorkGroupsMixins.js";
 import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
+import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
+
 export default {
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
-  mounted() {
-    this.formData.is_nerve_center = false;
+   components: {
+    deleteConfirmationDialog,
   },
   computed: {
     formDataType() {
@@ -421,7 +428,7 @@ export default {
       invitation_code: "",
       resource: "",
       adinviter_title: "",
-      is_nerve_center: false,
+      is_nerve_center: '',
       invitation_date: "",
       submit_date: "",
       receipt_date: "",
@@ -464,6 +471,16 @@ export default {
         value: "انتشار یافته",
       },
     ],
+    isNerveCenterList: [
+      {
+        id: '1',
+        value: "ستادی",
+      },
+      {
+        id: '0',
+        value: "غیر ستادی",
+      },
+    ],
     staffStatusList: [
       {
         value: "ستاد",
@@ -474,6 +491,8 @@ export default {
         id: "0",
       },
     ],
+
+    isLoading: false,
 
     checkbox: false,
     singleSelect: false,
@@ -502,6 +521,7 @@ export default {
 
   methods: {
     async editItem() {
+      this.isLoading = true
       if (
         false
         // this.formData.status == 1
@@ -516,6 +536,7 @@ export default {
           await this.$axios
             .$put("advertise/update/" + this.advertiseId, this.formData)
             .then(() => {
+              this.isLoading = false
               this.showSnackbar("آگهی به روز رسانی شد", "green");
               this.backToShowMode();
               this.editMode = false;
@@ -525,6 +546,7 @@ export default {
               }, 1500);
             })
             .catch(() => {
+              this.isLoading = false
               Object.values(this.$store.getters["errorHandling/errors"]).map(
                 (error) => {
                   this.showSnackbar(error[0], "red");
@@ -553,7 +575,7 @@ export default {
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: false,
+        is_nerve_center: '',
         invitation_date: "",
         submit_date: "",
         receipt_date: "",
@@ -574,7 +596,7 @@ export default {
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: false,
+        is_nerve_center: '',
         invitation_date: "",
         submit_date: "",
         receipt_date: "",
@@ -653,6 +675,7 @@ export default {
       this.loading = true;
       this.$refs.form.resetValidation();
       const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+
       let newFormData = this.removeEmptyObjects(this.formData);
       return new Promise((resolve, reject) => {
         this.$axios
@@ -674,6 +697,7 @@ export default {
     },
     sendData() {
       this.$refs.form.validate();
+      this.isLoading = true;
       if (
         this.formData.status == 1 &&
         !this.isWorkGruopsSelected("workGroups")
@@ -687,6 +711,7 @@ export default {
           this.$axios
             .$post("advertise/create", this.formData)
             .then((response) => {
+              this.isLoading = false;
               this.showSnackbar("آگهی با موفقیت اضافه شد", "green");
               setTimeout(() => {
                 this.resetFormDataWithoutType();
@@ -694,6 +719,7 @@ export default {
               }, 1500);
             })
             .catch((error) => {
+              this.isLoading = false;
               Object.values(this.$store.getters["errorHandling/errors"]).map(
                 (error) => {
                   this.showSnackbar(error[0], "red");
@@ -712,6 +738,7 @@ export default {
       this.getDataFromApi();
     },
     removeEmptyObjects(obj) {
+    
       Object.keys(obj).map((key) => {
         if (obj[key] == "" || obj[key] == undefined || obj[key] == null) {
           delete obj[key];
