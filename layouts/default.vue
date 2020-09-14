@@ -17,10 +17,19 @@
       </v-btn>
       <v-spacer />
       <div class="d-flex align-center justify-center">
-        <p class="c-mb-0 c-user-name">{{$auth.user.name}}</p>
-        <p class="c-mb-0 c-user-name mr-2" style="cursor: pointer;" @click.prevent="logOut">خروج</p>
+        <p class="c-mb-0 c-user-name">{{ $auth.user.name }}</p>
+        <p
+          class="c-mb-0 c-user-name mr-2"
+          style="cursor: pointer;"
+          @click.prevent="logOut"
+        >
+          خروج
+        </p>
         <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg" width="20"></v-img>
+          <v-img
+            src="https://randomuser.me/api/portraits/men/85.jpg"
+            width="20"
+          ></v-img>
         </v-list-item-avatar>
       </div>
     </v-app-bar>
@@ -30,11 +39,15 @@
       </div>
     </v-main>
 
-    <v-snackbar v-model="$store.state.snackbar" :color="$store.state.snackbarColor">
+    <v-snackbar
+      v-model="$store.state.snackbar"
+      :color="$store.state.snackbarColor"
+    >
       <v-card-title
         class="font-weight-regular pa-2"
         style="word-spacing: 1.2px; text-align: center"
-      >{{ $store.state.snackbarText }}</v-card-title>
+        >{{ $store.state.snackbarText }}</v-card-title
+      >
 
       <v-btn icon @click="$store.state.snackbar = false">
         <v-icon color="white">mdi-close-circle-outline</v-icon>
@@ -52,7 +65,7 @@ export default {
   methods: {
     async logOut() {
       await this.$auth.logout();
-    },
+    }
   },
   data() {
     return {
@@ -63,70 +76,70 @@ export default {
         {
           icon: "mdi-view-dashboard",
           title: "داشبورد",
-          to: "/dashboard",
+          to: "/dashboard"
         },
         {
           icon: "mdi-notebook-check",
           title: "آگهی",
-          to: "/advertising",
+          to: "/advertising"
         },
         {
           icon: "mdi-card-search-outline",
           title: "جستجوی آگهی",
-          to: "/adSearch",
+          to: "/adSearch"
         },
         {
           icon: "mdi-lightbulb-group",
           title: "گروه های کاری",
-          to: "/workingGroups",
+          to: "/workingGroups"
         },
         {
           icon: "mdi-account-group",
           title: "مشتریان",
-          to: "/customers",
+          to: "/customers"
         },
         {
           icon: "mdi-format-list-text",
           title: "طرح های اشتراکی ",
-          to: "/salesPlans",
+          to: "/salesPlans"
         },
         {
           icon: "mdi-receipt",
           title: "پرداخت ها",
-          to: "/payments",
+          to: "/payments"
         },
         {
           icon: "mdi-ticket-percent",
           title: "کد تخفیف",
-          to: "/discountCode",
+          to: "/discountCode"
         },
-        {
-          icon: "mdi-post-outline",
-          title: "تبلیغات",
-          to: "/publicity",
-        },
-        {
-          icon: "mdi-ticket-account",
-          title: "آگهی گذار",
-          to: "/adTransition",
-        },
+        // {
+        //   icon: "mdi-post-outline",
+        //   title: "تبلیغات",
+        //   to: "/publicity",
+        // },
+        // {
+        //   icon: "mdi-ticket-account",
+        //   title: "آگهی گذار",
+        //   to: "/adTransition",
+        // },
         {
           icon: "mdi-account",
           title: "کارمندان و دسترسی ها",
-          to: "/staffAndAccess",
-        },
-        {
-          icon: "mdi-cog",
-          title: "تنظیمات",
-          to: "/settings",
-        },
+          to: "/staffAndAccess"
+        }
+        // {
+        //   icon: "mdi-cog",
+        //   title: "تنظیمات",
+        //   to: "/settings",
+        // },
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "Asantender",
+      title: "Asantender"
     };
-  },
+  }
 };
 </script>
 <style lang="css">
