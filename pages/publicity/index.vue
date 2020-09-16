@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="elevation-1">
+    <v-data-table
+      :headers="headers"
+      :items="desserts"
+      sort-by="calories"
+      class="elevation-1"
+    >
       <template v-slot:top>
         <v-toolbar flat color="white">
           <v-toolbar-title>تبلیغات</v-toolbar-title>
@@ -8,7 +13,9 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">اضافه کردن</v-btn>
+              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
+                >اضافه کردن</v-btn
+              >
             </template>
             <v-card>
               <v-card-title class="c-header">
@@ -19,13 +26,22 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field v-model="editedItem.title" label="عنوان"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.title"
+                        label="عنوان"
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="6">
-                      <v-text-field v-model="editedItem.link" label="لینک "></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.link"
+                        label="لینک "
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="12">
-                      <custom-date-picker label="تاریخ " v-model="editedItem.date"></custom-date-picker>
+                      <custom-date-picker
+                        label="تاریخ "
+                        v-model="editedItem.date"
+                      ></custom-date-picker>
                     </v-col>
                     <v-col cols="12" sm="6" md="12">
                       <v-file-input
@@ -78,13 +94,13 @@ export default {
         text: " عنوان",
         align: "start",
         sortable: false,
-        value: "title",
+        value: "title"
       },
       { text: "عکس", value: "urlImage" },
       { text: "تاریخ", value: "date" },
       { text: "لینک", value: "link" },
       { text: "شناسه", value: "id" },
-      { text: "عملیات", value: "actions", sortable: false },
+      { text: "ابزار", value: "actions", sortable: false }
     ],
     desserts: [],
     editedIndex: -1,
@@ -93,27 +109,27 @@ export default {
       link: "",
       date: 0,
       image: null,
-      urlImage: null,
+      urlImage: null
     },
     defaultItem: {
       title: "",
       link: "",
       date: 0,
       image: null,
-      urlImage: null,
-    },
+      urlImage: null
+    }
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
+    }
   },
 
   watch: {
     dialog(val) {
       val || this.close();
-    },
+    }
   },
 
   created() {
@@ -126,8 +142,8 @@ export default {
         {
           title: "Frozen Yogurt",
           link: 159,
-          date: 24,
-        },
+          date: 24
+        }
       ];
     },
 
@@ -164,8 +180,8 @@ export default {
       console.log("fw", this.editedItem.image, this.editedItem.urlImage);
       // const file = image;
       // this.editedItem.image = URL.createObjectURL(file);
-    },
-  },
+    }
+  }
 };
 </script>
 

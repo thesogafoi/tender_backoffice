@@ -11,20 +11,16 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app height="32">
+    <v-app-bar :clipped-left="clipped" fixed app height="62">
       <v-btn icon @click.stop="drawer = !drawer">
         <v-icon>mdi-menu</v-icon>
       </v-btn>
       <v-spacer />
       <div class="d-flex align-center justify-center">
         <p class="c-mb-0 c-user-name">{{ $auth.user.name }}</p>
-        <p
-          class="c-mb-0 c-user-name mr-2"
-          style="cursor: pointer;"
-          @click.prevent="logOut"
-        >
+        <v-btn class="ma-2" color="indigo" dark @click.prevent="logOut">
           خروج
-        </p>
+        </v-btn>
         <v-list-item-avatar>
           <v-img
             src="https://randomuser.me/api/portraits/men/85.jpg"

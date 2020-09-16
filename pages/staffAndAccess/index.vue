@@ -1,7 +1,12 @@
 <template>
   <div>
-    {{editedItem.image}}
-    <v-data-table :headers="headers" :items="desserts" sort-by="calories" class="elevation-1">
+    {{ editedItem.image }}
+    <v-data-table
+      :headers="headers"
+      :items="desserts"
+      sort-by="calories"
+      class="elevation-1"
+    >
       <template v-slot:top>
         <v-toolbar flat color="white">
           <v-toolbar-title>کارمندان و دسترسی ها</v-toolbar-title>
@@ -9,7 +14,9 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">اضافه کردن</v-btn>
+              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
+                >اضافه کردن</v-btn
+              >
             </template>
             <v-card>
               <v-card-title>
@@ -20,16 +27,29 @@
                 <v-container>
                   <v-row>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.fullName" label="نام و نام خانوادگی"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.fullName"
+                        label="نام و نام خانوادگی"
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.phoneNumber" label="موبایل "></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.phoneNumber"
+                        label="موبایل "
+                      ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="4">
-                      <v-text-field v-model="editedItem.password" label="رمز عبور"></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.password"
+                        label="رمز عبور"
+                      ></v-text-field>
                     </v-col>
                     <v-col class="d-flex" cols="12" sm="6">
-                      <v-select :items="items" v-model="editedItem.levelAccess" label="سطح دسترسی"></v-select>
+                      <v-select
+                        :items="items"
+                        v-model="editedItem.levelAccess"
+                        label="سطح دسترسی"
+                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -64,14 +84,14 @@ export default {
         text: " fullName",
         align: "start",
         sortable: false,
-        value: "fullName",
+        value: "fullName"
       },
 
       { text: "موبایل", value: "phoneNumber" },
       { text: "رمز عبور", value: "password" },
       { text: "شناسه", value: "id" },
       { text: "سطح دسترسی", value: "levelAccess" },
-      { text: "عملیات", value: "actions", sortable: false },
+      { text: "ابزار", value: "actions", sortable: false }
     ],
     desserts: [],
     editedIndex: -1,
@@ -79,26 +99,26 @@ export default {
       fullName: "",
       phoneNumber: 0,
       password: 0,
-      levelAccess: "",
+      levelAccess: ""
     },
     defaultItem: {
       fullName: "",
       phoneNumber: 0,
       password: 0,
-      levelAccess: "",
-    },
+      levelAccess: ""
+    }
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    },
+    }
   },
 
   watch: {
     dialog(val) {
       val || this.close();
-    },
+    }
   },
 
   created() {
@@ -112,8 +132,8 @@ export default {
           fullName: "حسین",
           phoneNumber: 0,
           password: 0,
-          levelAccess: "",
-        },
+          levelAccess: ""
+        }
       ];
     },
 
@@ -144,7 +164,7 @@ export default {
       }
       this.close();
       // this.showSnackbar("Save", "green");
-    },
-  },
+    }
+  }
 };
 </script>

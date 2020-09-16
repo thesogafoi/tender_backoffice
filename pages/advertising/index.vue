@@ -70,10 +70,19 @@
           </v-col>
 
           <v-col cols="4">
-            <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی گذار " :rules="[v => !!v || 'Item is required']" required></v-text-field>
+            <v-text-field
+              v-model="formData.adinviter_title"
+              label="عنوان آگهی گذار "
+              :rules="[v => !!v || 'Item is required']"
+              required
+            ></v-text-field>
           </v-col>
           <v-col cols="4">
-            <v-text-field v-model="formData.resource" label="منبع" required></v-text-field>
+            <v-text-field
+              v-model="formData.resource"
+              label="منبع"
+              required
+            ></v-text-field>
           </v-col>
 
           <v-col cols="2">
@@ -83,7 +92,10 @@
               prepend-inner-icon="mdi-calendar"
               label="تاریخ فراخوان"
             ></v-text-field>
-            <custom-date-picker v-model="formData.invitation_date" element="call-date"></custom-date-picker>
+            <custom-date-picker
+              v-model="formData.invitation_date"
+              element="call-date"
+            ></custom-date-picker>
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -92,7 +104,10 @@
               prepend-inner-icon="mdi-calendar"
               label="تاریخ ارسال"
             ></v-text-field>
-            <custom-date-picker v-model="formData.submit_date" element="send-date"></custom-date-picker>
+            <custom-date-picker
+              v-model="formData.submit_date"
+              element="send-date"
+            ></custom-date-picker>
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -101,7 +116,10 @@
               prepend-inner-icon="mdi-calendar"
               label="تاریخ دریافت"
             ></v-text-field>
-            <custom-date-picker v-model="formData.receipt_date" element="receive-date"></custom-date-picker>
+            <custom-date-picker
+              v-model="formData.receipt_date"
+              element="receive-date"
+            ></custom-date-picker>
           </v-col>
           <v-col cols="2">
             <v-text-field
@@ -131,7 +149,7 @@
             ></custom-date-picker>
           </v-col>
           <v-col cols="2">
-             <v-select
+            <v-select
               v-model="formData.is_nerve_center"
               :items="isNerveCenterList"
               item-value="id"
@@ -143,7 +161,7 @@
           </v-col>
           <v-col cols="8">
             <ChooseWorkGroup
-      :dis='formData.type == undefined'
+              :dis="formData.type == undefined"
               :work_groups="workGroups"
               ref="workGroups"
               @selected_work_group_changed="selectedWorkGroupChanged"
@@ -180,8 +198,15 @@
             class="mr-4"
             type="button"
             @click.prevent="editItem"
-          >به روز رسانی اطلاعت</v-btn>
-          <v-btn color="warning" class="mr-4" @click.prevent="backToShowMode" type="button">انصراف</v-btn>
+            >به روز رسانی اطلاعت</v-btn
+          >
+          <v-btn
+            color="warning"
+            class="mr-4"
+            @click.prevent="backToShowMode"
+            type="button"
+            >انصراف</v-btn
+          >
         </div>
         <div v-else>
           <v-btn
@@ -191,7 +216,8 @@
             type="button"
             width="120"
             @click.prevent="sendData"
-          >ذخیره</v-btn>
+            >ذخیره</v-btn
+          >
 
           <v-btn
             color="primary"
@@ -199,8 +225,11 @@
             @click.prevent="search"
             type="button"
             width="120"
-          >جستجو</v-btn>
-          <v-btn width="120" class="mx-4" color="warning" @click="resetFormData">پاک کردن فیلد ها</v-btn>
+            >جستجو</v-btn
+          >
+          <v-btn width="120" class="mx-4" color="warning" @click="resetFormData"
+            >پاک کردن فیلد ها</v-btn
+          >
         </div>
       </v-card-actions>
     </v-card>
@@ -211,7 +240,11 @@
 
       <v-menu bottom origin="center center" transition="scale-transition">
         <v-list>
-          <v-list-item v-for="(item, i) in items" :key="i" @click="buttonActions(item.title)">
+          <v-list-item
+            v-for="(item, i) in items"
+            :key="i"
+            @click="buttonActions(item.title)"
+          >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -230,7 +263,9 @@
           'items-per-page-options': [10, 20, 30, 40, 50]
         }"
       >
-        <template v-slot:item.created_at="{ item }">{{item.created_at}}</template>
+        <template v-slot:item.created_at="{ item }">{{
+          item.created_at
+        }}</template>
         <template v-slot:item.actions="{ item }">
           <div class="buttons-container">
             <v-icon
@@ -238,8 +273,9 @@
               class="mr-1"
               color="blue lighten-2"
               @click="turnToEditMode(item)"
-            >mdi-pencil</v-icon>
-                                <deleteConfirmationDialog @delete="deleteItem(item)" />
+              >mdi-pencil</v-icon
+            >
+            <deleteConfirmationDialog @delete="deleteItem(item)" />
 
             <v-icon small class="mr-1" @click="showItem(item)">mdi-eye</v-icon>
           </div>
@@ -263,90 +299,96 @@
           <v-col cols="2">
             <v-card>
               <v-card-title>ID</v-card-title>
-              <v-card-text>{{singleAdvertise.id}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.id }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="6">
             <v-card>
               <v-card-title>عنوان</v-card-title>
-              <v-card-text>{{singleAdvertise.title}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.title }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="4">
             <v-card>
               <v-card-title>کد آسان‌تندر</v-card-title>
-              <v-card-text>{{singleAdvertise.tender_code}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.tender_code }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="3">
             <v-card>
               <v-card-title>وضعیت</v-card-title>
-              <v-card-text>{{singleAdvertise.status}}</v-card-text>
+              <v-card-text>{{
+                singleAdvertise.status == 0 ? "انتشار یافته" : "در حال بررسی"
+              }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="6">
             <v-card>
               <v-card-title>عنوان آگهی گذار</v-card-title>
-              <v-card-text>{{singleAdvertise.adinviter_title}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.adinviter_title }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="3">
             <v-card>
               <v-card-title>منبع</v-card-title>
-              <v-card-text>{{singleAdvertise.resource}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.resource }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="2">
             <v-card>
               <v-card-title>تاریخ انتشار</v-card-title>
-              <v-card-text>{{singleAdvertise.created_at}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.created_at }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="2">
             <v-card>
               <v-card-title>تاریخ بازگشایی</v-card-title>
-              <v-card-text>{{singleAdvertise.free_date}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.free_date }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="2">
             <v-card>
               <v-card-title>تاریخ دریافت</v-card-title>
-              <v-card-text>{{singleAdvertise.receipt_date}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.receipt_date }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="2">
             <v-card>
               <v-card-title>تاریخ فراخوان</v-card-title>
-              <v-card-text>{{singleAdvertise.invitation_date}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.invitation_date }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="2">
             <v-card>
               <v-card-title>تاریخ شروع</v-card-title>
-              <v-card-text>{{singleAdvertise.start_date}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.start_date }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="2">
             <v-card>
               <v-card-title>تاریخ ارسال</v-card-title>
-              <v-card-text>{{singleAdvertise.submit_date}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.submit_date }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="9">
             <v-card>
               <v-card-title>شرح</v-card-title>
-              <v-card-text>{{singleAdvertise.description}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.description }}</v-card-text>
             </v-card>
             <v-card class="c-mt-20">
               <v-card-title>لینک</v-card-title>
-              <v-card-text>{{singleAdvertise.link}}</v-card-text>
+              <v-card-text>{{ singleAdvertise.link }}</v-card-text>
             </v-card>
           </v-col>
           <v-col cols="3">
             <v-card>
               <v-card-title>عکس ضمیمه</v-card-title>
               <v-card-text>
-                <img class="thumbnaail-image" src="https://placehold.co/300x300" alt />
+                <img
+                  class="thumbnaail-image"
+                  src="https://placehold.co/300x300"
+                  alt
+                />
               </v-card-text>
             </v-card>
           </v-col>
@@ -387,13 +429,13 @@ import deleteConfirmationDialog from "~/components/general/deleteConfirmationDia
 
 export default {
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
-   components: {
-    deleteConfirmationDialog,
+  components: {
+    deleteConfirmationDialog
   },
   computed: {
     formDataType() {
       return this.formData.type;
-    },
+    }
   },
   watch: {
     formDataType() {
@@ -402,13 +444,13 @@ export default {
     },
     options: {
       handler() {
-        this.getDataFromApi().then((data) => {
+        this.getDataFromApi().then(data => {
           this.desserts = data.items;
           this.totalDesserts = data.total;
         });
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   data: () => ({
     excel_file: "",
@@ -428,68 +470,68 @@ export default {
       invitation_code: "",
       resource: "",
       adinviter_title: "",
-      is_nerve_center: '',
+      is_nerve_center: "",
       invitation_date: "",
       submit_date: "",
       receipt_date: "",
       start_date: "",
-      free_date: "",
+      free_date: ""
     },
     items: ["Programming", "Design", "Vue", "Vuetify"],
 
     nameRules: [
-      (v) => !!v || "Name is required",
-      (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
+      v => !!v || "Name is required",
+      v => (v && v.length <= 10) || "Name must be less than 10 characters"
     ],
     email: "",
     emailRules: [
-      (v) => !!v || "E-mail is required",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      v => !!v || "E-mail is required",
+      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
     ],
     selected: [],
     listType: [
       {
         id: "AUCTION",
-        value: "مزایده",
+        value: "مزایده"
       },
       {
         id: "TENDER",
-        value: "مناقصه",
+        value: "مناقصه"
       },
       {
         id: "INQUIRY",
-        value: "استعلام",
-      },
+        value: "استعلام"
+      }
     ],
     statusList: [
       {
         id: "0",
-        value: "در حال بررسی",
+        value: "در حال بررسی"
       },
       {
         id: "1",
-        value: "انتشار یافته",
-      },
+        value: "انتشار یافته"
+      }
     ],
     isNerveCenterList: [
       {
-        id: '1',
-        value: "ستادی",
+        id: "1",
+        value: "ستادی"
       },
       {
-        id: '0',
-        value: "غیر ستادی",
-      },
+        id: "0",
+        value: "غیر ستادی"
+      }
     ],
     staffStatusList: [
       {
         value: "ستاد",
-        id: "1",
+        id: "1"
       },
       {
         value: "غیر ستاد",
-        id: "0",
-      },
+        id: "0"
+      }
     ],
 
     isLoading: false,
@@ -502,7 +544,7 @@ export default {
       { text: "عنوان آگهی", value: "title" },
       { text: "تاریخ انتشار", value: "created_at" },
       { text: "آگهی گذار", value: "adinviter_title" },
-      { text: "Actions", value: "actions", sortable: false, align: "left" },
+      { text: "ابزار", value: "actions", sortable: false, align: "left" }
     ],
     advertises: [],
     editedIndex: -1,
@@ -512,16 +554,16 @@ export default {
       { title: "انتشار آگهی" },
       { title: "تغییر به حالت بررسی" },
       { title: "تغییر گروه‌کاری" },
-      { title: "حذف" },
+      { title: "حذف" }
     ],
 
     advertiseId: "",
-    editMode: false,
+    editMode: false
   }),
 
   methods: {
     async editItem() {
-      this.isLoading = true
+      this.isLoading = true;
       if (
         false
         // this.formData.status == 1
@@ -536,7 +578,7 @@ export default {
           await this.$axios
             .$put("advertise/update/" + this.advertiseId, this.formData)
             .then(() => {
-              this.isLoading = false
+              this.isLoading = false;
               this.showSnackbar("آگهی به روز رسانی شد", "green");
               this.backToShowMode();
               this.editMode = false;
@@ -546,9 +588,9 @@ export default {
               }, 1500);
             })
             .catch(() => {
-              this.isLoading = false
+              this.isLoading = false;
               Object.values(this.$store.getters["errorHandling/errors"]).map(
-                (error) => {
+                error => {
                   this.showSnackbar(error[0], "red");
                 }
               );
@@ -575,12 +617,12 @@ export default {
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: '',
+        is_nerve_center: "",
         invitation_date: "",
         submit_date: "",
         receipt_date: "",
         start_date: "",
-        free_date: "",
+        free_date: ""
       };
     },
     resetFormData() {
@@ -596,12 +638,12 @@ export default {
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: '',
+        is_nerve_center: "",
         invitation_date: "",
         submit_date: "",
         receipt_date: "",
         start_date: "",
-        free_date: "",
+        free_date: ""
       };
     },
     turnToEditMode(item) {
@@ -610,6 +652,8 @@ export default {
       this.advertiseId = item.id;
       this.$axios.$get("advertise/show/" + item.id).then(({ data }) => {
         this.formData = JSON.parse(JSON.stringify(data));
+        this.formData.is_nerve_center = this.formData.is_nerve_center.toString();
+
         this.fillSelected("formData", "workGroups");
       });
     },
@@ -622,16 +666,16 @@ export default {
         this.advertises.splice(this.advertises.indexOf(item), 1);
         this.$axios
           .$delete("advertise/" + item.id)
-          .then((response) => {
+          .then(response => {
             setTimeout(() => {
               this.resetFormData();
               this.search();
             }, 1500);
             this.showSnackbar("آگهی با موفقیت حذف شد", "success");
           })
-          .catch((error) => {
+          .catch(error => {
             Object.values(this.$store.getters["errorHandling/errors"]).map(
-              (error) => {
+              error => {
                 this.showSnackbar(error[0], "red");
               }
             );
@@ -656,7 +700,7 @@ export default {
       try {
         await this.$axios
           .$post("advertise/excel/create", formData)
-          .then((response) => {
+          .then(response => {
             setTimeout(() => {
               this.resetFormData();
               this.search();
@@ -665,7 +709,7 @@ export default {
           });
       } catch (error) {
         Object.values(this.$store.getters["errorHandling/errors"]).map(
-          (error) => {
+          error => {
             this.showSnackbar(error[0], "red");
           }
         );
@@ -685,10 +729,10 @@ export default {
               "&items_per_page=" +
               this.options.itemsPerPage,
             {
-              ...this.formData,
+              ...this.formData
             }
           )
-          .then((response) => {
+          .then(response => {
             this.meta = response.meta;
             this.advertises = response.data;
             this.loading = false;
@@ -710,7 +754,7 @@ export default {
         try {
           this.$axios
             .$post("advertise/create", this.formData)
-            .then((response) => {
+            .then(response => {
               this.isLoading = false;
               this.showSnackbar("آگهی با موفقیت اضافه شد", "green");
               setTimeout(() => {
@@ -718,10 +762,10 @@ export default {
                 this.search();
               }, 1500);
             })
-            .catch((error) => {
+            .catch(error => {
               this.isLoading = false;
               Object.values(this.$store.getters["errorHandling/errors"]).map(
-                (error) => {
+                error => {
                   this.showSnackbar(error[0], "red");
                 }
               );
@@ -738,8 +782,7 @@ export default {
       this.getDataFromApi();
     },
     removeEmptyObjects(obj) {
-    
-      Object.keys(obj).map((key) => {
+      Object.keys(obj).map(key => {
         if (obj[key] == "" || obj[key] == undefined || obj[key] == null) {
           delete obj[key];
         }
@@ -761,8 +804,8 @@ export default {
       } else if (title === "تغییر گروه‌کاری") {
         this.wgDialog = true;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
