@@ -29,11 +29,7 @@
           <v-container fluid>
             <v-form v-if="i == 1" ref="form4" v-model="valid1">
               <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.title"
-                  label="نام"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-select
@@ -58,11 +54,7 @@
               </v-col>
 
               <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.priorty"
-                  label="اولویت"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="12">
                 <!-- <v-file-input
@@ -79,8 +71,7 @@
                   :disabled="!valid1 || isLoading"
                   text
                   @click="save('parent')"
-                  >ذخیره</v-btn
-                >
+                >ذخیره</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -88,11 +79,7 @@
           <v-container fluid>
             <v-form v-if="i == 2" ref="form1" v-model="valid2">
               <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.title"
-                  label="نام"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-select
@@ -137,11 +124,7 @@
               </v-col>
 
               <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.priorty"
-                  label="اولویت"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -150,8 +133,7 @@
                   :disabled="!valid2 || isLoading"
                   text
                   @click="save('child')"
-                  >ذخیره</v-btn
-                >
+                >ذخیره</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -169,11 +151,7 @@
           <v-container fluid>
             <v-form ref="form2" v-model="valid1">
               <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.title"
-                  label="نام"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-select
@@ -197,11 +175,7 @@
                 ></v-select>
               </v-col>
               <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.priorty"
-                  label="اولویت"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
               </v-col>
               <v-col cols="12" sm="12">
                 <!-- <v-file-input
@@ -209,7 +183,7 @@
                   v-model="editedItem.image"
                   accept="image/*"
                   label="File input"
-                ></v-file-input> -->
+                ></v-file-input>-->
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -218,8 +192,7 @@
                   :disabled="!valid1 || isLoading"
                   text
                   @click="update('parent')"
-                  >به روز رسانی اطلاعات</v-btn
-                >
+                >به روز رسانی اطلاعات</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -232,11 +205,7 @@
           <v-container fluid>
             <v-form ref="form3" v-model="valid2">
               <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.title"
-                  label="نام"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
               </v-col>
 
               <v-col cols="12">
@@ -285,18 +254,13 @@
                       close
                       @click="data.select"
                       @click:close="removeSelected(data.item)"
-                      >{{ data.item.title }}</v-chip
-                    >
+                    >{{ data.item.title }}</v-chip>
                   </template>
                 </v-combobox>
               </v-col>
 
               <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.priorty"
-                  label="اولویت"
-                  required
-                ></v-text-field>
+                <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -305,8 +269,7 @@
                   :disabled="!valid2 || isLoading"
                   text
                   @click="update('child')"
-                  >به روز رسانی اطلاعات</v-btn
-                >
+                >به روز رسانی اطلاعات</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
@@ -325,11 +288,16 @@
           <input
             type="file"
             name="uploadfile"
-            id="img"
+            id="import_excel"
             @change="onExcelFileChange"
             style="display:none;"
           />
-          <label for="img" class="uploader-button">ورود اطلاعت با اکسل</label>
+          <label for="import_excel" class="uploader-button">ورود اطلاعت با اکسل</label>
+          <label
+            for="export_excel"
+            @click.prevent="getExcel"
+            class="uploader-button"
+          >دریافت اطلاعات با اکسل</label>
         </v-col>
       </v-toolbar>
       <v-row>
@@ -379,30 +347,21 @@
           <v-toolbar flat>
             <v-toolbar-title>لیست گروه های کاری</v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-btn
-              color="primary"
-              dark
-              class="mx-2 mb-2"
-              @click="openAdd"
-              width="120"
-              >مورد جدید</v-btn
-            >
+            <v-btn color="primary" dark class="mx-2 mb-2" @click="openAdd" width="120">مورد جدید</v-btn>
             <v-btn
               color="primary"
               dark
               class="mx-2 ml-2 mb-2"
               @click="workGroupSearch"
               width="120"
-              >جستجو</v-btn
-            >
+            >جستجو</v-btn>
             <v-btn
               color="warning"
               dark
               class="mx-2 mb-2"
               width="120"
               @click="resetWorkGroupSearchForm"
-              >پاک کردن فیلد ها</v-btn
-            >
+            >پاک کردن فیلد ها</v-btn>
           </v-toolbar>
         </template>
         <template v-slot:item.image="{ item }">
@@ -473,7 +432,7 @@ export default {
   mounted() {},
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
   components: {
-    deleteConfirmationDialog
+    deleteConfirmationDialog,
   },
   computed: {
     editedItemType() {
@@ -481,7 +440,7 @@ export default {
     },
     parentId() {
       return this.editedItem.parent_id;
-    }
+    },
   },
   watch: {
     parentId() {
@@ -497,11 +456,28 @@ export default {
     editedItemType() {
       this.filters.type = this.editedItem.type;
       this.workGroupSearch();
-    }
+    },
   },
   methods: {
+    async getExcel() {
+      return this.$axios
+        .$get("workgroups/as/excel")
+        .then((response) => {
+          var fileURL = window.URL.createObjectURL(new Blob([response.url]));
+          var fileLink = document.createElement("a");
+          fileLink.href = response.url;
+          fileLink.setAttribute("download", "AsanTenderWorkGroups.xlsx");
+          fileLink.setAttribute("target", "_blank");
+          document.body.appendChild(fileLink);
+
+          fileLink.click();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     getParentTitleWithId(id) {
-      let data = Object.values(this.workGroups).find(workGroup => {
+      let data = Object.values(this.workGroups).find((workGroup) => {
         return workGroup.id == id;
       });
       return data;
@@ -521,16 +497,16 @@ export default {
       try {
         this.$axios
           .$delete("workgroup/delete/" + item.id)
-          .then(res => {
+          .then((res) => {
             this.$store.getters.workGroups.splice(
               this.$store.getters.workGroups.indexOf(item),
               1
             );
             this.showSnackbar("دسته ی کاری با موفقیت حذف شد", "green");
           })
-          .catch(e => {
+          .catch((e) => {
             Object.values(this.$store.getters["errorHandling/errors"]).map(
-              error => {
+              (error) => {
                 this.showSnackbar(error[0], "red");
               }
             );
@@ -568,7 +544,7 @@ export default {
         priorty: 1,
         children: [],
         parent_id: "",
-        status: 0
+        status: 0,
       };
     },
     onFileChange(e) {
@@ -597,7 +573,7 @@ export default {
 
         this.$axios
           .$post("workgroup/create", this.editedItem)
-          .then(res => {
+          .then((res) => {
             this.isLoading = false;
             this.showSnackbar("گروه کاری با موفقیت اضافه شد", "green");
             this.resetFormData();
@@ -608,10 +584,10 @@ export default {
               this.workGroupSearch();
             }, 1500);
           })
-          .catch(errors => {
+          .catch((errors) => {
             this.isLoading = false;
             Object.values(this.$store.getters["errorHandling/errors"]).map(
-              error => {
+              (error) => {
                 this.showSnackbar(error[0], "red");
               }
             );
@@ -639,7 +615,7 @@ export default {
 
         this.$axios
           .$put("workgroup/" + this.editedItem.id, this.editedItem)
-          .then(res => {
+          .then((res) => {
             this.isLoading = false;
             this.showSnackbar("گروه کاری با موفقیت تغییر یافت", "green");
             this.resetFormData();
@@ -648,10 +624,10 @@ export default {
               this.workGroupSearch();
             }, 1500);
           })
-          .catch(errors => {
+          .catch((errors) => {
             this.isLoading = false;
             Object.values(this.$store.getters["errorHandling/errors"]).map(
-              error => {
+              (error) => {
                 this.showSnackbar(error[0], "red");
               }
             );
@@ -666,7 +642,7 @@ export default {
       try {
         await this.$axios
           .$post("workgroup/excel/create", formData)
-          .then(response => {
+          .then((response) => {
             this.showSnackbar(
               "دسته های کاری اکسل با موفقیت اضافه شدند",
               "green"
@@ -677,9 +653,9 @@ export default {
               this.workGroupSearch();
             }, 1500);
           })
-          .catch(errors => {
+          .catch((errors) => {
             Object.values(this.$store.getters["errorHandling/errors"]).map(
-              error => {
+              (error) => {
                 this.showSnackbar(error[0], "red");
               }
             );
@@ -687,21 +663,22 @@ export default {
       } catch (error) {
         this.showSnackbar("مشکلی پیش آمده دوباره تلاش کنید ", "red");
       }
-    }
+    },
   },
   data() {
     return {
+      export_excel_url: "",
       isLoading: false,
       dialogEdit: false,
       statusList: [
         {
           id: 0,
-          value: "در حال بررسی"
+          value: "در حال بررسی",
         },
         {
           id: 1,
-          value: "انتشار یافته"
-        }
+          value: "انتشار یافته",
+        },
       ],
       editMainDialog: false,
       editMode: true,
@@ -714,30 +691,30 @@ export default {
       listType: [
         {
           id: "AUCTION",
-          value: "مزایده"
+          value: "مزایده",
         },
         {
           id: "TENDER",
-          value: "مناقصه"
+          value: "مناقصه",
         },
         {
           id: "INQUIRY",
-          value: "استعلام"
-        }
+          value: "استعلام",
+        },
       ],
       items: [
         {
           id: 1,
-          title: "تست"
+          title: "تست",
         },
         {
           id: 2,
-          title: "تستس۱"
+          title: "تستس۱",
         },
         {
           id: 3,
-          title: "تستستس"
-        }
+          title: "تستستس",
+        },
       ],
       values: ["ظطزر"],
       singleExpand: true,
@@ -750,7 +727,7 @@ export default {
         priorty: 1,
         children: [],
         parent_id: "",
-        status: 0
+        status: 0,
       },
       headers: [
         { text: "عکس", value: "image", sortable: false },
@@ -760,15 +737,15 @@ export default {
         { text: "دسته ی اصلی", value: "parent_id" },
         { text: "نوع دسته", value: "type", sortable: true },
         { text: "", value: "data-table-expand", sortable: false },
-        { text: "ابزار", value: "actions", sortable: false, align: "center" }
+        { text: "ابزار", value: "actions", sortable: false, align: "center" },
       ],
 
       works: [
         {
           title: "test main",
           id: 2,
-          imageUrl: "https://randomuser.me/api/portraits/men/85.jpg"
-        }
+          imageUrl: "https://randomuser.me/api/portraits/men/85.jpg",
+        },
       ],
       // tab data
       tab: null,
@@ -781,9 +758,9 @@ export default {
       prevIcon: false,
       nextIcon: false,
       right: false,
-      tabs: 2
+      tabs: 2,
     };
-  }
+  },
 };
 </script>
 
