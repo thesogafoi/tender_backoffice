@@ -44,7 +44,7 @@
             <v-text-field v-model="formData.invitation_code" label="کد فراخوان" required></v-text-field>
           </div>
           <div class="w-30 c-px-10">
-            <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی"></v-text-field>
+            <v-text-field v-model="formData.title" label="عنوان آگهی"></v-text-field>
           </div>
           <div class="w-30 c-px-10">
             <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی گذار "></v-text-field>
@@ -92,7 +92,7 @@
               v-model="formData.range_free_date['second']"
               element="end-free-date"
             ></custom-date-picker>
-          </div> -->
+          </div>-->
           <div class="w-20 c-px-10">
             <v-text-field
               id="created-at-first"
@@ -392,9 +392,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-            this.options.page +
-            "&items_per_page=" +
-            this.options.itemsPerPage,
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage,
             {
               ...this.formData,
             }

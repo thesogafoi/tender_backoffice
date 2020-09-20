@@ -385,7 +385,7 @@
             <v-card>
               <v-card-text class="d-flex c-py-10 flex-wrap">
                 <h4 class="rtl c-ml-5">رایگان از تاریخ:</h4>
-                <p class="c-mb-0">{{ singleAdvertise.start_date }} test</p>
+                <p class="c-mb-0">{{ singleAdvertise.start_date }}</p>
               </v-card-text>
             </v-card>
           </div>
@@ -394,7 +394,8 @@
             <v-card>
               <v-card-text class="d-flex c-py-10 flex-wrap">
                 <h4 class="rtl c-ml-5">وضعیت ستاد:</h4>
-                <p class="c-mb-0">test</p>
+                <p class="c-mb-0" v-if="singleAdvertise.is_nerve_center">ستادی</p>
+                <p class="c-mb-0" v-if="!singleAdvertise.is_nerve_center">غیر ستادی</p>
               </v-card-text>
             </v-card>
           </div>
@@ -470,18 +471,18 @@
 import searchOnWorkGroupsMixins from "~/mixins.js/searchOnWorkGroupsMixins.js";
 import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
-import workingGroupsModal from '~/components/workGroupModal'
+import workingGroupsModal from "~/components/workGroupModal";
 
 export default {
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
   components: {
     deleteConfirmationDialog,
-    workingGroupsModal
+    workingGroupsModal,
   },
   computed: {
     formDataType() {
       return this.formData.type;
-    }
+    },
   },
   watch: {
     formDataType() {
@@ -490,16 +491,21 @@ export default {
     },
     options: {
       handler() {
-        this.getDataFromApi().then(data => {
+        this.getDataFromApi().then((data) => {
           this.desserts = data.items;
           this.totalDesserts = data.total;
         });
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   data: () => ({
-    activityDrop: ['تعریف و تغییر گروه‌کاری', 'انتقال وضعیت به در حال بررسی', 'انتقال وضعیت به انتشار یافته', 'حذف'],
+    activityDrop: [
+      "تعریف و تغییر گروه‌کاری",
+      "انتقال وضعیت به در حال بررسی",
+      "انتقال وضعیت به انتشار یافته",
+      "حذف",
+    ],
     excel_file: "",
     options: {},
     meta: [],
@@ -522,63 +528,63 @@ export default {
       submit_date: "",
       receipt_date: "",
       start_date: "",
-      free_date: ""
+      free_date: "",
     },
     items: ["Programming", "Design", "Vue", "Vuetify"],
 
     nameRules: [
-      v => !!v || "Name is required",
-      v => (v && v.length <= 10) || "Name must be less than 10 characters"
+      (v) => !!v || "Name is required",
+      (v) => (v && v.length <= 10) || "Name must be less than 10 characters",
     ],
     email: "",
     emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+      (v) => !!v || "E-mail is required",
+      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
     selected: [],
     listType: [
       {
         id: "AUCTION",
-        value: "مزایده"
+        value: "مزایده",
       },
       {
         id: "TENDER",
-        value: "مناقصه"
+        value: "مناقصه",
       },
       {
         id: "INQUIRY",
-        value: "استعلام"
-      }
+        value: "استعلام",
+      },
     ],
     statusList: [
       {
         id: "0",
-        value: "در حال بررسی"
+        value: "در حال بررسی",
       },
       {
         id: "1",
-        value: "انتشار یافته"
-      }
+        value: "انتشار یافته",
+      },
     ],
     isNerveCenterList: [
       {
         id: "1",
-        value: "ستادی"
+        value: "ستادی",
       },
       {
         id: "0",
-        value: "غیر ستادی"
-      }
+        value: "غیر ستادی",
+      },
     ],
     staffStatusList: [
       {
         value: "ستاد",
-        id: "1"
+        id: "1",
       },
       {
         value: "غیر ستاد",
-        id: "0"
-      }
+        id: "0",
+      },
     ],
 
     isLoading: false,
@@ -592,7 +598,7 @@ export default {
       { text: "تاریخ انتشار", value: "created_at" },
       { text: "آگهی گذار", value: "adinviter_title" },
       { text: "وضعیت انتشار", value: "status" },
-      { text: "ابزار", value: "actions", sortable: false, align: "center" }
+      { text: "ابزار", value: "actions", sortable: false, align: "center" },
     ],
     advertises: [],
     editedIndex: -1,
@@ -602,11 +608,11 @@ export default {
       { title: "انتشار آگهی" },
       { title: "تغییر به حالت بررسی" },
       { title: "تغییر گروه‌کاری" },
-      { title: "حذف" }
+      { title: "حذف" },
     ],
 
     advertiseId: "",
-    editMode: false
+    editMode: false,
   }),
 
   methods: {
@@ -638,12 +644,12 @@ export default {
             .catch(() => {
               this.isLoading = false;
               Object.values(this.$store.getters["errorHandling/errors"]).map(
-                error => {
+                (error) => {
                   this.showSnackbar(error[0], "red");
                 }
               );
             });
-        } catch (error) { }
+        } catch (error) {}
       }
     },
     backToShowMode() {
@@ -654,7 +660,6 @@ export default {
     },
     resetFormDataWithoutType() {
       this.advertiseId = "";
-      this.clearSelectedWorkGroups("workGroups");
       this.formData = {
         work_groups: [],
         description: "",
@@ -670,12 +675,11 @@ export default {
         submit_date: "",
         receipt_date: "",
         start_date: "",
-        free_date: ""
+        free_date: "",
       };
     },
     resetFormData() {
       this.advertiseId = "";
-      this.clearSelectedWorkGroups("workGroups");
       this.formData = {
         work_groups: [],
         description: "",
@@ -691,7 +695,7 @@ export default {
         submit_date: "",
         receipt_date: "",
         start_date: "",
-        free_date: ""
+        free_date: "",
       };
     },
     turnToEditMode(item) {
@@ -701,8 +705,6 @@ export default {
       this.$axios.$get("advertise/show/" + item.id).then(({ data }) => {
         this.formData = JSON.parse(JSON.stringify(data));
         this.formData.is_nerve_center = this.formData.is_nerve_center.toString();
-
-        this.fillSelected("formData", "workGroups");
       });
     },
     showItem(item) {
@@ -714,16 +716,16 @@ export default {
         this.advertises.splice(this.advertises.indexOf(item), 1);
         this.$axios
           .$delete("advertise/" + item.id)
-          .then(response => {
+          .then((response) => {
             setTimeout(() => {
               this.resetFormData();
               this.search();
             }, 1500);
             this.showSnackbar("آگهی با موفقیت حذف شد", "success");
           })
-          .catch(error => {
+          .catch((error) => {
             Object.values(this.$store.getters["errorHandling/errors"]).map(
-              error => {
+              (error) => {
                 this.showSnackbar(error[0], "red");
               }
             );
@@ -748,7 +750,7 @@ export default {
       try {
         await this.$axios
           .$post("advertise/excel/create", formData)
-          .then(response => {
+          .then((response) => {
             setTimeout(() => {
               this.resetFormData();
               this.search();
@@ -757,7 +759,7 @@ export default {
           });
       } catch (error) {
         Object.values(this.$store.getters["errorHandling/errors"]).map(
-          error => {
+          (error) => {
             this.showSnackbar(error[0], "red");
           }
         );
@@ -773,14 +775,14 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-            this.options.page +
-            "&items_per_page=" +
-            this.options.itemsPerPage,
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage,
             {
-              ...this.formData
+              ...this.formData,
             }
           )
-          .then(response => {
+          .then((response) => {
             this.meta = response.meta;
             this.advertises = response.data;
             this.loading = false;
@@ -791,8 +793,8 @@ export default {
       this.$refs.form.validate();
       this.isLoading = true;
       if (
-        this.formData.status == 1 &&
-        !this.isWorkGruopsSelected("workGroups")
+        this.formData.status == 1
+        // !this.isWorkGruopsSelected("workGroups")
       ) {
         this.showSnackbar(
           "آگهی انتشار یافته نمیتواند فاقد دسته ی کاری باشد",
@@ -802,7 +804,7 @@ export default {
         try {
           this.$axios
             .$post("advertise/create", this.formData)
-            .then(response => {
+            .then((response) => {
               this.isLoading = false;
               this.showSnackbar("آگهی با موفقیت اضافه شد", "green");
               setTimeout(() => {
@@ -810,10 +812,10 @@ export default {
                 this.search();
               }, 1500);
             })
-            .catch(error => {
+            .catch((error) => {
               this.isLoading = false;
               Object.values(this.$store.getters["errorHandling/errors"]).map(
-                error => {
+                (error) => {
                   this.showSnackbar(error[0], "red");
                 }
               );
@@ -830,7 +832,7 @@ export default {
       this.getDataFromApi();
     },
     removeEmptyObjects(obj) {
-      Object.keys(obj).map(key => {
+      Object.keys(obj).map((key) => {
         if (obj[key] == "" || obj[key] == undefined || obj[key] == null) {
           delete obj[key];
         }
@@ -852,8 +854,8 @@ export default {
       } else if (title === "تغییر گروه‌کاری") {
         this.wgDialog = true;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
