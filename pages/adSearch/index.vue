@@ -1,26 +1,14 @@
 <template>
   <div>
-    <v-card class="c-pa-20">
-      <v-toolbar flat>
+    <v-card class="c-px-20 c-py-5">
+      <!-- <v-toolbar flat>
         <v-toolbar-title>جستجوی آگهی</v-toolbar-title>
-      </v-toolbar>
+      </v-toolbar>-->
 
       <!-- <v-form class="c-form" ref="form" v-model="valid" lazy-validation> -->
       <v-form class="c-form" ref="form" lazy-validation>
         <v-row>
-          <v-col cols="2">
-            <v-select
-              v-model="formData.type"
-              item-value="id"
-              item-text="value"
-              :items="listType"
-              label="نوع آگهی"
-            ></v-select>
-          </v-col>
-          <v-col cols="4">
-            <v-text-field v-model="formData.title" label="عنوان آگهی"></v-text-field>
-          </v-col>
-          <v-col cols="2">
+          <div class="w-15 c-px-10">
             <v-select
               v-model="formData.status"
               :items="statusList"
@@ -28,8 +16,17 @@
               item-text="value"
               label="وضعیت آگهی"
             ></v-select>
-          </v-col>
-          <v-col cols="4">
+          </div>
+          <div class="w-10 c-px-10">
+            <v-select
+              v-model="formData.type"
+              item-value="id"
+              item-text="value"
+              :items="listType"
+              label="نوع آگهی"
+            ></v-select>
+          </div>
+          <div class="w-40 c-px-10">
             <v-combobox
               :items="$store.state.cityList"
               v-model="formData.provinces"
@@ -39,86 +36,29 @@
               multiple
               required
             ></v-combobox>
-          </v-col>
-          <v-col cols="2">
+          </div>
+          <div class="w-20 c-px-10">
             <v-text-field v-model="formData.tender_code" label="کد آسان تندر"></v-text-field>
-          </v-col>
-          <v-col cols="2">
+          </div>
+          <div class="w-15 c-px-10">
             <v-text-field v-model="formData.invitation_code" label="کد فراخوان" required></v-text-field>
-          </v-col>
-          <v-col cols="4">
+          </div>
+          <div class="w-30 c-px-10">
+            <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی"></v-text-field>
+          </div>
+          <div class="w-30 c-px-10">
             <v-text-field v-model="formData.adinviter_title" label="عنوان آگهی گذار "></v-text-field>
-          </v-col>
-          <v-col cols="4" class="d-flex flex-row justify-center">
-            <div class="c-ml-5">
-              <v-text-field
-                id="start-free-date"
-                prepend-inner-icon="mdi-calendar"
-                label="شروع رایگان"
-                v-model="formData.range_free_date['first']"
-                :clearable="true"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_free_date['first']"
-                element="start-free-date"
-              ></custom-date-picker>
-            </div>
-            <div class="c-mr-5">
-              <v-text-field
-                id="end-free-date"
-                prepend-inner-icon="mdi-calendar"
-                label="پایان رایگان"
-                v-model="formData.range_free_date['second']"
-                :clearable="true"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_free_date['second']"
-                element="end-free-date"
-              ></custom-date-picker>
-            </div>
-          </v-col>
-
-          <v-col cols="4" class="d-flex flex-row justify-center">
-            <div class="c-ml-5">
-              <v-text-field
-                id="created-at-first"
-                prepend-inner-icon="mdi-calendar"
-                label="تاریخ انتشار از"
-                v-model="formData.range_created_at['first']"
-                :clearable="true"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_created_at['first']"
-                element="created-at-first"
-              ></custom-date-picker>
-            </div>
-            <div class="c-mr-5">
-              <v-text-field
-                id="created-at-second"
-                prepend-inner-icon="mdi-calendar"
-                label="تاریخ انتشار تا"
-                v-model="formData.range_created_at['second']"
-                :clearable="true"
-              ></v-text-field>
-              <custom-date-picker
-                v-model="formData.range_created_at['second']"
-                element="created-at-second"
-              ></custom-date-picker>
-            </div>
-          </v-col>
-          <v-col cols="3">
+          </div>
+          <div class="w-25 c-px-10">
             <ChooseWorkGroup
               :work_groups="this.$store.getters.workGroups"
               @selected_work_group_changed="fillSelected"
               ref="workGroups"
               :multiple="true"
             />
-          </v-col>
-          <v-col cols="3">
-            <v-text-field v-model="formData.description" label="شرح"></v-text-field>
-          </v-col>
-          <v-col cols="2">
-             <v-select
+          </div>
+          <div class="w-15 c-px-10">
+            <v-select
               v-model="formData.is_nerve_center"
               :items="isNerveCenterList"
               item-value="id"
@@ -126,13 +66,68 @@
               label="وضعیت ستاد"
               required
             ></v-select>
-          </v-col>
+          </div>
+          <!-- <div class="w-25 c-px-10">
+            <v-text-field
+              id="start-free-date"
+              prepend-inner-icon="mdi-calendar"
+              label="شروع رایگان"
+              v-model="formData.range_free_date['first']"
+              :clearable="true"
+            ></v-text-field>
+            <custom-date-picker
+              v-model="formData.range_free_date['first']"
+              element="start-free-date"
+            ></custom-date-picker>
+          </div>
+          <div class="w-25 c-px-10">
+            <v-text-field
+              id="end-free-date"
+              prepend-inner-icon="mdi-calendar"
+              label="پایان رایگان"
+              v-model="formData.range_free_date['second']"
+              :clearable="true"
+            ></v-text-field>
+            <custom-date-picker
+              v-model="formData.range_free_date['second']"
+              element="end-free-date"
+            ></custom-date-picker>
+          </div> -->
+          <div class="w-20 c-px-10">
+            <v-text-field
+              id="created-at-first"
+              prepend-inner-icon="mdi-calendar"
+              label="انتشار یافته از تاریخ"
+              v-model="formData.range_created_at['first']"
+              :clearable="true"
+            ></v-text-field>
+            <custom-date-picker
+              v-model="formData.range_created_at['first']"
+              element="created-at-first"
+            ></custom-date-picker>
+          </div>
+          <div class="w-20 c-px-10">
+            <v-text-field
+              id="created-at-second"
+              prepend-inner-icon="mdi-calendar"
+              label="انتشار یافته تا تاریخ"
+              v-model="formData.range_created_at['second']"
+              :clearable="true"
+            ></v-text-field>
+            <custom-date-picker
+              v-model="formData.range_created_at['second']"
+              element="created-at-second"
+            ></custom-date-picker>
+          </div>
+          <div class="w-60 c-px-10">
+            <v-text-field v-model="formData.description" label="شرح"></v-text-field>
+          </div>
           <!-- <v-col cols="12">
             <v-textarea name="input-7-1" label="توضیحات" v-model="formData.description" outlined></v-textarea>
           </v-col>-->
           <v-card-actions class="mr-auto">
+            <v-btn color="red darken-4" dark @click="resetFormData" width="120">پاک کردن فیلد ها</v-btn>
             <v-btn color="primary" @click="search" width="120" class="mx-2">جستجو</v-btn>
-            <v-btn color="warning" @click="resetFormData" width="120">پاک کردن فیلد ها</v-btn>
           </v-card-actions>
         </v-row>
       </v-form>
@@ -342,7 +337,7 @@ export default {
       },
     ],
 
-       isNerveCenterList: [
+    isNerveCenterList: [
       {
         id: 1,
         value: "ستادی",
@@ -397,9 +392,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-              this.options.page +
-              "&items_per_page=" +
-              this.options.itemsPerPage,
+            this.options.page +
+            "&items_per_page=" +
+            this.options.itemsPerPage,
             {
               ...this.formData,
             }

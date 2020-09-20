@@ -5,7 +5,7 @@
         <v-toolbar-title class="nav-title">
           <img src="/Asan-2.png" alt />
         </v-toolbar-title>
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router>
+        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router dir="ltr">
           <v-list-item-title class="nav-icon" v-text="item.title" />
           <v-icon>{{ item.icon }}</v-icon>
         </v-list-item>

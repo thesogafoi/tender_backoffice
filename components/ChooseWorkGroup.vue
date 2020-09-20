@@ -1,12 +1,12 @@
 <template>
   <v-autocomplete
-
+    class="c-autocomplete"
     v-model="selected"
     :disabled="isUpdating || dis"
     :items="workGroups"
     chips
     dense
-    label="انتخاب دسته‌های کاربری"
+    label="انتخاب دسته‌های کاری"
     item-text="title"
     item-value="id"
     :multiple="multiple"
@@ -79,3 +79,10 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.c-autocomplete{
+  &.v-text-field{
+    margin-top: 8px;
+  }
+}
+</style>

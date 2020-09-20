@@ -21,12 +21,12 @@
       margin-left: #{$i}px !important;
     }
 
-    .c-my-#{$i}{
+    .c-my-#{$i} {
       margin-top: #{$i}px !important;
       margin-bottom: #{$i}px !important;
     }
 
-    .c-mx-#{$i}{
+    .c-mx-#{$i} {
       margin-left: #{$i}px !important;
       margin-right: #{$i}px !important;
     }
@@ -34,7 +34,7 @@
     .c-pa-#{$i} {
       padding: #{$i}px !important;
     }
-    
+
     .c-py-#{$i} {
       padding-top: #{$i}px !important;
       padding-bottom: #{$i}px !important;
@@ -44,6 +44,7 @@
       padding-left: #{$i}px !important;
       padding-right: #{$i}px !important;
     }
+
     .c-pt-#{$i} {
       padding-top: #{$i}px !important;
     }
@@ -62,14 +63,15 @@
 
   }
 }
-@for $i from 0 through 300{
+
+@for $i from 0 through 300 {
   .unloaded-text-#{$i} {
     background: linear-gradient(135deg, #EBEBEB 0%, #FAFAFA 100%);
     width: #{$i}px;
     height: 12px;
     border-radius: 48px;
   }
-  
+
   .unloaded-avatar-#{$i} {
     width: #{$i}px;
     height: #{$i}px;
@@ -78,9 +80,10 @@
     border-radius: 50%;
   }
 }
-@for $i from 0 through 100{
-  .w-#{$i}{
-    width: percentage($i/10);
+
+@for $i from 0 through 100 {
+    .w-#{$i} {
+      width: percentage($i)/100;
   }
 }
 
@@ -98,10 +101,10 @@
 
 
 // ---------------------------- DEFAULT CLASSES --------------------------- //
-.c-m-auto{
+.c-m-auto {
   margin: auto !important;
 }
 
-.rtl{
+.rtl {
   direction: rtl !important;
 }

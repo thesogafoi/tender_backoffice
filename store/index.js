@@ -1,6 +1,7 @@
 export const strict = false
 
 export const state = () => ({
+  workingGroupsModal:false,
   toolbarColor: 'grey lighten-1',
   snackbarTextDeleteSuccessful: 'The Item was  deleted',
   snackbarTextDeleteFailed: 'The Item were not deleted',

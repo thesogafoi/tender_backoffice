@@ -1,43 +1,9 @@
 <template>
   <div>
-    <v-card class="c-pa-20">
-      <v-toolbar flat>
-        <v-toolbar-title>آگهی</v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-col cols="5" style="    text-align: left;">
-          <input
-            type="file"
-            name="uploadfile"
-            id="img"
-            @change="onFileChange"
-            style="display:none;"
-          />
-          <label for="img" class="uploader-button">ورود اطلاعت با اکسل</label>
-        </v-col>
-      </v-toolbar>
-
-      <v-form class="c-form" ref="form" v-model="valid" lazy-validation>
+    <v-card class="c-px-20 c-pb-5 c-pt-5">
+      <v-form class="c-form c-pb-0" ref="form" v-model="valid" lazy-validation>
         <v-row class="rtl">
-          <v-col class="rtl" cols="2">
-            <v-select
-              v-model="formData.type"
-              item-value="id"
-              item-text="value"
-              :items="listType"
-              :rules="[v => !!v || 'Item is required']"
-              label="نوع آگهی"
-              required
-            ></v-select>
-          </v-col>
-          <v-col cols="4">
-            <v-text-field
-              v-model="formData.title"
-              :rules="[v => !!v || 'Item is required']"
-              label="عنوان آگهی"
-              required
-            ></v-text-field>
-          </v-col>
-          <v-col cols="2">
+          <div class="w-15 c-px-10">
             <v-select
               v-model="formData.status"
               :items="statusList"
@@ -47,8 +13,19 @@
               label="وضعیت آگهی"
               required
             ></v-select>
-          </v-col>
-          <v-col cols="4">
+          </div>
+          <div class="w-10 c-px-10">
+            <v-select
+              v-model="formData.type"
+              item-value="id"
+              item-text="value"
+              :items="listType"
+              :rules="[v => !!v || 'Item is required']"
+              label="نوع آگهی"
+              required
+            ></v-select>
+          </div>
+          <div class="w-40 c-px-10">
             <v-select
               :items="$store.state.cityList"
               v-model="formData.provinces"
@@ -59,69 +36,78 @@
               :rules="[v => !!v || 'Item is required']"
               required
             ></v-select>
-          </v-col>
-          <v-col cols="4">
+          </div>
+          <div class="w-20 c-px-10">
             <v-text-field
               v-model="formData.invitation_code"
               :rules="[v => !!v || 'Item is required']"
               label="کد فراخوان"
               required
             ></v-text-field>
-          </v-col>
+          </div>
+          <div class="w-15 c-px-10">
+            <v-text-field v-model="formData.resource" label="منبع" required></v-text-field>
+          </div>
+          <div class="w-35 c-px-10">
+            <v-text-field
+              v-model="formData.title"
+              :rules="[v => !!v || 'Item is required']"
+              label="عنوان آگهی"
+              required
+            ></v-text-field>
+          </div>
 
-          <v-col cols="4">
+          <div class="w-30 c-px-10">
             <v-text-field
               v-model="formData.adinviter_title"
               label="عنوان آگهی گذار "
               :rules="[v => !!v || 'Item is required']"
               required
             ></v-text-field>
-          </v-col>
-          <v-col cols="4">
-            <v-text-field
-              v-model="formData.resource"
-              label="منبع"
+          </div>
+          <div class="w-20 c-px-10">
+            <v-text-field label="دستگاه مرکزی " disabled></v-text-field>
+          </div>
+          <div class="w-15 c-px-10">
+            <v-select
+              v-model="formData.is_nerve_center"
+              :items="isNerveCenterList"
+              item-value="id"
+              item-text="value"
+              :rules="[v => !!v || 'Item is required']"
+              label="وضعیت ستاد"
               required
-            ></v-text-field>
-          </v-col>
-
-          <v-col cols="2">
+            ></v-select>
+          </div>
+          <div class="w-20 c-px-10">
             <v-text-field
               id="call-date"
               v-model="formData.invitation_date"
               prepend-inner-icon="mdi-calendar"
               label="تاریخ فراخوان"
             ></v-text-field>
-            <custom-date-picker
-              v-model="formData.invitation_date"
-              element="call-date"
-            ></custom-date-picker>
-          </v-col>
-          <v-col cols="2">
-            <v-text-field
-              id="send-date"
-              v-model="formData.submit_date"
-              prepend-inner-icon="mdi-calendar"
-              label="تاریخ ارسال"
-            ></v-text-field>
-            <custom-date-picker
-              v-model="formData.submit_date"
-              element="send-date"
-            ></custom-date-picker>
-          </v-col>
-          <v-col cols="2">
+            <custom-date-picker v-model="formData.invitation_date" element="call-date"></custom-date-picker>
+          </div>
+          <div class="w-20 c-px-10">
             <v-text-field
               id="receive-date"
               v-model="formData.receipt_date"
               prepend-inner-icon="mdi-calendar"
               label="تاریخ دریافت"
             ></v-text-field>
-            <custom-date-picker
-              v-model="formData.receipt_date"
-              element="receive-date"
-            ></custom-date-picker>
-          </v-col>
-          <v-col cols="2">
+            <custom-date-picker v-model="formData.receipt_date" element="receive-date"></custom-date-picker>
+          </div>
+          <div class="w-20 c-px-10">
+            <v-text-field
+              id="send-date"
+              v-model="formData.submit_date"
+              prepend-inner-icon="mdi-calendar"
+              label="تاریخ ارسال"
+            ></v-text-field>
+            <custom-date-picker v-model="formData.submit_date" element="send-date"></custom-date-picker>
+          </div>
+
+          <div class="w-20 c-px-10">
             <v-text-field
               id="open-date"
               v-model="formData.start_date"
@@ -133,8 +119,9 @@
               v-model="formData.start_date"
               element="open-date"
             ></custom-date-picker>
-          </v-col>
-          <v-col cols="2">
+          </div>
+
+          <div class="w-20 c-px-10">
             <v-text-field
               id="free-date"
               v-model="formData.free_date"
@@ -147,30 +134,23 @@
               v-model="formData.free_date"
               element="free-date"
             ></custom-date-picker>
-          </v-col>
-          <v-col cols="2">
-            <v-select
-              v-model="formData.is_nerve_center"
-              :items="isNerveCenterList"
-              item-value="id"
-              item-text="value"
-              :rules="[v => !!v || 'Item is required']"
-              label="وضعیت ستاد"
-              required
-            ></v-select>
-          </v-col>
-          <v-col cols="8">
-            <ChooseWorkGroup
+          </div>
+          <div class="w-40 c-px-10">
+            <!-- <ChooseWorkGroup
               :dis="formData.type == undefined"
               :work_groups="workGroups"
               ref="workGroups"
               @selected_work_group_changed="selectedWorkGroupChanged"
               :multiple="true"
-            />
+            />-->
             <!-- <v-combobox v-model="work_groups" :items="items" label="گروه های کاری" multiple></v-combobox> -->
-          </v-col>
-
-          <v-col cols="4">
+            <v-text-field label="گروه‌های کاری" @click="$store.state.workingGroupsModal = true"></v-text-field>
+            <workingGroupsModal />
+          </div>
+          <div class="w-40 c-px-10">
+            <v-text-field v-model="formData.link" label="لینک"></v-text-field>
+          </div>
+          <div class="w-20 c-px-10">
             <v-file-input
               prepend-inner-icon="mdi-camera"
               prepend-icon
@@ -178,73 +158,72 @@
               multiple
               label="آپلود عکس"
             ></v-file-input>
-          </v-col>
-          <v-col cols="12">
+          </div>
+          <div class="w-100 c-px-10">
             <v-textarea
               name="input-7-1"
               outlined
               :rules="[v => !!v || 'Item is required']"
-              label="توضیحات"
+              label="شرح آگهی"
               v-model="formData.description"
             ></v-textarea>
-          </v-col>
+          </div>
         </v-row>
       </v-form>
-      <v-card-actions>
+      <v-card-actions class="justify-end c-pt-0">
         <div v-if="editMode">
+          <v-btn color="red darken-4" dark @click.prevent="backToShowMode" type="button">انصراف</v-btn>
           <v-btn
             :disabled="!valid || isLoading"
             color="success"
-            class="mr-4"
+            class="c-mr-10"
             type="button"
             @click.prevent="editItem"
-            >به روز رسانی اطلاعت</v-btn
-          >
-          <v-btn
-            color="warning"
-            class="mr-4"
-            @click.prevent="backToShowMode"
-            type="button"
-            >انصراف</v-btn
-          >
+          >به روز رسانی اطلاعت</v-btn>
         </div>
-        <div v-else>
-          <v-btn
-            :disabled="!valid || isLoading"
-            color="success"
-            class="mx-4"
-            type="button"
-            width="120"
-            @click.prevent="sendData"
-            >ذخیره</v-btn
-          >
-
+        <div v-else class="d-flex align-center justify-end">
+          <v-btn width="120" color="red darken-4" dark @click="resetFormData">پاک کردن فیلد ها</v-btn>
           <v-btn
             color="primary"
-            class="mx-4"
+            class="c-mx-10"
             @click.prevent="search"
             type="button"
             width="120"
-            >جستجو</v-btn
-          >
-          <v-btn width="120" class="mx-4" color="warning" @click="resetFormData"
-            >پاک کردن فیلد ها</v-btn
-          >
+          >جستجو</v-btn>
+
+          <v-btn
+            :disabled="!valid || isLoading"
+            color="success"
+            type="button"
+            class="c-ml-10"
+            width="120"
+            @click.prevent="sendData"
+          >ذخیره</v-btn>
+          <div>
+            <input
+              type="file"
+              name="uploadfile"
+              id="img"
+              @change="onFileChange"
+              style="display:none;"
+            />
+            <label for="img" class="uploader-button">ورود اطلاعات با اکسل</label>
+          </div>
+          <div class="w-25 c-mr-20">
+            <v-select :items="activityDrop" label="عملیات"></v-select>
+          </div>
         </div>
       </v-card-actions>
     </v-card>
-    <v-card class="c-pa-20 c-mt-20">
-      <v-toolbar flat>
+    <v-card class="c-px-20 c-pb-5 c-pt-5 c-mt-20">
+      <!-- <v-toolbar flat>
         <v-toolbar-title>لیست آگهی‌ها</v-toolbar-title>
-      </v-toolbar>
+        <v-spacer></v-spacer>
+      </v-toolbar>-->
 
       <v-menu bottom origin="center center" transition="scale-transition">
         <v-list>
-          <v-list-item
-            v-for="(item, i) in items"
-            :key="i"
-            @click="buttonActions(item.title)"
-          >
+          <v-list-item v-for="(item, i) in items" :key="i" @click="buttonActions(item.title)">
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -263,9 +242,11 @@
           'items-per-page-options': [10, 20, 30, 40, 50]
         }"
       >
-        <template v-slot:item.created_at="{ item }">{{
+        <template v-slot:item.created_at="{ item }">
+          {{
           item.created_at
-        }}</template>
+          }}
+        </template>
         <template v-slot:item.actions="{ item }">
           <div class="buttons-container">
             <v-icon
@@ -273,8 +254,7 @@
               class="mr-1"
               color="blue lighten-2"
               @click="turnToEditMode(item)"
-              >mdi-pencil</v-icon
-            >
+            >mdi-pencil</v-icon>
             <deleteConfirmationDialog @delete="deleteItem(item)" />
 
             <v-icon small class="mr-1" @click="showItem(item)">mdi-eye</v-icon>
@@ -288,115 +268,179 @@
     <!-- dialog for show item in table -->
     <v-dialog v-model="showItemDialog" max-width="95%">
       <v-card class="c-pa-20">
-        <v-toolbar flat color="white">
-          <v-btn icon @click="close">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-          <v-toolbar-title>اطلاعات آگهی</v-toolbar-title>
-        </v-toolbar>
-
         <v-row>
-          <v-col cols="2">
+          <div class="w-20 c-px-5 c-my-5 child-col">
             <v-card>
-              <v-card-title>ID</v-card-title>
-              <v-card-text>{{ singleAdvertise.id }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="6">
-            <v-card>
-              <v-card-title>عنوان</v-card-title>
-              <v-card-text>{{ singleAdvertise.title }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="4">
-            <v-card>
-              <v-card-title>کد آسان‌تندر</v-card-title>
-              <v-card-text>{{ singleAdvertise.tender_code }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="3">
-            <v-card>
-              <v-card-title>وضعیت</v-card-title>
-              <v-card-text>{{
-                singleAdvertise.status == 0 ? "انتشار یافته" : "در حال بررسی"
-              }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="6">
-            <v-card>
-              <v-card-title>عنوان آگهی گذار</v-card-title>
-              <v-card-text>{{ singleAdvertise.adinviter_title }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="3">
-            <v-card>
-              <v-card-title>منبع</v-card-title>
-              <v-card-text>{{ singleAdvertise.resource }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="2">
-            <v-card>
-              <v-card-title>تاریخ انتشار</v-card-title>
-              <v-card-text>{{ singleAdvertise.created_at }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="2">
-            <v-card>
-              <v-card-title>تاریخ بازگشایی</v-card-title>
-              <v-card-text>{{ singleAdvertise.free_date }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="2">
-            <v-card>
-              <v-card-title>تاریخ دریافت</v-card-title>
-              <v-card-text>{{ singleAdvertise.receipt_date }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="2">
-            <v-card>
-              <v-card-title>تاریخ فراخوان</v-card-title>
-              <v-card-text>{{ singleAdvertise.invitation_date }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="2">
-            <v-card>
-              <v-card-title>تاریخ شروع</v-card-title>
-              <v-card-text>{{ singleAdvertise.start_date }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="2">
-            <v-card>
-              <v-card-title>تاریخ ارسال</v-card-title>
-              <v-card-text>{{ singleAdvertise.submit_date }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="9">
-            <v-card>
-              <v-card-title>شرح</v-card-title>
-              <v-card-text>{{ singleAdvertise.description }}</v-card-text>
-            </v-card>
-            <v-card class="c-mt-20">
-              <v-card-title>لینک</v-card-title>
-              <v-card-text>{{ singleAdvertise.link }}</v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="3">
-            <v-card>
-              <v-card-title>عکس ضمیمه</v-card-title>
-              <v-card-text>
-                <img
-                  class="thumbnaail-image"
-                  src="https://placehold.co/300x300"
-                  alt
-                />
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">کد آسان‌تندر:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.tender_code }}</p>
               </v-card-text>
             </v-card>
-          </v-col>
+          </div>
+
+          <div class="w-15 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">وضعیت:</h4>
+                <p class="c-mb-0">
+                  {{
+                  singleAdvertise.status == 0 ? "انتشار یافته" : "در حال بررسی"
+                  }}
+                </p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-15 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">نوع آگهی:</h4>
+                <p class="c-mb-0" v-if="singleAdvertise.type === 'AUCTION'">مزایده</p>
+                <p class="c-mb-0" v-if="singleAdvertise.type === 'TENDER'">مناقصه</p>
+                <p class="c-mb-0" v-if="singleAdvertise.type === 'INQUIRY'">استعلام</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-50 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">استان:</h4>
+                <div class="city" v-for="(city,i) in $store.state.cityList" :key="i">
+                  <p
+                    class="c-mb-0"
+                    v-for="(province,index) in singleAdvertise.provinces"
+                    :key="index"
+                  >
+                    <span v-if="province == city.id">{{city.name}}</span>
+                  </p>
+                </div>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-45 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">عنوان:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.title }}</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-35 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">عنوان آگهی گذار:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.adinviter_title }}</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-20 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">منبع:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.resource }}</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-20 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">تاریخ فراخوان:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.invitation_date }}</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-20 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">تاریخ دریافت:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.receipt_date }}</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-20 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">تاریخ ارسال:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.submit_date }}</p>
+              </v-card-text>
+            </v-card>
+          </div>
+
+          <div class="w-20 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">تاریخ بازگشایی:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.free_date }}</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-20 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">تاریخ انتشار:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.created_at }}</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-20 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">رایگان از تاریخ:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.start_date }} test</p>
+              </v-card-text>
+            </v-card>
+          </div>
+
+          <div class="w-20 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">وضعیت ستاد:</h4>
+                <p class="c-mb-0">test</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-60 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap">
+                <h4 class="rtl c-ml-5">لینک:</h4>
+                <p class="c-mb-0">{{ singleAdvertise.link }}</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="w-100 c-px-5 c-my-5 child-col">
+            <v-card>
+              <v-card-text class="d-flex c-py-10 flex-wrap flex-wrap">
+                <h4 class="rtl c-ml-5">گروه‌های کاری:</h4>
+                <p
+                  class="c-mb-10 c-ml-20"
+                  v-for="(workingGroup,index) in singleAdvertise.work_groups"
+                  :key="index"
+                >{{ workingGroup.title }} /</p>
+              </v-card-text>
+            </v-card>
+          </div>
+          <div class="c-table-row w-100 c-my-5">
+            <div class="w-80 c-px-5 child-col">
+              <v-card>
+                <v-card-text class="d-flex c-py-10 flex-wrap">
+                  <h4 class="rtl c-ml-5">شرح:</h4>
+                  <p class="c-mb-0">{{ singleAdvertise.description }}</p>
+                </v-card-text>
+              </v-card>
+            </div>
+
+            <div class="w-20 c-px-5 child-col">
+              <v-card>
+                <v-card-text class="c-py-10">
+                  <h4 class="rtl c-mb-10">عکس ضمیمه:</h4>
+                  <img class="thumbnaail-image" src="https://placehold.co/300x300" alt />
+                </v-card-text>
+              </v-card>
+            </div>
+          </div>
         </v-row>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="close">بستن</v-btn>
-        </v-card-actions>
+        <v-row class="c-px-5 c-mt-10 justify-end">
+          <v-btn color="red darken-4" dark @click="close">بستن</v-btn>
+        </v-row>
       </v-card>
     </v-dialog>
     <!-- change work group dialog -->
@@ -426,11 +470,13 @@
 import searchOnWorkGroupsMixins from "~/mixins.js/searchOnWorkGroupsMixins.js";
 import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
+import workingGroupsModal from '~/components/workGroupModal'
 
 export default {
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
   components: {
-    deleteConfirmationDialog
+    deleteConfirmationDialog,
+    workingGroupsModal
   },
   computed: {
     formDataType() {
@@ -453,6 +499,7 @@ export default {
     }
   },
   data: () => ({
+    activityDrop: ['تعریف و تغییر گروه‌کاری', 'انتقال وضعیت به در حال بررسی', 'انتقال وضعیت به انتشار یافته', 'حذف'],
     excel_file: "",
     options: {},
     meta: [],
@@ -544,7 +591,8 @@ export default {
       { text: "عنوان آگهی", value: "title" },
       { text: "تاریخ انتشار", value: "created_at" },
       { text: "آگهی گذار", value: "adinviter_title" },
-      { text: "ابزار", value: "actions", sortable: false, align: "left" }
+      { text: "وضعیت انتشار", value: "status" },
+      { text: "ابزار", value: "actions", sortable: false, align: "center" }
     ],
     advertises: [],
     editedIndex: -1,
@@ -595,7 +643,7 @@ export default {
                 }
               );
             });
-        } catch (error) {}
+        } catch (error) { }
       }
     },
     backToShowMode() {
@@ -725,9 +773,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-              this.options.page +
-              "&items_per_page=" +
-              this.options.itemsPerPage,
+            this.options.page +
+            "&items_per_page=" +
+            this.options.itemsPerPage,
             {
               ...this.formData
             }

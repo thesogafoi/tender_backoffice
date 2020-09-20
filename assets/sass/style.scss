@@ -113,9 +113,10 @@ div {
   background-color: $secondaryColor;
   color: $lightestColor;
   border-radius: $defaultRadius;
-  padding: 10px 20px;
+  padding: 7px 10px;
   transition: all .6s ease;
   cursor: pointer;
+  font-size: 13px;
 
   &:hover {
     background-color: $primaryColor;
@@ -123,7 +124,18 @@ div {
   }
 
 }
-
+.v-snack__wrapper{
+  position: absolute !important;
+  top: 20px !important;
+  .v-snack__content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .v-card__title{
+      word-spacing: 0;
+    }
+  }
+}
 .c-date-picker {
   border: 1px solid red;
 }
@@ -160,5 +172,24 @@ div {
   background-color: #ddd;
   color: $secondaryColor;
   padding: 4px;
-  
+
+}
+
+.city {
+  span {
+    margin-left: 10px;
+  }
+}
+.parent-row{
+  width: 100%;
+  display: flex;
+}
+.c-table-row{
+  display: table;
+  .child-col{
+    display: table-cell;
+    .v-card{
+      height: 100%;
+    }
+  }
 }
