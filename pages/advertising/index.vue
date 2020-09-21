@@ -148,12 +148,22 @@
               label="گروه‌های کاری"
               @click=""
             ></v-text-field>-->
-            <v-btn @click="workGroupModal=true">انتخاب دسته های کاری</v-btn>
-            {{formData.work_groups}}
+            <v-btn
+              @click="workGroupModal=true"
+              :disabled="formData.type == undefined ||
+            formData.type == ''"
+            >انتخاب دسته های کاری</v-btn>
+            <span v-if="formData.work_groups">
+              <span v-if="formData.work_groups.length ==0">دسته کاری انتخاب نشده</span>
+              <span
+                v-if="formData.work_groups.length >0"
+              >{{formData.work_groups.length}} دسته کاری انتخاب شده</span>
+            </span>
             <workingGroupsModal
               v-if="workGroupModal"
               :modal="workGroupModal"
               :props_selected.sync="formData.work_groups"
+              :type="formData.type"
               @close_modal="workGroupModal= false"
               @add_selected="childSeleted"
             />
@@ -161,9 +171,6 @@
           <div class="w-40 c-px-10">
             <v-text-field v-model="formData.link" label="لینک"></v-text-field>
           </div>
-
-          <br />
-
           <div class="w-20 c-px-10">
             <v-file-input
               prepend-inner-icon="mdi-camera"

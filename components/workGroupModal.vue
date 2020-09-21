@@ -10,32 +10,80 @@
           <v-spacer></v-spacer>
         </v-toolbar>
         <v-container>
-          <v-form ref="form" @submit.prevent="submitGroup()">
-            <p>it's here</p>
-            {{props_selected}}
+          <v-form ref="form">
             <v-row>
               <v-col cols="12" class="text-left">
-                <v-btn color="success" type="submit" dark>تعیین گروه</v-btn>
+                <v-btn color="success" type="button" @click="submitGroup()" dark>تعیین گروه</v-btn>
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="4" v-for="(parentGroup,index) in workingGroups" :key="index">
-                <v-expansion-panels accordion>
-                  <v-expansion-panel>
-                    <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                      <v-checkbox
-                        class="c-mt-0"
-                        v-for="(childrenGroup,i) in parentGroup.children"
-                        :key="i"
-                        v-model="selected"
-                        :label="childrenGroup.title"
-                        :value="childrenGroup.id"
-                      ></v-checkbox>
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </v-col>
+              <span v-for="id in selected" :key="id">{{findTitle(id)}}</span>
+              <div background-color="white" color="deep-purple accent-4" right>
+                <div class="header">
+                  <div v-for="(tab , index) in headerTab" :key="index">
+                    <button v-show=" tab.id == type" @click="activeTab(tab.id)">{{tab.name}}</button>
+                  </div>
+                </div>
+                <div class="tab-body">
+                  <div v-if="currentTab=='AUCTION'">
+                    <v-col cols="4" v-for="(parentGroup,index) in workingGroups" :key="index">
+                      <v-expansion-panels accordion v-if="parentGroup.type=='AUCTION'">
+                        <v-expansion-panel>
+                          <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
+                          <v-expansion-panel-content>
+                            <v-checkbox
+                              class="c-mt-0"
+                              v-for="(childrenGroup,i) in parentGroup.children"
+                              :key="i"
+                              v-model="selected"
+                              :label="childrenGroup.title"
+                              :value="childrenGroup.id"
+                            ></v-checkbox>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                    </v-col>
+                  </div>
+                  <div v-if="currentTab=='TENDER'">
+                    <v-col cols="4" v-for="(parentGroup,index) in workingGroups" :key="index">
+                      <v-expansion-panels accordion v-if="parentGroup.type=='TENDER'">
+                        <v-expansion-panel>
+                          <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
+                          <v-expansion-panel-content>
+                            <v-checkbox
+                              class="c-mt-0"
+                              v-for="(childrenGroup,i) in parentGroup.children"
+                              :key="i"
+                              v-model="selected"
+                              :label="childrenGroup.title"
+                              :value="childrenGroup.id"
+                            ></v-checkbox>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                    </v-col>
+                  </div>
+                  <div v-if="currentTab=='INQUIRY'">
+                    <v-col cols="4" v-for="(parentGroup,index) in workingGroups" :key="index">
+                      <v-expansion-panels accordion v-if="parentGroup.type=='INQUIRY'">
+                        <v-expansion-panel>
+                          <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
+                          <v-expansion-panel-content>
+                            <v-checkbox
+                              class="c-mt-0"
+                              v-for="(childrenGroup,i) in parentGroup.children"
+                              :key="i"
+                              v-model="selected"
+                              :label="childrenGroup.title"
+                              :value="childrenGroup.id"
+                            ></v-checkbox>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                    </v-col>
+                  </div>
+                </div>
+              </div>
             </v-row>
           </v-form>
         </v-container>
@@ -46,20 +94,33 @@
 
 <script>
 export default {
-  props: ["props_selected", "modal"],
+  props: ["props_selected", "modal", "type"],
   mounted() {
     this.workingGroups = this.$store.getters["workGroups"];
   },
   created() {
-    console.log(this.props_selected);
     if (this.props_selected != undefined) {
       this.props_selected.forEach((e) => {
         this.selected.push(e);
       });
     }
+    this.currentTab = this.type;
   },
   watch: {},
   methods: {
+    findTitle(id) {
+      if (!id) return "";
+      let title = "";
+      this.$store.getters["workGroups"].forEach((element) => {
+        if (element.children.find((child) => child.id == id) != undefined) {
+          title = element.children.find((child) => child.id == id).title;
+        }
+      });
+      return title;
+    },
+    activeTab(id) {
+      this.currentTab = id;
+    },
     submitGroup() {
       this.closeModal();
       this.$emit("add_selected", this.selected);
@@ -70,6 +131,21 @@ export default {
   },
   data() {
     return {
+      headerTab: [
+        {
+          id: "AUCTION",
+          name: "مزایده",
+        },
+        {
+          id: "TENDER",
+          name: "مناقصه",
+        },
+        {
+          id: "INQUIRY",
+          name: "استعلام",
+        },
+      ],
+      currentTab: "1",
       selected: [],
       selectedChildren: [],
       workingGroups: [],
