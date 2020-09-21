@@ -146,16 +146,10 @@
             <!-- <v-combobox v-model="work_groups" :items="items" label="گروه های کاری" multiple></v-combobox> -->
             <v-text-field
               label="گروه‌های کاری"
-              @click="workGroupModal=true"
-              v-model="workGroupsTitle"
+              @click="$store.state.openWorkGroupModal = true"
+              v-model="$store.state.showGroupTitle"
             ></v-text-field>
-
-            <!-- <workingGroupsModal
-              @add_selected="childSeleted"
-              :props_selected="formData.work_groups"
-              :modal="workGroupModal"
-              @close_modal="workGroupModal = false"
-            />-->
+            <workingGroupsModal/>
           </div>
           <div class="w-40 c-px-10">
             <v-text-field v-model="formData.link" label="لینک"></v-text-field>
@@ -688,7 +682,7 @@ export default {
                 }
               );
             });
-        } catch (error) {}
+        } catch (error) { }
       }
     },
     backToShowMode() {
@@ -816,9 +810,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-              this.options.page +
-              "&items_per_page=" +
-              this.options.itemsPerPage,
+            this.options.page +
+            "&items_per_page=" +
+            this.options.itemsPerPage,
             {
               ...this.formData,
             }

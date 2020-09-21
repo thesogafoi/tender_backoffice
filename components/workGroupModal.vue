@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-dialog v-model="modal" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <v-dialog v-model="$store.state.openWorkGroupModal" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click="closeModal()">
+          <v-btn icon dark @click="$store.state.openWorkGroupModal = false">
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>دسته‌های کاری</v-toolbar-title>
@@ -13,7 +13,7 @@
           <v-form ref="form" @submit.prevent="submitGroup()">
             <v-row>
               <v-col cols="12" class="text-left">
-                <v-btn color="success" type="submit" dark>تعیین گروه</v-btn>
+                <v-btn color="success" type="submit" dark @click="$store.state.openWorkGroupModal = false">تعیین گروه</v-btn>
               </v-col>
             </v-row>
             <v-row>
@@ -22,11 +22,12 @@
                   <v-expansion-panel>
                     <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
                     <v-expansion-panel-content>
+                        {{$store.state.WorkGroupSelected}}
                       <v-checkbox
                         class="c-mt-0"
                         v-for="(childrenGroup,i) in parentGroup.children"
                         :key="i"
-                        v-model="selected"
+                        v-model="$store.state.WorkGroupSelected"
                         :label="childrenGroup.title"
                         :value="childrenGroup"
                       ></v-checkbox>
@@ -44,7 +45,6 @@
 
 <script>
 export default {
-  props: ["props_selected", "modal"],
   mounted() {
     this.workingGroups = this.$store.getters["workGroups"];
   },
@@ -56,6 +56,10 @@ export default {
   methods: {
     submitGroup() {
       this.$store.state.workingGroupsModal = false;
+      this.$store.state.showGroupTitle = []
+      this.selected.forEach(element => {
+         this.$store.state.showGroupTitle.push(element.title);
+      });
     },
     closeModal() {
       this.$emit("close_modal");
