@@ -49,9 +49,6 @@ export default {
     this.workingGroups = this.$store.getters["workGroups"];
   },
   watch: {
-    props_selected() {
-      this.selected = this.props_selected;
-    },
     selected() {
       this.$emit("add_selected", this.selected);
     },

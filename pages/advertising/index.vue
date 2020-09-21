@@ -144,18 +144,18 @@
               :multiple="true"
             />-->
             <!-- <v-combobox v-model="work_groups" :items="items" label="گروه های کاری" multiple></v-combobox> -->
-            {{workGroupsTitle}}
             <v-text-field
               label="گروه‌های کاری"
               @click="workGroupModal=true"
               v-model="workGroupsTitle"
             ></v-text-field>
-            <workingGroupsModal
+
+            <!-- <workingGroupsModal
               @add_selected="childSeleted"
               :props_selected="formData.work_groups"
               :modal="workGroupModal"
               @close_modal="workGroupModal = false"
-            />
+            />-->
           </div>
           <div class="w-40 c-px-10">
             <v-text-field v-model="formData.link" label="لینک"></v-text-field>
@@ -230,8 +230,8 @@
               type="button"
               class="c-ml-10"
               width="120"
-              @click.prevent="sendData"
-            >ذخیره</v-btn>
+              @click.prevent="sendAction"
+            >اعمال تغییرات</v-btn>
           </div>
         </div>
       </v-card-actions>
@@ -282,7 +282,7 @@
           </div>
         </template>
         <template v-slot:no-data>
-          <!-- <v-btn color="primary" @click="initialize">Reset</v-btn> -->
+          <v-btn color="primary" @click="initialize">Reset</v-btn>
         </template>
       </v-data-table>
     </v-card>
@@ -521,6 +521,8 @@ export default {
     },
   },
   data: () => ({
+    action: 0,
+    advertises_action: [],
     workGroupsTitle: [],
     workGroupModal: false,
     activityDrop: [
@@ -639,6 +641,12 @@ export default {
   }),
 
   methods: {
+    sendAction() {
+      // we need axio here
+      //  Data we need here
+      //  action : Number
+      // advertises_action : (Array Of Actions Id) []
+    },
     childSeleted(e) {
       this.formData.work_groups = [];
       this.workGroupsTitle = [];
