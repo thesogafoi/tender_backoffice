@@ -144,19 +144,26 @@
               :multiple="true"
             />-->
             <!-- <v-combobox v-model="work_groups" :items="items" label="گروه های کاری" multiple></v-combobox> -->
-            <v-text-field
+            <!-- <v-text-field
               label="گروه‌های کاری"
-              @click="$store.state.openWorkGroupModal = true"
-              v-model="$store.state.showGroupTitle"
-            ></v-text-field>
-            <workingGroupsModal/>
+              @click=""
+            ></v-text-field>-->
+            <v-btn @click="workGroupModal=true">انتخاب دسته های کاری</v-btn>
+            {{formData.work_groups}}
+            <workingGroupsModal
+              v-if="workGroupModal"
+              :modal="workGroupModal"
+              :props_selected.sync="formData.work_groups"
+              @close_modal="workGroupModal= false"
+              @add_selected="childSeleted"
+            />
           </div>
           <div class="w-40 c-px-10">
             <v-text-field v-model="formData.link" label="لینک"></v-text-field>
           </div>
 
           <br />
-          {{this.formData.work_groups}}
+
           <div class="w-20 c-px-10">
             <v-file-input
               prepend-inner-icon="mdi-camera"
@@ -644,10 +651,11 @@ export default {
     childSeleted(e) {
       this.formData.work_groups = [];
       this.workGroupsTitle = [];
-      e.forEach((element) => {
-        this.formData.work_groups.push(element.id);
-        this.workGroupsTitle.push(element.title);
-      });
+      if (e != undefined) {
+        e.forEach((element) => {
+          this.formData.work_groups.push(element);
+        });
+      }
     },
     async editItem() {
       this.isLoading = true;
@@ -682,7 +690,7 @@ export default {
                 }
               );
             });
-        } catch (error) { }
+        } catch (error) {}
       }
     },
     backToShowMode() {
@@ -810,9 +818,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-            this.options.page +
-            "&items_per_page=" +
-            this.options.itemsPerPage,
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage,
             {
               ...this.formData,
             }

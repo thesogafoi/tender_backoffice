@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-dialog v-model="$store.state.openWorkGroupModal" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <v-dialog v-model="modal" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click="$store.state.openWorkGroupModal = false">
+          <v-btn icon dark @click="closeModal()">
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <v-toolbar-title>دسته‌های کاری</v-toolbar-title>
@@ -11,9 +11,11 @@
         </v-toolbar>
         <v-container>
           <v-form ref="form" @submit.prevent="submitGroup()">
+            <p>it's here</p>
+            {{props_selected}}
             <v-row>
               <v-col cols="12" class="text-left">
-                <v-btn color="success" type="submit" dark @click="$store.state.openWorkGroupModal = false">تعیین گروه</v-btn>
+                <v-btn color="success" type="submit" dark>تعیین گروه</v-btn>
               </v-col>
             </v-row>
             <v-row>
@@ -22,14 +24,13 @@
                   <v-expansion-panel>
                     <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        {{$store.state.WorkGroupSelected}}
                       <v-checkbox
                         class="c-mt-0"
                         v-for="(childrenGroup,i) in parentGroup.children"
                         :key="i"
-                        v-model="$store.state.WorkGroupSelected"
+                        v-model="selected"
                         :label="childrenGroup.title"
-                        :value="childrenGroup"
+                        :value="childrenGroup.id"
                       ></v-checkbox>
                     </v-expansion-panel-content>
                   </v-expansion-panel>
@@ -45,21 +46,23 @@
 
 <script>
 export default {
+  props: ["props_selected", "modal"],
   mounted() {
     this.workingGroups = this.$store.getters["workGroups"];
   },
-  watch: {
-    selected() {
-      this.$emit("add_selected", this.selected);
-    },
+  created() {
+    console.log(this.props_selected);
+    if (this.props_selected != undefined) {
+      this.props_selected.forEach((e) => {
+        this.selected.push(e);
+      });
+    }
   },
+  watch: {},
   methods: {
     submitGroup() {
-      this.$store.state.workingGroupsModal = false;
-      this.$store.state.showGroupTitle = []
-      this.selected.forEach(element => {
-         this.$store.state.showGroupTitle.push(element.title);
-      });
+      this.closeModal();
+      this.$emit("add_selected", this.selected);
     },
     closeModal() {
       this.$emit("close_modal");
