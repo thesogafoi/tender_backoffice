@@ -1,7 +1,6 @@
 export const strict = false
 
 export const state = () => ({
-  workingGroupsModal: false,
   toolbarColor: 'grey lighten-1',
   snackbarTextDeleteSuccessful: 'The Item was  deleted',
   snackbarTextDeleteFailed: 'The Item were not deleted',
@@ -196,7 +195,6 @@ export const actions = {
   }) {
 
     let data = await this.$axios.$get('workgroup/component/index')
-    console.log(data);
     commit('SET_WORK_GROUPS', data);
   },
   async nuxtServerInit({

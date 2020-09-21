@@ -144,12 +144,25 @@
               :multiple="true"
             />-->
             <!-- <v-combobox v-model="work_groups" :items="items" label="گروه های کاری" multiple></v-combobox> -->
-            <v-text-field label="گروه‌های کاری" @click="$store.state.workingGroupsModal = true"></v-text-field>
-            <workingGroupsModal />
+            {{workGroupsTitle}}
+            <v-text-field
+              label="گروه‌های کاری"
+              @click="workGroupModal=true"
+              v-model="workGroupsTitle"
+            ></v-text-field>
+            <workingGroupsModal
+              @add_selected="childSeleted"
+              :props_selected="formData.work_groups"
+              :modal="workGroupModal"
+              @close_modal="workGroupModal = false"
+            />
           </div>
           <div class="w-40 c-px-10">
             <v-text-field v-model="formData.link" label="لینک"></v-text-field>
           </div>
+
+          <br />
+          {{this.formData.work_groups}}
           <div class="w-20 c-px-10">
             <v-file-input
               prepend-inner-icon="mdi-camera"
@@ -211,6 +224,14 @@
           </div>
           <div class="w-25 c-mr-20">
             <v-select :items="activityDrop" label="عملیات"></v-select>
+            <v-btn
+              :disabled="!valid || isLoading"
+              color="primary"
+              type="button"
+              class="c-ml-10"
+              width="120"
+              @click.prevent="sendData"
+            >ذخیره</v-btn>
           </div>
         </div>
       </v-card-actions>
@@ -500,6 +521,8 @@ export default {
     },
   },
   data: () => ({
+    workGroupsTitle: [],
+    workGroupModal: false,
     activityDrop: [
       "تعریف و تغییر گروه‌کاری",
       "انتقال وضعیت به در حال بررسی",
@@ -616,6 +639,14 @@ export default {
   }),
 
   methods: {
+    childSeleted(e) {
+      this.formData.work_groups = [];
+      this.workGroupsTitle = [];
+      e.forEach((element) => {
+        this.formData.work_groups.push(element.id);
+        this.workGroupsTitle.push(element.title);
+      });
+    },
     async editItem() {
       this.isLoading = true;
       if (
@@ -659,6 +690,7 @@ export default {
       this.getDataFromApi();
     },
     resetFormDataWithoutType() {
+      this.workGroupsTitle = [];
       this.advertiseId = "";
       this.formData = {
         work_groups: [],
@@ -679,6 +711,7 @@ export default {
       };
     },
     resetFormData() {
+      this.workGroupsTitle = [];
       this.advertiseId = "";
       this.formData = {
         work_groups: [],
