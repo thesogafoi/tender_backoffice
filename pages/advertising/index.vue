@@ -167,6 +167,15 @@
               @close_modal="workGroupModal= false"
               @add_selected="childSeleted"
             />
+
+            <workingGroupsModal
+              v-if="workGroupModalAction"
+              :modal="workGroupModalAction"
+              :props_selected.sync="work_groups_action"
+              type="action"
+              @close_modal="workGroupModalAction= false"
+              @add_selected="actionChildSeleted"
+            />
           </div>
           <div class="w-40 c-px-10">
             <v-text-field v-model="formData.link" label="لینک"></v-text-field>
@@ -231,9 +240,14 @@
             <label for="img" class="uploader-button">ورود اطلاعات با اکسل</label>
           </div>
           <div class="w-25 c-mr-20">
-            <v-select :items="activityDrop" label="عملیات"></v-select>
+            <v-select
+              :items="activityDrop"
+              v-model="choosed_action"
+              item-text="name"
+              item-value="id"
+              label="عملیات"
+            ></v-select>
             <v-btn
-              :disabled="!valid || isLoading"
               color="primary"
               type="button"
               class="c-ml-10"
@@ -259,10 +273,11 @@
       </v-menu>
       <v-data-table
         class="mt-5 rtl c-table"
-        v-model="selected"
+        v-model="advertises_action"
         disable-sort
         :headers="headers"
         :items="advertises"
+        :single-select="false"
         :server-items-length="meta.total"
         :loading="loading"
         :options.sync="options"
@@ -290,7 +305,7 @@
           </div>
         </template>
         <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize">Reset</v-btn>
+          <v-btn color="primary" @click="initialize">آگهی وجود ندارد</v-btn>
         </template>
       </v-data-table>
     </v-card>
@@ -514,6 +529,11 @@ export default {
     },
   },
   watch: {
+    choosed_action() {
+      if (this.choosed_action == 0) {
+        this.workGroupModalAction = true;
+      }
+    },
     formDataType() {
       this.filters.type = this.formData.type;
       this.workGroupSearch();
@@ -529,15 +549,29 @@ export default {
     },
   },
   data: () => ({
-    action: 0,
+    workGroupModalAction: false,
+    work_groups_action: [],
+    choosed_action: [],
     advertises_action: [],
     workGroupsTitle: [],
     workGroupModal: false,
     activityDrop: [
-      "تعریف و تغییر گروه‌کاری",
-      "انتقال وضعیت به در حال بررسی",
-      "انتقال وضعیت به انتشار یافته",
-      "حذف",
+      {
+        name: "تعریف و تغییر گروه‌کاری",
+        id: 0,
+      },
+      {
+        name: "انتقال وضعیت به در حال بررسی",
+        id: 1,
+      },
+      {
+        name: "انتقال وضعیت به انتشار یافته",
+        id: 2,
+      },
+      {
+        name: "حذف",
+        id: 3,
+      },
     ],
     excel_file: "",
     options: {},
@@ -574,7 +608,7 @@ export default {
       (v) => !!v || "E-mail is required",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
-    selected: [],
+    advertises_action: [],
     listType: [
       {
         id: "AUCTION",
@@ -650,10 +684,69 @@ export default {
 
   methods: {
     sendAction() {
+      let advertiseId = [];
+      if (
+        this.advertises_action.length == 0 ||
+        this.choosed_action.length == 0
+      ) {
+        this.showSnackbar(
+          "لطفا آگهی ها یا عملیات مورد نظر را انتخاب کنید",
+          "red"
+        );
+        return;
+      }
+      this.advertises_action.forEach((advertise) => {
+        advertiseId.push(advertise.id);
+      });
       // we need axio here
-      //  Data we need here
-      //  action : Number
-      // advertises_action : (Array Of Actions Id) []
+      let requestData = {};
+
+      if (this.choosed_action == 0) {
+        if (this.work_groups_action.length == 0) {
+          this.showSnackbar(
+            "لطفا دسته ی کاری مورد نظر را انتخاب نمایید",
+            "red"
+          );
+          return;
+        }
+        requestData = {
+          action: this.choosed_action,
+          advertises_action: advertiseId,
+          work_groups_action: this.work_groups_action,
+        };
+      } else {
+        requestData = {
+          action: this.choosed_action,
+          advertises_action: advertiseId,
+        };
+      }
+      if (this.choosed_action == 3) {
+        confirm("برای پاک کردن آگهی هااطمینان دارید ؟");
+      }
+      this.$axios
+        .$post("advertises/action", requestData)
+        .then((response) => {
+          this.advertises_action = [];
+          this.work_groups_action = [];
+          this.action = "";
+          this.getDataFromApi();
+          this.showSnackbar("تغییرات انجام شد", "green");
+        })
+        .catch((error) => {
+          Object.values(this.$store.getters["errorHandling/errors"]).map(
+            (error) => {
+              this.showSnackbar(error[0], "red");
+            }
+          );
+        });
+    },
+    actionChildSeleted(e) {
+      this.work_groups_action = [];
+      if (e != undefined) {
+        e.forEach((element) => {
+          this.work_groups_action.push(element);
+        });
+      }
     },
     childSeleted(e) {
       this.formData.work_groups = [];

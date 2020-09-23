@@ -55,7 +55,8 @@ export default {
       src: "~plugins/jalaliCalender.js",
       ssr: false
     },
-    "./plugins/global.js"
+    "./plugins/global.js",
+
   ],
   /*
    ** Auto import components
