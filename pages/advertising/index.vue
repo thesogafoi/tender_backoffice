@@ -135,7 +135,7 @@
               element="free-date"
             ></custom-date-picker>
           </div>
-          <div class="w-40 c-px-10">
+          <div class="w-40 c-px-10 d-flex align-center">
             <!-- <ChooseWorkGroup
               :dis="formData.type == undefined"
               :work_groups="workGroups"
@@ -151,14 +151,18 @@
             <v-btn
               @click="workGroupModal=true"
               :disabled="formData.type == undefined ||
-            formData.type == ''"
+              formData.type == ''"
+              class="w-48 c-ml-10"
             >انتخاب دسته های کاری</v-btn>
+            <v-btn class="w-50" disabled>
+
             <span v-if="formData.work_groups">
-              <span v-if="formData.work_groups.length ==0">دسته کاری انتخاب نشده</span>
+              <span v-if="formData.work_groups.length === 0">دسته کاری انتخاب نشده</span>
               <span
                 v-if="formData.work_groups.length >0"
               >{{formData.work_groups.length}} دسته کاری انتخاب شده</span>
             </span>
+            </v-btn>
             <workingGroupsModal
               v-if="workGroupModal"
               :modal="workGroupModal"
@@ -201,6 +205,23 @@
         </v-row>
       </v-form>
       <v-card-actions class="justify-end c-pt-0">
+        <div class="w-25 c-mr-20 d-flex align-center">
+            <v-select
+              :items="activityDrop"
+              v-model="choosed_action"
+              item-text="name"
+              item-value="id"
+              label="عملیات"
+            ></v-select>
+            <v-btn
+              color="primary "
+              type="button"
+              class="c-mr-10"
+              width="120"
+              @click.prevent="sendAction"
+            >اعمال تغییرات</v-btn>
+          </div>
+        <v-spacer></v-spacer>
         <div v-if="editMode">
           <v-btn color="red darken-4" dark @click.prevent="backToShowMode" type="button">انصراف</v-btn>
           <v-btn
@@ -239,22 +260,7 @@
             />
             <label for="img" class="uploader-button">ورود اطلاعات با اکسل</label>
           </div>
-          <div class="w-25 c-mr-20">
-            <v-select
-              :items="activityDrop"
-              v-model="choosed_action"
-              item-text="name"
-              item-value="id"
-              label="عملیات"
-            ></v-select>
-            <v-btn
-              color="primary"
-              type="button"
-              class="c-ml-10"
-              width="120"
-              @click.prevent="sendAction"
-            >اعمال تغییرات</v-btn>
-          </div>
+          
         </div>
       </v-card-actions>
     </v-card>

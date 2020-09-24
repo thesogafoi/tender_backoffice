@@ -25,7 +25,11 @@
             <v-form ref="form4" v-model="valid1">
               <v-row>
                 <v-col cols="12" md="12" class="c-py-0">
-                  <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
+                  <v-text-field
+                    v-model="editedItem.title"
+                    label="نام"
+                    required
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="6" class="c-py-0">
                   <v-select
@@ -33,7 +37,7 @@
                     item-value="id"
                     item-text="value"
                     :items="listType"
-                    :rules="[v => !!v || 'Item is required']"
+                    :rules="[(v) => !!v || 'Item is required']"
                     label="نوع دسته"
                     required
                   ></v-select>
@@ -50,7 +54,11 @@
                 </v-col>
 
                 <v-col cols="12" md="12" class="c-py-0">
-                  <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
+                  <v-text-field
+                    v-model="editedItem.priorty"
+                    label="اولویت"
+                    required
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12" class="c-py-0">
                   <!-- <v-file-input
@@ -67,7 +75,8 @@
                   color="success"
                   :disabled="!valid1 || isLoading"
                   @click="save('parent')"
-                >ذخیره</v-btn>
+                  >ذخیره</v-btn
+                >
               </v-card-actions>
             </v-form>
           </v-container>
@@ -95,7 +104,11 @@
                   </v-combobox>
                 </v-col>
                 <v-col cols="12" md="12" class="c-py-0">
-                  <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
+                  <v-text-field
+                    v-model="editedItem.title"
+                    label="نام"
+                    required
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="6" class="c-py-0">
                   <v-select
@@ -103,7 +116,7 @@
                     item-value="id"
                     item-text="value"
                     :items="listType"
-                    :rules="[v => !!v || 'Item is required']"
+                    :rules="[(v) => !!v || 'Item is required']"
                     required
                     label="نوع دسته"
                   ></v-select>
@@ -121,7 +134,11 @@
                 <!--....... -->
 
                 <v-col cols="12" md="12" class="c-py-0">
-                  <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
+                  <v-text-field
+                    v-model="editedItem.priorty"
+                    label="اولویت"
+                    required
+                  ></v-text-field>
                 </v-col>
               </v-row>
               <v-card-actions>
@@ -130,7 +147,8 @@
                   color="success"
                   :disabled="!valid2 || isLoading"
                   @click="save('child')"
-                >ذخیره</v-btn>
+                  >ذخیره</v-btn
+                >
               </v-card-actions>
             </v-form>
           </v-container>
@@ -148,7 +166,11 @@
           <v-container fluid>
             <v-form ref="form2" v-model="valid1">
               <v-col cols="12" md="12">
-                <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
+                <v-text-field
+                  v-model="editedItem.title"
+                  label="نام"
+                  required
+                ></v-text-field>
               </v-col>
               <v-col cols="12">
                 <v-select
@@ -156,7 +178,7 @@
                   item-value="id"
                   item-text="value"
                   :items="listType"
-                  :rules="[v => !!v || 'Item is required']"
+                  :rules="[(v) => !!v || 'Item is required']"
                   label="نوع دسته"
                   required
                 ></v-select>
@@ -172,7 +194,11 @@
                 ></v-select>
               </v-col>
               <v-col cols="12" md="12">
-                <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
+                <v-text-field
+                  v-model="editedItem.priorty"
+                  label="اولویت"
+                  required
+                ></v-text-field>
               </v-col>
               <v-col cols="12" sm="12">
                 <!-- <v-file-input
@@ -189,7 +215,8 @@
                   :disabled="!valid1 || isLoading"
                   text
                   @click="update('parent')"
-                >به روز رسانی اطلاعات</v-btn>
+                  >به روز رسانی اطلاعات</v-btn
+                >
               </v-card-actions>
             </v-form>
           </v-container>
@@ -202,7 +229,11 @@
           <v-container fluid>
             <v-form ref="form3" v-model="valid2">
               <v-col cols="12" md="12">
-                <v-text-field v-model="editedItem.title" label="نام" required></v-text-field>
+                <v-text-field
+                  v-model="editedItem.title"
+                  label="نام"
+                  required
+                ></v-text-field>
               </v-col>
 
               <v-col cols="12">
@@ -211,7 +242,7 @@
                   item-value="id"
                   item-text="value"
                   :items="listType"
-                  :rules="[v => !!v || 'Item is required']"
+                  :rules="[(v) => !!v || 'Item is required']"
                   label="نوع دسته"
                   required
                 ></v-select>
@@ -251,13 +282,18 @@
                       close
                       @click="data.select"
                       @click:close="removeSelected(data.item)"
-                    >{{ data.item.title }}</v-chip>
+                      >{{ data.item.title }}</v-chip
+                    >
                   </template>
                 </v-combobox>
               </v-col>
 
               <v-col cols="12" md="12">
-                <v-text-field v-model="editedItem.priorty" label="اولویت" required></v-text-field>
+                <v-text-field
+                  v-model="editedItem.priorty"
+                  label="اولویت"
+                  required
+                ></v-text-field>
               </v-col>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -266,7 +302,8 @@
                   :disabled="!valid2 || isLoading"
                   text
                   @click="update('child')"
-                >به روز رسانی اطلاعات</v-btn>
+                  >به روز رسانی اطلاعات</v-btn
+                >
               </v-card-actions>
             </v-form>
           </v-container>
@@ -305,32 +342,40 @@
         </div>
       </v-row>
       <v-card-actions class="justify-end c-pt-0 align-center">
-        <v-btn color="success" width="120" dark @click="openAdd">افزودن گروه کاری</v-btn>
+        <v-btn color="success" width="120" dark @click="openAdd"
+          >افزودن گروه کاری</v-btn
+        >
         <v-spacer></v-spacer>
         <v-btn
           color="red darken-4"
           dark
           width="120"
           @click="resetWorkGroupSearchForm"
-        >پاک کردن فیلد ها</v-btn>
+          >پاک کردن فیلد ها</v-btn
+        >
 
-        <v-btn color="primary c-ml-10" dark @click="workGroupSearch" width="120">جستجو</v-btn>
+        <v-btn color="primary c-ml-10" dark @click="workGroupSearch" width="120"
+          >جستجو</v-btn
+        >
         <div>
           <input
             type="file"
             name="uploadfile"
             id="import_excel"
             @change="onExcelFileChange"
-            style="display:none;"
+            style="display: none"
           />
-          <label for="import_excel" class="uploader-button c-ml-10">ورود اطلاعت با اکسل</label>
+          <label for="import_excel" class="uploader-button c-ml-10"
+            >ورود اطلاعت با اکسل</label
+          >
         </div>
         <div>
           <label
             for="export_excel"
             @click.prevent="getExcel"
             class="uploader-button"
-          >دریافت اطلاعات با اکسل</label>
+            >دریافت اطلاعات با اکسل</label
+          >
         </div>
       </v-card-actions>
     </v-card>
@@ -342,8 +387,11 @@
         :items="workGroups"
         item-key="name"
         class="c-table"
+        :expanded.sync="workGroups"
+        show-expand
+        singleExpand
         :footer-props="{
-          'items-per-page-options': [10, 20, 30, 40, 50]
+          'items-per-page-options': [10, 20, 30, 40, 50],
         }"
       >
         <template v-slot:top>
@@ -403,6 +451,9 @@
           </v-simple-table>
         </td>
         </template>-->
+        <template v-slot:expanded-item="{ headers, item }">
+          <td :colspan="headers">More info about {{ item.name }}</td>
+        </template>
       </v-data-table>
     </v-card>
     <!-- edit main dialog -->

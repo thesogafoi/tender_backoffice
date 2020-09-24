@@ -124,15 +124,23 @@ div {
   }
 
 }
+.v-input__slot{
+  .v-label{
+    text-align: right;
+  }
+}
 .v-snack__wrapper{
   position: absolute !important;
   top: 20px !important;
+  max-width: 90% !important;
+  width: 100% !important;
   .v-snack__content{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     .v-card__title{
       word-spacing: 0;
+      font-size: 16px;
     }
   }
 }
@@ -191,5 +199,11 @@ div {
     .v-card{
       height: 100%;
     }
+  }
+}
+.small-header{
+  height: 50px !important;
+  .v-toolbar__content{
+    height: 50px !important;
   }
 }

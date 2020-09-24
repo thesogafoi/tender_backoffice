@@ -1,53 +1,80 @@
 <template>
   <div>
-    <v-dialog v-model="modal" fullscreen hide-overlay transition="dialog-bottom-transition">
+    <v-dialog
+      v-model="modal"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
       <v-card>
-        <v-toolbar dark color="primary">
+        <v-toolbar dark color="primary" class="small-header">
           <v-btn icon dark @click="closeModal()">
             <v-icon>mdi-close</v-icon>
           </v-btn>
-          <v-toolbar-title>دسته‌های کاری</v-toolbar-title>
+          <v-toolbar-title>
+            <div v-if="currentTab == 'AUCTION'">مزایده</div>
+            <div v-if="currentTab == 'TENDER'">مناقصه</div>
+            <div v-if="currentTab == 'INQUIRY'">استعلام</div>
+          </v-toolbar-title>
           <v-spacer></v-spacer>
+          <v-btn color="success" type="button" @click="submitGroup()" dark
+            >تعیین گروه</v-btn
+          >
         </v-toolbar>
         <v-container>
           <v-form ref="form">
             <v-row>
-              <v-col cols="12" class="text-left">
-                <v-btn color="success" type="button" @click="submitGroup()" dark>تعیین گروه</v-btn>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-card class="c-mb-20">
-                <v-card-body class="c-pa-10">
-                  <v-row class="c-px-30">
-                    <div v-for="id in selected" :key="id">
-                      <p class="c-mb-0">{{findTitle(id)}} /</p>
-                    </div>
-                  </v-row>
-                </v-card-body>
-              </v-card>
+              <v-row class="c-px-30 c-py-20">
+                <v-chip
+                  v-for="(id, index) in selected"
+                  :key="index"
+                  class="c-ml-10 c-mb-15"
+                  close
+                  color="default"
+                  label
+                  outlined
+                  @click:close="deleteGroup(index)"
+                >
+                  {{ findTitle(id) }}
+                </v-chip>
+              </v-row>
               <div
                 background-color="white"
                 color="deep-purple accent-4"
                 right
-                v-if="type!='action'"
+                v-if="type != 'action'"
               >
                 <div class="header">
-                  <div v-for="(tab , index) in headerTab" :key="index">
-                    <button v-show=" tab.id == type" @click.prevent="activeTab(tab.id)">{{tab.name}}</button>
+                  <div v-for="(tab, index) in headerTab" :key="index">
+                    <!-- <button
+                      v-show="tab.id == type"
+                      @click.prevent="activeTab(tab.id)"
+                    >
+                      {{ tab.name }}
+                    </button> -->
                   </div>
                 </div>
                 <div class="tab-body">
-                  <div v-if="currentTab=='AUCTION'">
+                  <div v-if="currentTab == 'AUCTION'">
                     <v-row>
-                      <v-col cols="4" v-for="(parentGroup,index) in workingGroups" :key="index">
-                        <v-expansion-panels accordion v-if="parentGroup.type=='AUCTION'">
+                      <v-col
+                        cols="4"
+                        v-for="(parentGroup, index) in workingGroups"
+                        :key="index"
+                      >
+                        <v-expansion-panels
+                          accordion
+                          v-if="parentGroup.type == 'AUCTION'"
+                        >
                           <v-expansion-panel>
-                            <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
+                            <v-expansion-panel-header>{{
+                              parentGroup.title
+                            }}</v-expansion-panel-header>
                             <v-expansion-panel-content>
                               <v-checkbox
                                 class="c-mt-0"
-                                v-for="(childrenGroup,i) in parentGroup.children"
+                                v-for="(childrenGroup,
+                                i) in parentGroup.children"
                                 :key="i"
                                 v-model="selected"
                                 :label="childrenGroup.title"
@@ -59,16 +86,26 @@
                       </v-col>
                     </v-row>
                   </div>
-                  <div v-if="currentTab=='TENDER'">
+                  <div v-if="currentTab == 'TENDER'">
                     <v-row>
-                      <v-col cols="4" v-for="(parentGroup,index) in workingGroups" :key="index">
-                        <v-expansion-panels accordion v-if="parentGroup.type=='TENDER'">
+                      <v-col
+                        cols="4"
+                        v-for="(parentGroup, index) in workingGroups"
+                        :key="index"
+                      >
+                        <v-expansion-panels
+                          accordion
+                          v-if="parentGroup.type == 'TENDER'"
+                        >
                           <v-expansion-panel>
-                            <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
+                            <v-expansion-panel-header>{{
+                              parentGroup.title
+                            }}</v-expansion-panel-header>
                             <v-expansion-panel-content>
                               <v-checkbox
                                 class="c-mt-0"
-                                v-for="(childrenGroup,i) in parentGroup.children"
+                                v-for="(childrenGroup,
+                                i) in parentGroup.children"
                                 :key="i"
                                 v-model="selected"
                                 :label="childrenGroup.title"
@@ -80,16 +117,26 @@
                       </v-col>
                     </v-row>
                   </div>
-                  <div v-if="currentTab=='INQUIRY'">
+                  <div v-if="currentTab == 'INQUIRY'">
                     <v-row>
-                      <v-col cols="4" v-for="(parentGroup,index) in workingGroups" :key="index">
-                        <v-expansion-panels accordion v-if="parentGroup.type=='INQUIRY'">
+                      <v-col
+                        cols="4"
+                        v-for="(parentGroup, index) in workingGroups"
+                        :key="index"
+                      >
+                        <v-expansion-panels
+                          accordion
+                          v-if="parentGroup.type == 'INQUIRY'"
+                        >
                           <v-expansion-panel>
-                            <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
+                            <v-expansion-panel-header>{{
+                              parentGroup.title
+                            }}</v-expansion-panel-header>
                             <v-expansion-panel-content>
                               <v-checkbox
                                 class="c-mt-0"
-                                v-for="(childrenGroup,i) in parentGroup.children"
+                                v-for="(childrenGroup,
+                                i) in parentGroup.children"
                                 :key="i"
                                 v-model="selected"
                                 :label="childrenGroup.title"
@@ -108,24 +155,36 @@
                 background-color="white"
                 color="deep-purple accent-4"
                 right
-                v-if="type=='action'"
+                v-if="type == 'action'"
               >
                 <div class="header">
-                  <div v-for="(tab , index) in headerTab" :key="index">
-                    <button @click.prevent="activeTab(tab.id)">{{tab.name}}</button>
+                  <div v-for="(tab, index) in headerTab" :key="index">
+                    <button @click.prevent="activeTab(tab.id)">
+                      {{ tab.name }}
+                    </button>
                   </div>
                 </div>
                 <div class="tab-body">
-                  <div v-if="currentTab=='AUCTION'">
+                  <div v-if="currentTab == 'AUCTION'">
                     <v-row>
-                      <v-col cols="4" v-for="(parentGroup,index) in workingGroups" :key="index">
-                        <v-expansion-panels accordion v-if="parentGroup.type=='AUCTION'">
+                      <v-col
+                        cols="4"
+                        v-for="(parentGroup, index) in workingGroups"
+                        :key="index"
+                      >
+                        <v-expansion-panels
+                          accordion
+                          v-if="parentGroup.type == 'AUCTION'"
+                        >
                           <v-expansion-panel>
-                            <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
+                            <v-expansion-panel-header>{{
+                              parentGroup.title
+                            }}</v-expansion-panel-header>
                             <v-expansion-panel-content>
                               <v-checkbox
                                 class="c-mt-0"
-                                v-for="(childrenGroup,i) in parentGroup.children"
+                                v-for="(childrenGroup,
+                                i) in parentGroup.children"
                                 :key="i"
                                 v-model="selected"
                                 :label="childrenGroup.title"
@@ -137,16 +196,26 @@
                       </v-col>
                     </v-row>
                   </div>
-                  <div v-if="currentTab=='TENDER'">
+                  <div v-if="currentTab == 'TENDER'">
                     <v-row>
-                      <v-col cols="4" v-for="(parentGroup,index) in workingGroups" :key="index">
-                        <v-expansion-panels accordion v-if="parentGroup.type=='TENDER'">
+                      <v-col
+                        cols="4"
+                        v-for="(parentGroup, index) in workingGroups"
+                        :key="index"
+                      >
+                        <v-expansion-panels
+                          accordion
+                          v-if="parentGroup.type == 'TENDER'"
+                        >
                           <v-expansion-panel>
-                            <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
+                            <v-expansion-panel-header>{{
+                              parentGroup.title
+                            }}</v-expansion-panel-header>
                             <v-expansion-panel-content>
                               <v-checkbox
                                 class="c-mt-0"
-                                v-for="(childrenGroup,i) in parentGroup.children"
+                                v-for="(childrenGroup,
+                                i) in parentGroup.children"
                                 :key="i"
                                 v-model="selected"
                                 :label="childrenGroup.title"
@@ -158,16 +227,26 @@
                       </v-col>
                     </v-row>
                   </div>
-                  <div v-if="currentTab=='INQUIRY'">
+                  <div v-if="currentTab == 'INQUIRY'">
                     <v-row>
-                      <v-col cols="4" v-for="(parentGroup,index) in workingGroups" :key="index">
-                        <v-expansion-panels accordion v-if="parentGroup.type=='INQUIRY'">
+                      <v-col
+                        cols="4"
+                        v-for="(parentGroup, index) in workingGroups"
+                        :key="index"
+                      >
+                        <v-expansion-panels
+                          accordion
+                          v-if="parentGroup.type == 'INQUIRY'"
+                        >
                           <v-expansion-panel>
-                            <v-expansion-panel-header>{{parentGroup.title}}</v-expansion-panel-header>
+                            <v-expansion-panel-header>{{
+                              parentGroup.title
+                            }}</v-expansion-panel-header>
                             <v-expansion-panel-content>
                               <v-checkbox
                                 class="c-mt-0"
-                                v-for="(childrenGroup,i) in parentGroup.children"
+                                v-for="(childrenGroup,
+                                i) in parentGroup.children"
                                 :key="i"
                                 v-model="selected"
                                 :label="childrenGroup.title"
@@ -205,6 +284,9 @@ export default {
   },
   watch: {},
   methods: {
+    deleteGroup(index) {
+      this.selected.splice(index, 1);
+    },
     findTitle(id) {
       if (!id) return "";
       let title = "";
