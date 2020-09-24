@@ -1,8 +1,8 @@
 export const strict = false
 
 export const state = () => ({
-  openWorkGroupModal:false,
-  showGroupTitle:[],
+  openWorkGroupModal: false,
+  showGroupTitle: [],
   toolbarColor: 'grey lighten-1',
   snackbarTextDeleteSuccessful: 'The Item was  deleted',
   snackbarTextDeleteFailed: 'The Item were not deleted',
@@ -192,10 +192,7 @@ export const mutations = {
 
 
 export const actions = {
-  async refreshWorkGroups({
-    commit
-  }) {
-
+  async refreshWorkGroups({ commit }) {
     let data = await this.$axios.$get('workgroup/component/index')
     commit('SET_WORK_GROUPS', data);
   },

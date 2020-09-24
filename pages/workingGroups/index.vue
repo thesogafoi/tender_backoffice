@@ -259,33 +259,16 @@
               </v-col>
               <!--....... -->
               <v-col cols="12">
-                <v-combobox
+                <v-select
                   v-model="editedItem.parent_id"
                   :items="workGroups"
-                  chips
+                  label="دسته های کاری اصلی"
                   item-text="title"
                   item-value="id"
-                  label="انتخاب سر گروه"
-                >
-                  <template v-slot:item="{ parent, item }">
-                    <!--Highlight output item.name-->
-                    {{ item.title }} - (
-                    <span v-if="item.type == 'AUCTION'">مزایده</span>
-                    <span v-if="item.type == 'TENDER'">مناقصه</span>
-                    <span v-if="item.type == 'INQUIRY'">استعلام</span>
-                    <span v-if="item.parent_id == null">دسته ی اصلی</span>)
-                  </template>
-                  <template v-slot:selection="data">
-                    <v-chip
-                      v-bind="data.attrs"
-                      :input-value="data.selected"
-                      close
-                      @click="data.select"
-                      @click:close="removeSelected(data.item)"
-                      >{{ data.item.title }}</v-chip
-                    >
-                  </template>
-                </v-combobox>
+                  menu-props="auto"
+                  hide-details
+                  single-line
+                ></v-select>
               </v-col>
 
               <v-col cols="12" md="12">
@@ -385,11 +368,9 @@
         :headers="headers"
         disable-sort
         :items="workGroups"
-        item-key="name"
         class="c-table"
-        :expanded.sync="workGroups"
         show-expand
-        singleExpand
+        :single-expand="true"
         :footer-props="{
           'items-per-page-options': [10, 20, 30, 40, 50],
         }"
@@ -452,7 +433,57 @@
         </td>
         </template>-->
         <template v-slot:expanded-item="{ headers, item }">
-          <td :colspan="headers">More info about {{ item.name }}</td>
+          <td :colspan="headers.length">
+            <v-simple-table
+              style="margin: 2% 5% 5% 2%; box-shadow: none; background: #ccc"
+            >
+              <template v-slot:default>
+                <thead>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                </thead>
+
+                <tbody>
+                  <tr v-for="(child, index) in item.children" :key="child.id">
+                    <td class="w-4">{{ index + 1 }}</td>
+                    <td class="w-32">{{ child.title }}</td>
+                    <td class="w-9">{{ child.priorty }}</td>
+                    <td class="w-14">
+                      <span v-if="child.status == 0">در دست بررسی</span>
+                      <span v-if="child.status == 1">انتشار یافته</span>
+                    </td>
+                    <td class="w-14">
+                      <span v-if="child.parent_id == null">اصلی</span>
+                      <span v-if="child.parent_id != null">زیرگروه</span>
+                    </td>
+                    <td class="w-14">
+                      <span v-if="item.type == 'AUCTION'">مزایده</span>
+                      <span v-if="item.type == 'TENDER'">مناقصه</span>
+                      <span v-if="item.type == 'INQUIRY'">استعلام</span>
+                    </td>
+                    <td class="">
+                      <v-btn
+                        small
+                        icon
+                        color="primary"
+                        @click="openDialog(child)"
+                      >
+                        <v-icon>mdi-pencil</v-icon>
+                      </v-btn>
+                      <deleteConfirmationDialog
+                        style="display: inline"
+                        @delete="deleteChildItem(child, item)"
+                      />
+                    </td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </td>
         </template>
       </v-data-table>
     </v-card>
@@ -468,7 +499,7 @@ import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
 
 export default {
-  mounted() { },
+  mounted() {},
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
   components: {
     deleteConfirmationDialog,
@@ -477,21 +508,8 @@ export default {
     editedItemType() {
       return this.editedItem.type;
     },
-    parentId() {
-      return this.editedItem.parent_id;
-    },
   },
   watch: {
-    parentId() {
-      if (
-        typeof this.editedItem.parent_id == "number" ||
-        typeof this.editedItem.parent_id == "string"
-      ) {
-        this.editedItem.parent_id = this.getParentTitleWithId(
-          this.editedItem.parent_id
-        );
-      }
-    },
     editedItemType() {
       this.filters.type = this.editedItem.type;
       this.workGroupSearch();
@@ -554,6 +572,26 @@ export default {
         this.showSnackbar("مشکلی پیش آمده دوباره تلاش کنید ", "red");
       }
     },
+    deleteChildItem(child, parent) {
+      try {
+        this.$axios
+          .$delete("workgroup/delete/" + child.id)
+          .then((res) => {
+            parent.children.splice(parent.children.indexOf(child), 1);
+            this.showSnackbar("دسته ی کاری با موفقیت حذف شد", "green");
+          })
+          .catch((e) => {
+            Object.values(this.$store.getters["errorHandling/errors"]).map(
+              (error) => {
+                this.showSnackbar(error[0], "red");
+              }
+            );
+          });
+      } catch (error) {
+        console.log(error);
+        this.showSnackbar("مشکلی پیش آمده دوباره تلاش کنید ", "red");
+      }
+    },
     primarySelected() {
       this.resetFormData();
     },
@@ -570,7 +608,6 @@ export default {
       this.dialogEdit = true;
       this.resetFormData();
       this.chooseParentsWithType();
-      console.log(item);
       this.editedItem = item;
     },
     resetFormData() {
@@ -581,7 +618,6 @@ export default {
         type: "",
         discription: "",
         priorty: 1,
-        children: [],
         parent_id: "",
         status: 0,
       };
@@ -609,7 +645,6 @@ export default {
             this.editedItem.parent_id = this.editedItem.parent_id.id;
           }
         }
-
         this.$axios
           .$post("workgroup/create", this.editedItem)
           .then((res) => {
@@ -631,10 +666,11 @@ export default {
               }
             );
           });
-      } catch (error) { }
+      } catch (error) {}
       // this.$refs.form.resetValidation();
     },
     async update(type) {
+      console.log(this.editedItem);
       this.isLoading = true;
       if (type == "child") {
         if (
@@ -644,14 +680,11 @@ export default {
         ) {
           this.showSnackbar("لطفا سرگروه را انتخاب کنید", "red");
           return;
-        } else {
-          this.editedItem.parent_id = this.editedItem.parent_id.id;
         }
       }
       try {
         this.dialog = false;
         this.dialogEdit = false;
-
         this.$axios
           .$put("workgroup/" + this.editedItem.id, this.editedItem)
           .then((res) => {
@@ -671,7 +704,9 @@ export default {
               }
             );
           });
-      } catch (error) { }
+      } catch (error) {
+        console.log(error);
+      }
     },
     async onExcelFileChange(e) {
       let formData = new FormData();
@@ -764,7 +799,6 @@ export default {
         type: "",
         discription: "",
         priorty: 1,
-        children: [],
         parent_id: "",
         status: 0,
       },
