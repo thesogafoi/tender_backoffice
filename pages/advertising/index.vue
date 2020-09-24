@@ -9,7 +9,7 @@
               :items="statusList"
               item-value="id"
               item-text="value"
-              :rules="[v => !!v || 'Item is required']"
+              :rules="[(v) => !!v || 'Item is required']"
               label="وضعیت آگهی"
               required
             ></v-select>
@@ -20,7 +20,7 @@
               item-value="id"
               item-text="value"
               :items="listType"
-              :rules="[v => !!v || 'Item is required']"
+              :rules="[(v) => !!v || 'Item is required']"
               label="نوع آگهی"
               required
             ></v-select>
@@ -33,25 +33,29 @@
               item-value="id"
               label="استان"
               multiple
-              :rules="[v => !!v || 'Item is required']"
+              :rules="[(v) => !!v || 'Item is required']"
               required
             ></v-select>
           </div>
           <div class="w-20 c-px-10">
             <v-text-field
               v-model="formData.invitation_code"
-              :rules="[v => !!v || 'Item is required']"
+              :rules="[(v) => !!v || 'Item is required']"
               label="کد فراخوان"
               required
             ></v-text-field>
           </div>
           <div class="w-15 c-px-10">
-            <v-text-field v-model="formData.resource" label="منبع" required></v-text-field>
+            <v-text-field
+              v-model="formData.resource"
+              label="منبع"
+              required
+            ></v-text-field>
           </div>
           <div class="w-35 c-px-10">
             <v-text-field
               v-model="formData.title"
-              :rules="[v => !!v || 'Item is required']"
+              :rules="[(v) => !!v || 'Item is required']"
               label="عنوان آگهی"
               required
             ></v-text-field>
@@ -61,7 +65,7 @@
             <v-text-field
               v-model="formData.adinviter_title"
               label="عنوان آگهی گذار "
-              :rules="[v => !!v || 'Item is required']"
+              :rules="[(v) => !!v || 'Item is required']"
               required
             ></v-text-field>
           </div>
@@ -74,7 +78,7 @@
               :items="isNerveCenterList"
               item-value="id"
               item-text="value"
-              :rules="[v => !!v || 'Item is required']"
+              :rules="[(v) => !!v || 'Item is required']"
               label="وضعیت ستاد"
               required
             ></v-select>
@@ -86,7 +90,10 @@
               prepend-inner-icon="mdi-calendar"
               label="تاریخ فراخوان"
             ></v-text-field>
-            <custom-date-picker v-model="formData.invitation_date" element="call-date"></custom-date-picker>
+            <custom-date-picker
+              v-model="formData.invitation_date"
+              element="call-date"
+            ></custom-date-picker>
           </div>
           <div class="w-20 c-px-10">
             <v-text-field
@@ -95,7 +102,10 @@
               prepend-inner-icon="mdi-calendar"
               label="تاریخ دریافت"
             ></v-text-field>
-            <custom-date-picker v-model="formData.receipt_date" element="receive-date"></custom-date-picker>
+            <custom-date-picker
+              v-model="formData.receipt_date"
+              element="receive-date"
+            ></custom-date-picker>
           </div>
           <div class="w-20 c-px-10">
             <v-text-field
@@ -104,7 +114,10 @@
               prepend-inner-icon="mdi-calendar"
               label="تاریخ ارسال"
             ></v-text-field>
-            <custom-date-picker v-model="formData.submit_date" element="send-date"></custom-date-picker>
+            <custom-date-picker
+              v-model="formData.submit_date"
+              element="send-date"
+            ></custom-date-picker>
           </div>
 
           <div class="w-20 c-px-10">
@@ -149,26 +162,27 @@
               @click=""
             ></v-text-field>-->
             <v-btn
-              @click="workGroupModal=true"
-              :disabled="formData.type == undefined ||
-              formData.type == ''"
+              @click="workGroupModal = true"
+              :disabled="formData.type == undefined || formData.type == ''"
               class="w-48 c-ml-10"
-            >انتخاب دسته های کاری</v-btn>
+              >انتخاب دسته های کاری</v-btn
+            >
             <v-btn class="w-50" disabled>
-
-            <span v-if="formData.work_groups">
-              <span v-if="formData.work_groups.length === 0">دسته کاری انتخاب نشده</span>
-              <span
-                v-if="formData.work_groups.length >0"
-              >{{formData.work_groups.length}} دسته کاری انتخاب شده</span>
-            </span>
+              <span v-if="formData.work_groups">
+                <span v-if="formData.work_groups.length === 0"
+                  >دسته کاری انتخاب نشده</span
+                >
+                <span v-if="formData.work_groups.length > 0"
+                  >{{ formData.work_groups.length }} دسته کاری انتخاب شده</span
+                >
+              </span>
             </v-btn>
             <workingGroupsModal
               v-if="workGroupModal"
               :modal="workGroupModal"
               :props_selected.sync="formData.work_groups"
               :type="formData.type"
-              @close_modal="workGroupModal= false"
+              @close_modal="workGroupModal = false"
               @add_selected="childSeleted"
             />
 
@@ -177,7 +191,7 @@
               :modal="workGroupModalAction"
               :props_selected.sync="work_groups_action"
               type="action"
-              @close_modal="workGroupModalAction= false"
+              @close_modal="workGroupModalAction = false"
               @add_selected="actionChildSeleted"
             />
           </div>
@@ -191,7 +205,7 @@
             <v-textarea
               name="input-7-1"
               outlined
-              :rules="[v => !!v || 'Item is required']"
+              :rules="[(v) => !!v || 'Item is required']"
               label="شرح آگهی"
               v-model="formData.description"
             ></v-textarea>
@@ -208,41 +222,52 @@
       </v-form>
       <v-card-actions class="justify-end c-pt-0">
         <div class="w-25 c-mr-20 d-flex align-center">
-            <v-select
-              :items="activityDrop"
-              v-model="choosed_action"
-              item-text="name"
-              item-value="id"
-              label="عملیات"
-            ></v-select>
-            <v-btn
-              color="primary "
-              type="button"
-              class="c-mr-10"
-              width="120"
-              @click.prevent="sendAction"
-            >اعمال تغییرات</v-btn>
-          </div>
+          <v-select
+            :items="activityDrop"
+            v-model="choosed_action"
+            item-text="name"
+            item-value="id"
+            label="عملیات"
+          ></v-select>
+          <v-btn
+            color="primary "
+            type="button"
+            class="c-mr-10"
+            width="120"
+            @click.prevent="sendAction"
+            >اعمال تغییرات</v-btn
+          >
+        </div>
         <v-spacer></v-spacer>
         <div v-if="editMode">
-          <v-btn color="red darken-4" dark @click.prevent="backToShowMode" type="button">انصراف</v-btn>
+          <v-btn
+            color="red darken-4"
+            dark
+            @click.prevent="backToShowMode"
+            type="button"
+            >انصراف</v-btn
+          >
           <v-btn
             :disabled="!valid || isLoading"
             color="success"
             class="c-mr-10"
             type="button"
             @click.prevent="editItem"
-          >به روز رسانی اطلاعت</v-btn>
+            >به روز رسانی اطلاعت</v-btn
+          >
         </div>
         <div v-else class="d-flex align-center justify-end">
-          <v-btn width="120" color="red darken-4" dark @click="resetFormData">پاک کردن فیلد ها</v-btn>
+          <v-btn width="120" color="red darken-4" dark @click="resetFormData"
+            >پاک کردن فیلد ها</v-btn
+          >
           <v-btn
             color="primary"
             class="c-mx-10"
             @click.prevent="search"
             type="button"
             width="120"
-          >جستجو</v-btn>
+            >جستجو</v-btn
+          >
 
           <v-btn
             :disabled="!valid || isLoading"
@@ -251,18 +276,20 @@
             class="c-ml-10"
             width="120"
             @click.prevent="sendData"
-          >ذخیره</v-btn>
+            >ذخیره</v-btn
+          >
           <div>
             <input
               type="file"
               name="uploadfile"
               id="img"
               @change="onFileChange"
-              style="display:none;"
+              style="display: none"
             />
-            <label for="img" class="uploader-button">ورود اطلاعات با اکسل</label>
+            <label for="img" class="uploader-button"
+              >ورود اطلاعات با اکسل</label
+            >
           </div>
-          
         </div>
       </v-card-actions>
     </v-card>
@@ -274,7 +301,11 @@
 
       <v-menu bottom origin="center center" transition="scale-transition">
         <v-list>
-          <v-list-item v-for="(item, i) in items" :key="i" @click="buttonActions(item.title)">
+          <v-list-item
+            v-for="(item, i) in items"
+            :key="i"
+            @click="buttonActions(item.title)"
+          >
             <v-list-item-title>{{ item.title }}</v-list-item-title>
           </v-list-item>
         </v-list>
@@ -291,13 +322,11 @@
         :options.sync="options"
         show-select
         :footer-props="{
-          'items-per-page-options': [10, 20, 30, 40, 50]
+          'items-per-page-options': [10, 20, 30, 40, 50],
         }"
       >
         <template v-slot:item.created_at="{ item }">
-          {{
-          item.created_at
-          }}
+          {{ item.created_at }}
         </template>
         <template v-slot:item.actions="{ item }">
           <div class="buttons-container">
@@ -306,7 +335,8 @@
               class="mr-1"
               color="blue lighten-2"
               @click="turnToEditMode(item)"
-            >mdi-pencil</v-icon>
+              >mdi-pencil</v-icon
+            >
             <deleteConfirmationDialog @delete="deleteItem(item)" />
 
             <v-icon small class="mr-1" @click="showItem(item)">mdi-eye</v-icon>
@@ -336,7 +366,9 @@
                 <h4 class="rtl c-ml-5">وضعیت:</h4>
                 <p class="c-mb-0">
                   {{
-                  singleAdvertise.status == 0 ? "انتشار یافته" : "در حال بررسی"
+                    singleAdvertise.status == 0
+                      ? "انتشار یافته"
+                      : "در حال بررسی"
                   }}
                 </p>
               </v-card-text>
@@ -346,9 +378,15 @@
             <v-card>
               <v-card-text class="d-flex c-py-10 flex-wrap">
                 <h4 class="rtl c-ml-5">نوع آگهی:</h4>
-                <p class="c-mb-0" v-if="singleAdvertise.type === 'AUCTION'">مزایده</p>
-                <p class="c-mb-0" v-if="singleAdvertise.type === 'TENDER'">مناقصه</p>
-                <p class="c-mb-0" v-if="singleAdvertise.type === 'INQUIRY'">استعلام</p>
+                <p class="c-mb-0" v-if="singleAdvertise.type === 'AUCTION'">
+                  مزایده
+                </p>
+                <p class="c-mb-0" v-if="singleAdvertise.type === 'TENDER'">
+                  مناقصه
+                </p>
+                <p class="c-mb-0" v-if="singleAdvertise.type === 'INQUIRY'">
+                  استعلام
+                </p>
               </v-card-text>
             </v-card>
           </div>
@@ -356,13 +394,17 @@
             <v-card>
               <v-card-text class="d-flex c-py-10 flex-wrap">
                 <h4 class="rtl c-ml-5">استان:</h4>
-                <div class="city" v-for="(city,i) in $store.state.cityList" :key="i">
+                <div
+                  class="city"
+                  v-for="(city, i) in $store.state.cityList"
+                  :key="i"
+                >
                   <p
                     class="c-mb-0"
-                    v-for="(province,index) in singleAdvertise.provinces"
+                    v-for="(province, index) in singleAdvertise.provinces"
                     :key="index"
                   >
-                    <span v-if="province == city.id">{{city.name}}</span>
+                    <span v-if="province == city.id">{{ city.name }}</span>
                   </p>
                 </div>
               </v-card-text>
@@ -446,8 +488,12 @@
             <v-card>
               <v-card-text class="d-flex c-py-10 flex-wrap">
                 <h4 class="rtl c-ml-5">وضعیت ستاد:</h4>
-                <p class="c-mb-0" v-if="singleAdvertise.is_nerve_center">ستادی</p>
-                <p class="c-mb-0" v-if="!singleAdvertise.is_nerve_center">غیر ستادی</p>
+                <p class="c-mb-0" v-if="singleAdvertise.is_nerve_center">
+                  ستادی
+                </p>
+                <p class="c-mb-0" v-if="!singleAdvertise.is_nerve_center">
+                  غیر ستادی
+                </p>
               </v-card-text>
             </v-card>
           </div>
@@ -465,9 +511,11 @@
                 <h4 class="rtl c-ml-5">گروه‌های کاری:</h4>
                 <p
                   class="c-mb-10 c-ml-20"
-                  v-for="(workingGroup,index) in singleAdvertise.work_groups"
+                  v-for="(workingGroup, index) in singleAdvertise.work_groups"
                   :key="index"
-                >{{ workingGroup.title }} /</p>
+                >
+                  {{ workingGroup.title }} /
+                </p>
               </v-card-text>
             </v-card>
           </div>
@@ -485,7 +533,11 @@
               <v-card>
                 <v-card-text class="c-py-10">
                   <h4 class="rtl c-mb-10">عکس ضمیمه:</h4>
-                  <img class="thumbnaail-image" src="https://placehold.co/300x300" alt />
+                  <img
+                    class="thumbnaail-image"
+                    src="https://placehold.co/300x300"
+                    alt
+                  />
                 </v-card-text>
               </v-card>
             </div>
@@ -798,11 +850,16 @@ export default {
         try {
           await this.$axios
             .$put("advertise/update/" + this.advertiseId, this.formData)
-            .then(() => {
+            .then((response) => {
               this.isLoading = false;
               this.showSnackbar("آگهی به روز رسانی شد", "green");
-              this.backToShowMode();
+              let input = this.$refs.fileInput;
+              let imageFile = input.files[0];
+              if (typeof imageFile == "object") {
+                this.saveImage(response[0]);
+              }
               this.editMode = false;
+              this.backToShowMode();
               setTimeout(() => {
                 this.resetFormData();
                 this.search();
@@ -826,6 +883,8 @@ export default {
       this.getDataFromApi();
     },
     resetFormDataWithoutType() {
+      this.previewImage = "";
+      this.$refs.fileInput.value = "";
       this.workGroupsTitle = [];
       this.advertiseId = "";
       this.formData = {
@@ -848,6 +907,8 @@ export default {
       };
     },
     resetFormData() {
+      this.previewImage = "";
+      this.$refs.fileInput.value = "";
       this.workGroupsTitle = [];
       this.advertiseId = "";
       this.formData = {
@@ -876,6 +937,9 @@ export default {
       this.$axios.$get("advertise/show/" + item.id).then(({ data }) => {
         this.formData = JSON.parse(JSON.stringify(data));
         this.formData.is_nerve_center = this.formData.is_nerve_center.toString();
+        if (this.formData.image != null) {
+          this.previewImage = this.formData.image;
+        }
       });
     },
     showItem(item) {
@@ -961,7 +1025,7 @@ export default {
       });
     },
     sendData() {
-      // this.$refs.form.validate();
+      this.$refs.form.validate();
       this.isLoading = true;
       if (
         this.formData.status == 1
@@ -973,17 +1037,18 @@ export default {
         );
       } else {
         try {
-          let input = this.$refs.fileInput;
-          let imageFile = input.files[0];
-          let formData = new FormData();
-          formData.append("image_file", imageFile);
-          let newFormData = [];
-          this.formData.push(formData);
           this.$axios
             .$post("advertise/create", this.formData)
             .then((response) => {
               this.isLoading = false;
               this.showSnackbar("آگهی با موفقیت اضافه شد", "green");
+              let input = this.$refs.fileInput;
+              let imageFile = input.files[0];
+
+              if (typeof imageFile == "object") {
+                this.saveImage(response[0]);
+              }
+
               setTimeout(() => {
                 this.resetFormDataWithoutType();
                 this.search();
@@ -1004,6 +1069,26 @@ export default {
       }
       // this.$refs.form.resetValidation();
       // send axios to backend and add refresh data
+    },
+    saveImage(id) {
+      this.isLoading = true;
+      let input = this.$refs.fileInput;
+      let imageFile = input.files[0];
+      let formData = new FormData();
+      formData.append("image_file", imageFile);
+      this.$axios
+        .$post("advertise/save/image/" + id, formData)
+        .then((response) => {
+          this.isLoading = false;
+        })
+        .catch((error) => {
+          this.isLoading = false;
+          Object.values(this.$store.getters["errorHandling/errors"]).map(
+            (error) => {
+              this.showSnackbar(error[0], "red");
+            }
+          );
+        });
     },
     search() {
       let newFormData = this.removeEmptyObjects(this.formData);
