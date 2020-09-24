@@ -181,15 +181,9 @@
             <v-text-field v-model="formData.link" label="لینک"></v-text-field>
           </div>
           <div class="w-20 c-px-10">
-            <v-file-input
-              prepend-inner-icon="mdi-camera"
-              prepend-icon
-              chips
-              multiple
-              label="آپلود عکس"
-            ></v-file-input>
+            <input ref="fileInput" type="file" @input="pickFile" />
           </div>
-          <div class="w-100 c-px-10">
+          <div class="w-70 c-px-10">
             <v-textarea
               name="input-7-1"
               outlined
@@ -197,6 +191,14 @@
               label="شرح آگهی"
               v-model="formData.description"
             ></v-textarea>
+          </div>
+
+          <div class="w-30 c-px-10">
+            <div
+              class="imagePreviewWrapper"
+              :style="{ 'background-image': `url(${previewImage})` }"
+              @click="selectImage"
+            ></div>
           </div>
         </v-row>
       </v-form>
@@ -528,6 +530,7 @@ export default {
       return this.formData.type;
     },
   },
+
   watch: {
     choosed_action() {
       if (this.choosed_action == 0) {
@@ -549,6 +552,7 @@ export default {
     },
   },
   data: () => ({
+    previewImage: "",
     workGroupModalAction: false,
     work_groups_action: [],
     choosed_action: [],
@@ -584,6 +588,7 @@ export default {
       description: "",
       type: "",
       status: "",
+      image: "",
       provinces: [],
       work_groups: [],
       title: "",
@@ -683,6 +688,21 @@ export default {
   }),
 
   methods: {
+    selectImage() {
+      this.$refs.fileInput.click();
+    },
+    pickFile() {
+      let input = this.$refs.fileInput;
+      let file = input.files;
+      if (file && file[0]) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          this.previewImage = e.target.result;
+        };
+        reader.readAsDataURL(file[0]);
+        this.$emit("input", file[0]);
+      }
+    },
     sendAction() {
       let advertiseId = [];
       if (
@@ -803,6 +823,7 @@ export default {
       this.workGroupsTitle = [];
       this.advertiseId = "";
       this.formData = {
+        image: "",
         work_groups: [],
         description: "",
         type: this.formData.type,
@@ -824,6 +845,7 @@ export default {
       this.workGroupsTitle = [];
       this.advertiseId = "";
       this.formData = {
+        image: "",
         work_groups: [],
         description: "",
         type: "",
@@ -933,7 +955,7 @@ export default {
       });
     },
     sendData() {
-      this.$refs.form.validate();
+      // this.$refs.form.validate();
       this.isLoading = true;
       if (
         this.formData.status == 1
@@ -945,6 +967,12 @@ export default {
         );
       } else {
         try {
+          let input = this.$refs.fileInput;
+          let imageFile = input.files[0];
+          let formData = new FormData();
+          formData.append("image_file", imageFile);
+          let newFormData = [];
+          this.formData.push(formData);
           this.$axios
             .$post("advertise/create", this.formData)
             .then((response) => {
@@ -964,6 +992,7 @@ export default {
               );
             });
         } catch (error) {
+          console.log(error);
           this.showSnackbar("فیلد ها را به درستی کامل کنید", "red");
         }
       }
@@ -1006,5 +1035,15 @@ export default {
 .wg-dialog {
   padding: 50px;
   width: 800px;
+}
+
+.imagePreviewWrapper {
+  width: 250px;
+  height: 250px;
+  display: block;
+  cursor: pointer;
+  margin: 0 auto 30px;
+  background-size: cover;
+  background-position: center center;
 }
 </style>
