@@ -26,6 +26,8 @@
         v-bind="data.attrs"
         :input-value="data.selected"
         close
+        dir="rtl"
+        class="text-right"
         @click="data.select"
         @click:close="remove(data.item)"
       >{{ data.item.title }}</v-chip>
