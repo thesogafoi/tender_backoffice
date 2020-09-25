@@ -1,9 +1,11 @@
-export default function ({ $axios, store }) {
+export default function ({
+  $axios,
+  store
+}) {
   $axios.onError(error => {
-    console.log(error);
     if (error.response.status == 422) {
       store.dispatch("errorHandling/setErrors", error.response.data.errors);
-      return Promise.reject(error);
+      // return Promise.reject(error);
     }
   });
   $axios.onError(error => {

@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <v-row>
+    <!-- <v-row>
       <v-col cols="12" align="center" justify="center">
         <div class="c-loading-wrapper">
           <div class="left">
@@ -18,7 +18,12 @@
               @submit.prevent="login"
             >
               <h2 class="welcome mt-4 mb-4">Welcome Back</h2>
-              <v-text-field v-model="loginData.mobile" label="Username" outlined :rules="required"></v-text-field>
+              <v-text-field
+                v-model="loginData.mobile"
+                label="Username"
+                outlined
+                :rules="required"
+              ></v-text-field>
               <v-text-field
                 :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
                 outlined
@@ -28,13 +33,15 @@
                 label="Password"
                 @click:append="show3 = !show3"
               ></v-text-field>
-              <v-btn block color="primary" class="my-3" type="submit">LOGIN</v-btn>
+              <v-btn block color="primary" class="my-3" type="submit"
+                >LOGIN</v-btn
+              >
               <div class="flex-end"></div>
             </v-form>
           </div>
         </div>
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 <script>

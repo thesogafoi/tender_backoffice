@@ -10,30 +10,31 @@
       :loading="loading"
       :options.sync="options"
       :footer-props="{
-        'items-per-page-options': [10, 20, 30, 40, 50]
+        'items-per-page-options': [10, 20, 30, 40, 50],
       }"
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
-          <v-toolbar-title>پلن‌های فروش</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-toolbar-title class="font-16">پلن‌های فروش</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="editDialog" max-width="500px">
             <v-card>
-              <v-card-title class="c-header">
-                <span class="headline">تغییر طرح اشتراکی</span>
+              <v-card-title
+                class="primary white--text c-py-10 justify-center font-18"
+              >
+                تغییر طرح اشتراکی
               </v-card-title>
 
-              <v-card-text>
+              <v-card-text class="c-pb-0">
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="6" class="c-py-0">
                       <v-text-field
                         v-model="editedItem.title"
                         label="نام پلن"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="6" class="c-py-0">
                       <v-select
                         v-model="editedItem.status"
                         :items="statusList"
@@ -43,35 +44,42 @@
                         required
                       ></v-select>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="6" class="c-py-0">
                       <v-text-field
                         v-model="editedItem.allowed_selection"
-                        :rules="[v => !!v || 'Item is Number']"
+                        :rules="[(v) => !!v || 'Item is Number']"
                         type="number"
                         label="تعداد گروه‌های کاری"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="6" class="c-py-0">
                       <v-text-field
                         type="number"
                         v-model="editedItem.cost"
-                        :rules="[v => !!v || 'Item is Number']"
+                        :rules="[(v) => !!v || 'Item is Number']"
                         label="ارزش پلن"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="6" class="c-py-0">
                       <v-text-field
                         v-model="editedItem.priorty"
                         type="number"
-                        :rules="[v => !!v || 'Item is Number']"
+                        :rules="[(v) => !!v || 'Item is Number']"
                         label="اولویت"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="6" class="c-py-0">
                       <custom-date-picker
                         label="تاریخ انقضا"
                         v-model="editedItem.period"
+                        element="my-custom-input"
                       ></custom-date-picker>
+                      <v-text-field
+                        v-model="editedItem.period"
+                        id="my-custom-input"
+                        type="text"
+                        label="تاریخ انقضا"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -79,11 +87,12 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red" text @click="closeEditDialog">انصراف</v-btn>
+                <v-btn color="red white--text" @click="closeEditDialog"
+                  >انصراف</v-btn
+                >
                 <v-btn
-                  color="green"
+                  color="green white--text"
                   :disabled="isLoading"
-                  text
                   @click="updateItem"
                   >ذخیره</v-btn
                 >
@@ -92,61 +101,70 @@
           </v-dialog>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
+              <v-btn color="success" dark class="mb-2" v-bind="attrs" v-on="on"
                 >اضافه کردن</v-btn
               >
             </template>
             <v-card>
-              <v-card-title class="c-header">
-                <span class="headline">اضافه کردن طرح اشتراکی</span>
+              <v-card-title
+                class="justify-center primary font-18 white--text c-py-10"
+              >
+                اضافه کردن طرح اشتراکی
               </v-card-title>
 
-              <v-card-text>
+              <v-card-text class="c-pb-0">
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="6" class="c-py-0">
                       <v-text-field
                         v-model="editedItem.title"
                         label="نام پلن"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="6">
+                    <v-col cols="6" class="c-py-0">
                       <v-select
                         v-model="editedItem.status"
                         :items="statusList"
                         item-value="id"
                         item-text="value"
-                        :rules="[v => !!v || 'Item is required']"
+                        :rules="[(v) => !!v || 'Item is required']"
                         label="طرح عضویت"
                         required
                       ></v-select>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="6" class="c-py-0">
                       <v-text-field
                         v-model="editedItem.allowed_selection"
                         type="number"
                         label="تعداد گروه‌های کاری"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="6" class="c-py-0">
                       <v-text-field
                         v-model="editedItem.cost"
                         type="number"
                         label="ارزش پلن"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="6" class="c-py-0">
                       <v-text-field
                         v-model="editedItem.priorty"
                         type="number"
                         label="اولویت"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="6" class="c-py-0">
                       <custom-date-picker
                         label="تاریخ انقضا"
                         v-model="editedItem.period"
+                        element="my-custom-input"
                       ></custom-date-picker>
+                      <v-text-field
+                        v-model="editedItem.priorty"
+                        id="my-custom-input"
+                        type="text"
+                        label="تاریخ انقضا"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -154,8 +172,10 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red" text @click="closeAddItem">انصراف</v-btn>
-                <v-btn color="green" :disabled="isLoading" text @click="save"
+                <v-btn color="red white--text" @click="closeAddItem"
+                  >انصراف</v-btn
+                >
+                <v-btn color="success" :disabled="isLoading" @click="save"
                   >ذخیره</v-btn
                 >
               </v-card-actions>
@@ -270,12 +290,10 @@ export default {
       return new Promise((resolve, reject) => {
         this.$axios
           .$get(
-            `subscription?page=${
-              this.options.page === undefined ? 1 : this.options.page
-            }&items_per_page=${
-              this.options.itemsPerPage === undefined
-                ? 10
-                : this.options.itemsPerPage
+            `subscription?page=${this.options.page === undefined ? 1 : this.options.page
+            }&items_per_page=${this.options.itemsPerPage === undefined
+              ? 10
+              : this.options.itemsPerPage
             }`
           )
           .then(response => {

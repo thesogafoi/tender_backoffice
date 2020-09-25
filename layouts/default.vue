@@ -5,7 +5,13 @@
         <v-toolbar-title class="nav-title">
           <img src="/Asan-2.png" alt />
         </v-toolbar-title>
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router dir="ltr">
+        <v-list-item
+          v-for="(item, i) in items"
+          :key="i"
+          :to="item.to"
+          router
+          dir="ltr"
+        >
           <v-list-item-title class="nav-icon" v-text="item.title" />
           <v-icon>{{ item.icon }}</v-icon>
         </v-list-item>
@@ -63,6 +69,7 @@ export default {
       await this.$auth.logout();
     }
   },
+
   data() {
     return {
       clipped: false,
@@ -72,7 +79,7 @@ export default {
         {
           icon: "mdi-view-dashboard",
           title: "داشبورد",
-          to: "/dashboard"
+          to: "#"
         },
         {
           icon: "mdi-notebook-check",
@@ -90,15 +97,16 @@ export default {
           to: "/workingGroups"
         },
         {
-          icon: "mdi-account-group",
-          title: "مشتریان",
-          to: "/customers"
-        },
-        {
           icon: "mdi-format-list-text",
           title: "طرح های اشتراکی ",
           to: "/salesPlans"
         },
+        {
+          icon: "mdi-account-group",
+          title: "مشتریان",
+          to: "/customers"
+        },
+
         {
           icon: "mdi-receipt",
           title: "پرداخت ها",

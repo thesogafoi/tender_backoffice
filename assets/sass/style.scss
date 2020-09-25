@@ -124,26 +124,31 @@ div {
   }
 
 }
-.v-input__slot{
-  .v-label{
+
+.v-input__slot {
+  .v-label {
     text-align: right;
   }
 }
-.v-snack__wrapper{
+
+.v-snack__wrapper {
   position: absolute !important;
   top: 20px !important;
   max-width: 90% !important;
   width: 100% !important;
-  .v-snack__content{
+
+  .v-snack__content {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .v-card__title{
+
+    .v-card__title {
       word-spacing: 0;
       font-size: 16px;
     }
   }
 }
+
 .c-date-picker {
   border: 1px solid red;
 }
@@ -188,22 +193,89 @@ div {
     margin-left: 10px;
   }
 }
-.parent-row{
+
+.parent-row {
   width: 100%;
   display: flex;
 }
-.c-table-row{
+
+.c-table-row {
   display: table;
-  .child-col{
+
+  .child-col {
     display: table-cell;
-    .v-card{
+
+    .v-card {
       height: 100%;
     }
   }
 }
-.small-header{
+
+.small-header {
   height: 50px !important;
-  .v-toolbar__content{
+
+  .v-toolbar__content {
     height: 50px !important;
+  }
+}
+
+.c-uploader {
+  position: relative;
+  height: 100%;
+  padding-bottom: 20px;
+
+  .c-uploader-input {
+    opacity: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 10;
+    cursor: pointer;
+  }
+
+  .c-uploader-button {
+    border: 2px dashed #ddd;
+    width: 100%;
+    height: 83%;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+
+    i {
+      font-size: 30px;
+      color: #ccc;
+    }
+  }
+}
+
+.imagePreviewWrapper {
+  width: 100px;
+  height: 100px;
+  display: block;
+  cursor: pointer;
+  margin-left: auto;
+  background-size: cover;
+  background-position: center center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% - 20px));
+  z-index: 12;
+
+  i {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba($color: #000000, $alpha: 0.4);
+    color: #fff !important;
+    font-size: 40px !important;
+
+    &:hover {
+      color: #B71C1C !important;
+    }
   }
 }

@@ -13,12 +13,11 @@
   >
     <template v-slot:item="{ parent, item }">
       <!--Highlight output item.name-->
-      {{item.title}} -
-      (
-      <span v-if="item.type=='AUCTION'">مزایده</span>
-      <span v-if="item.type=='TENDER'">مناقصه</span>
-      <span v-if="item.type=='INQUIRY'">استعلام</span>
-      <span v-if="item.parent_id==null">دسته ی اصلی</span>)
+      {{ item.title }} - (
+      <span v-if="item.type == 'AUCTION'">مزایده</span>
+      <span v-if="item.type == 'TENDER'">مناقصه</span>
+      <span v-if="item.type == 'INQUIRY'">استعلام</span>
+      <span v-if="item.parent_id == null">دسته ی اصلی</span>)
     </template>
 
     <template v-slot:selection="data">
@@ -30,14 +29,15 @@
         class="text-right"
         @click="data.select"
         @click:close="remove(data.item)"
-      >{{ data.item.title }}</v-chip>
+        >{{ data.item.title }}</v-chip
+      >
     </template>
   </v-autocomplete>
 </template>
 
 <script>
 export default {
-  props: ["work_groups", "multiple",'dis'],
+  props: ["work_groups", "multiple", 'dis'],
   data() {
     return {
       selected: [],
@@ -46,7 +46,6 @@ export default {
     };
   },
   created() {
-    console.log(this.multiple);
     this.workGroups = this.work_groups;
   },
   watch: {
@@ -82,8 +81,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.c-autocomplete{
-  &.v-text-field{
+.c-autocomplete {
+  &.v-text-field {
     margin-top: 8px;
   }
 }

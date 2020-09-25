@@ -86,6 +86,7 @@
           <div class="w-20 c-px-10">
             <v-text-field
               id="call-date"
+              :rules="[(v) => !!v || 'Item is required']"
               v-model="formData.invitation_date"
               prepend-inner-icon="mdi-calendar"
               label="تاریخ فراخوان"
@@ -195,11 +196,8 @@
               @add_selected="actionChildSeleted"
             />
           </div>
-          <div class="w-40 c-px-10">
+          <div class="w-60 c-px-10">
             <v-text-field v-model="formData.link" label="لینک"></v-text-field>
-          </div>
-          <div class="w-20 c-px-10">
-            <input ref="fileInput" type="file" @input="pickFile" />
           </div>
           <div class="w-70 c-px-10">
             <v-textarea
@@ -210,13 +208,28 @@
               v-model="formData.description"
             ></v-textarea>
           </div>
-
           <div class="w-30 c-px-10">
-            <div
-              class="imagePreviewWrapper"
-              :style="{ 'background-image': `url(${previewImage})` }"
-              @click="selectImage"
-            ></div>
+            <div class="c-uploader">
+              <input
+                accept="image/x-png,image/gif,image/jpeg"
+                ref="fileInput"
+                type="file"
+                class="c-uploader-input"
+                @input="pickFile"
+              />
+              <div class="c-uploader-button">
+                فایل انتخابی را آپلود کنید
+                <v-icon class="c-mt-10">mdi-plus</v-icon>
+              </div>
+              <div
+                v-if="previewImage !== ''"
+                class="imagePreviewWrapper"
+                :style="{ 'background-image': `url(${previewImage})` }"
+                @click="selectImage"
+              >
+                <v-icon>mdi-close</v-icon>
+              </div>
+            </div>
           </div>
         </v-row>
       </v-form>
@@ -341,6 +354,18 @@
 
             <v-icon small class="mr-1" @click="showItem(item)">mdi-eye</v-icon>
           </div>
+        </template>
+        <template v-slot:item.status="{ item }">
+          <v-icon small class="mr-1" color="success" v-if="item.status == 1"
+            >mdi-check</v-icon
+          >
+          <v-icon
+            small
+            class="mr-1"
+            color="red darken-4"
+            v-if="item.status == 0"
+            >mdi-close</v-icon
+          >
         </template>
         <template v-slot:no-data>
           <v-btn color="primary" @click="initialize">آگهی وجود ندارد</v-btn>
@@ -511,10 +536,10 @@
                 <h4 class="rtl c-ml-5">گروه‌های کاری:</h4>
                 <p
                   class="c-mb-10 c-ml-20"
-                  v-for="(workingGroup, index) in singleAdvertise.work_groups"
+                  v-for="(workGroupId, index) in singleAdvertise.work_groups"
                   :key="index"
                 >
-                  {{ workingGroup.title }} /
+                  {{ findTitle(workGroupId) }} /
                 </p>
               </v-card-text>
             </v-card>
@@ -528,14 +553,16 @@
                 </v-card-text>
               </v-card>
             </div>
-
-            <div class="w-20 c-px-5 child-col">
+            <div
+              class="w-20 c-px-5 child-col"
+              v-if="singleAdvertise.image != null"
+            >
               <v-card>
                 <v-card-text class="c-py-10">
                   <h4 class="rtl c-mb-10">عکس ضمیمه:</h4>
                   <img
                     class="thumbnaail-image"
-                    src="https://placehold.co/300x300"
+                    :src="singleAdvertise.image"
                     alt
                   />
                 </v-card-text>
@@ -727,7 +754,7 @@ export default {
       { text: "عنوان آگهی", value: "title" },
       { text: "تاریخ انتشار", value: "created_at" },
       { text: "آگهی گذار", value: "adinviter_title" },
-      { text: "وضعیت انتشار", value: "status" },
+      { text: "وضعیت انتشار", value: "status", align: "center" },
       { text: "ابزار", value: "actions", sortable: false, align: "center" },
     ],
     advertises: [],
@@ -746,8 +773,18 @@ export default {
   }),
 
   methods: {
+    findTitle(id) {
+      if (!id) return "";
+      let title = "";
+      this.$store.getters["workGroups"].forEach((element) => {
+        if (element.children.find((child) => child.id == id) != undefined) {
+          title = element.children.find((child) => child.id == id).title;
+        }
+      });
+      return title;
+    },
     selectImage() {
-      this.$refs.fileInput.click();
+      this.previewImage = ''
     },
     pickFile() {
       let input = this.$refs.fileInput;
@@ -838,9 +875,8 @@ export default {
     async editItem() {
       this.isLoading = true;
       if (
-        false
-        // this.formData.status == 1
-        // !this.isWorkGruopsSelected("workGroups")
+        this.formData.status == 1
+        && this.formData.work_groups == []
       ) {
         this.showSnackbar(
           "آگهی انتشار یافته نمیتواند فاقد دسته ی کاری باشد",
@@ -873,7 +909,7 @@ export default {
                 }
               );
             });
-        } catch (error) {}
+        } catch (error) { }
       }
     },
     backToShowMode() {
@@ -1010,9 +1046,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-              this.options.page +
-              "&items_per_page=" +
-              this.options.itemsPerPage,
+            this.options.page +
+            "&items_per_page=" +
+            this.options.itemsPerPage,
             {
               ...this.formData,
             }
@@ -1029,8 +1065,9 @@ export default {
       this.isLoading = true;
       if (
         this.formData.status == 1
-        // !this.isWorkGruopsSelected("workGroups")
+        && this.formData.work_groups == []
       ) {
+        this.$refs.form.validate();
         this.showSnackbar(
           "آگهی انتشار یافته نمیتواند فاقد دسته ی کاری باشد",
           "red"
@@ -1126,15 +1163,5 @@ export default {
 .wg-dialog {
   padding: 50px;
   width: 800px;
-}
-
-.imagePreviewWrapper {
-  width: 250px;
-  height: 250px;
-  display: block;
-  cursor: pointer;
-  margin: 0 auto 30px;
-  background-size: cover;
-  background-position: center center;
 }
 </style>

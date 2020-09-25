@@ -38,7 +38,7 @@
                     item-text="value"
                     :items="listType"
                     :rules="[(v) => !!v || 'Item is required']"
-                    label="نوع دسته"
+                    label="نوع گروه"
                     required
                   ></v-select>
                 </v-col>
@@ -48,7 +48,7 @@
                     :items="statusList"
                     item-value="id"
                     item-text="value"
-                    label="وضعیت دسته"
+                    label="وضعیت گروه"
                     required
                   ></v-select>
                 </v-col>
@@ -118,7 +118,7 @@
                     :items="listType"
                     :rules="[(v) => !!v || 'Item is required']"
                     required
-                    label="نوع دسته"
+                    label="نوع گروه"
                   ></v-select>
                 </v-col>
                 <v-col class="rtl c-py-0" cols="6">
@@ -127,7 +127,7 @@
                     :items="statusList"
                     item-value="id"
                     item-text="value"
-                    label="وضعیت دسته"
+                    label="وضعیت گروه"
                     required
                   ></v-select>
                 </v-col>
@@ -161,59 +161,63 @@
         <div v-if="editedItem.parent_id === null">
           <input type="hidden" name="parent" value="false" />
 
-          <v-card-title>اصلی</v-card-title>
+          <v-card-title
+            class="primary justify-center c-py-10 white--text font-18"
+            >اصلی</v-card-title
+          >
 
           <v-container fluid>
             <v-form ref="form2" v-model="valid1">
-              <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.title"
-                  label="نام"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-select
-                  v-model="editedItem.type"
-                  item-value="id"
-                  item-text="value"
-                  :items="listType"
-                  :rules="[(v) => !!v || 'Item is required']"
-                  label="نوع دسته"
-                  required
-                ></v-select>
-              </v-col>
-              <v-col class="rtl" cols="12">
-                <v-select
-                  v-model="editedItem.status"
-                  :items="statusList"
-                  item-value="id"
-                  item-text="value"
-                  label="وضعیت دسته"
-                  required
-                ></v-select>
-              </v-col>
-              <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.priorty"
-                  label="اولویت"
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12" sm="12">
-                <!-- <v-file-input
+              <v-row>
+                <v-col cols="12" md="12" class="c-py-0">
+                  <v-text-field
+                    v-model="editedItem.title"
+                    label="نام"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6" class="c-py-0">
+                  <v-select
+                    v-model="editedItem.type"
+                    item-value="id"
+                    item-text="value"
+                    :items="listType"
+                    :rules="[(v) => !!v || 'Item is required']"
+                    label="نوع گروه"
+                    required
+                  ></v-select>
+                </v-col>
+                <v-col class="rtl c-py-0" cols="6">
+                  <v-select
+                    v-model="editedItem.status"
+                    :items="statusList"
+                    item-value="id"
+                    item-text="value"
+                    label="وضعیت گروه"
+                    required
+                  ></v-select>
+                </v-col>
+                <v-col cols="12" md="12" class="c-py-0">
+                  <v-text-field
+                    v-model="editedItem.priorty"
+                    label="اولویت"
+                    required
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="12" sm="12" class="c-py-0">
+                  <!-- <v-file-input
                   @change="onFileChange"
                   v-model="editedItem.image"
                   accept="image/*"
                   label="File input"
                 ></v-file-input>-->
-              </v-col>
+                </v-col>
+              </v-row>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="blue darken-1"
+                  color="success"
                   :disabled="!valid1 || isLoading"
-                  text
                   @click="update('parent')"
                   >به روز رسانی اطلاعات</v-btn
                 >
@@ -224,66 +228,68 @@
         <div v-else>
           <input type="hidden" name="parent" value="false" />
 
-          <v-card-title>زیر گروه</v-card-title>
+          <v-card-title
+            class="primary white--text justify-center font-18 c-py-10"
+            >زیر گروه</v-card-title
+          >
 
           <v-container fluid>
             <v-form ref="form3" v-model="valid2">
-              <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.title"
-                  label="نام"
-                  required
-                ></v-text-field>
-              </v-col>
+              <v-row>
+                <v-col cols="12" md="12" class="c-py-0">
+                  <v-text-field
+                    v-model="editedItem.title"
+                    label="نام"
+                    required
+                  ></v-text-field>
+                </v-col>
 
-              <v-col cols="12">
-                <v-select
-                  v-model="editedItem.type"
-                  item-value="id"
-                  item-text="value"
-                  :items="listType"
-                  :rules="[(v) => !!v || 'Item is required']"
-                  label="نوع دسته"
-                  required
-                ></v-select>
-              </v-col>
-              <v-col class="rtl" cols="12">
-                <v-select
-                  v-model="editedItem.status"
-                  :items="statusList"
-                  item-value="id"
-                  item-text="value"
-                  label="وضعیت دسته"
-                  required
-                ></v-select>
-              </v-col>
-              <!--....... -->
-              <v-col cols="12">
-                <v-select
-                  v-model="editedItem.parent_id"
-                  :items="workGroups"
-                  label="دسته های کاری اصلی"
-                  item-text="title"
-                  item-value="id"
-                  menu-props="auto"
-                  hide-details
-                  single-line
-                ></v-select>
-              </v-col>
+                <v-col cols="6" class="c-py-0">
+                  <v-select
+                    v-model="editedItem.type"
+                    item-value="id"
+                    item-text="value"
+                    :items="listType"
+                    :rules="[(v) => !!v || 'Item is required']"
+                    label="نوع گروه"
+                    required
+                  ></v-select>
+                </v-col>
+                <v-col class="rtl c-py-0" cols="6">
+                  <v-select
+                    v-model="editedItem.status"
+                    :items="statusList"
+                    item-value="id"
+                    item-text="value"
+                    label="وضعیت گروه"
+                    required
+                  ></v-select>
+                </v-col>
+                <!--....... -->
+                <v-col cols="12" class="c-py-0">
+                  <v-select
+                    v-model="editedItem.parent_id"
+                    :items="workGroups"
+                    label="دسته کاری اصلی"
+                    item-text="title"
+                    item-value="id"
+                    menu-props="auto"
+                  ></v-select>
+                </v-col>
 
-              <v-col cols="12" md="12">
-                <v-text-field
-                  v-model="editedItem.priorty"
-                  label="اولویت"
-                  required
-                ></v-text-field>
-              </v-col>
+                <v-col cols="12" md="12" class="c-py-0">
+                  <v-text-field
+                    v-model="editedItem.priorty"
+                    label="اولویت"
+                    required
+                  ></v-text-field>
+                </v-col>
+              </v-row>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="blue darken-1"
+                  color="success"
                   :disabled="!valid2 || isLoading"
-                  text
                   @click="update('child')"
                   >به روز رسانی اطلاعات</v-btn
                 >
@@ -377,7 +383,9 @@
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title>لیست گروه های کاری</v-toolbar-title>
+            <v-toolbar-title class="font-16"
+              >لیست گروه های کاری</v-toolbar-title
+            >
             <v-spacer></v-spacer>
           </v-toolbar>
         </template>
@@ -461,9 +469,9 @@
                       <span v-if="child.parent_id != null">زیرگروه</span>
                     </td>
                     <td class="w-14">
-                      <span v-if="item.type == 'AUCTION'">مزایده</span>
-                      <span v-if="item.type == 'TENDER'">مناقصه</span>
-                      <span v-if="item.type == 'INQUIRY'">استعلام</span>
+                      <span v-if="child.type == 'AUCTION'">مزایده</span>
+                      <span v-if="child.type == 'TENDER'">مناقصه</span>
+                      <span v-if="child.type == 'INQUIRY'">استعلام</span>
                     </td>
                     <td class="">
                       <v-btn
@@ -499,7 +507,7 @@ import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
 
 export default {
-  mounted() {},
+  mounted() { },
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
   components: {
     deleteConfirmationDialog,
@@ -666,7 +674,7 @@ export default {
               }
             );
           });
-      } catch (error) {}
+      } catch (error) { }
       // this.$refs.form.resetValidation();
     },
     async update(type) {
@@ -698,14 +706,14 @@ export default {
           })
           .catch((errors) => {
             this.isLoading = false;
-            Object.values(this.$store.getters["errorHandling/errors"]).map(
-              (error) => {
-                this.showSnackbar(error[0], "red");
-              }
+            this.showSnackbar(
+              errors.response.data.message,
+              "red"
             );
+
           });
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     async onExcelFileChange(e) {
@@ -807,10 +815,10 @@ export default {
         { text: "نام", value: "title", sortable: false, width: "30%" },
         { text: "اولویت", value: "priorty", sortable: false },
         { text: "وضعیت", value: "status", sortable: false },
-        { text: "دسته ی اصلی", value: "parent_id" },
+        { text: "دسته اصلی", value: "parent_id" },
         { text: "نوع دسته", value: "type", sortable: true },
-        { text: "", value: "data-table-expand", sortable: false },
         { text: "ابزار", value: "actions", sortable: false, align: "center" },
+        { text: "", value: "data-table-expand", sortable: false },
       ],
 
       works: [
