@@ -37,6 +37,7 @@ export default {
       href: "/favicon.ico"
     }]
   },
+  loading: '~/components/loader.vue',
   /*
    ** Global CSS
    */
