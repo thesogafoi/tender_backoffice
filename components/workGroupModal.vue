@@ -24,7 +24,7 @@
         <v-container>
           <v-form ref="form">
             <v-row>
-              <v-row class="c-px-30 c-py-20">
+              <v-row class="c-px-30 c-py-20" v-if="selected.length != 0">
                 <v-chip
                   v-for="(id, index) in selected"
                   :key="index"
@@ -153,12 +153,17 @@
               <!-- Work Groups on Action -->
               <div
                 background-color="white"
+                class="w-100"
                 color="deep-purple accent-4"
                 right
                 v-if="type == 'action'"
               >
-                <div class="header">
-                  <div v-for="(tab, index) in headerTab" :key="index">
+                <div class="header d-flex align-center justify-center">
+                  <div
+                    v-for="(tab, index) in headerTab"
+                    :key="index"
+                    class="mx-5"
+                  >
                     <button @click.prevent="activeTab(tab.id)">
                       {{ tab.name }}
                     </button>
@@ -292,7 +297,7 @@ export default {
       let title = "";
       this.$store.getters["workGroups"].forEach((element) => {
         let findedId = element.children.find((child) => child.id == id);
-        if ( findedId!= undefined) {
+        if (findedId != undefined) {
           title = findedId.title;
         }
       });
