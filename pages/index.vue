@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <!-- <v-row>
+    <v-row>
       <v-col cols="12" align="center" justify="center">
         <div class="c-loading-wrapper">
           <div class="left">
@@ -41,7 +41,7 @@
           </div>
         </div>
       </v-col>
-    </v-row> -->
+    </v-row>
   </div>
 </template>
 <script>
