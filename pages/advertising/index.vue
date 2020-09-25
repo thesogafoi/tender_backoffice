@@ -234,7 +234,7 @@
         </v-row>
       </v-form>
       <v-card-actions class="justify-end c-pt-0">
-        <div class="w-25 c-mr-20 d-flex align-center">
+        <div class="w-25 c-mr-20 d-flex align-center" v-if="!editMode">
           <v-select
             :items="activityDrop"
             v-model="choosed_action"
@@ -784,7 +784,7 @@ export default {
       return title;
     },
     selectImage() {
-      this.previewImage = ''
+      this.previewImage = "";
     },
     pickFile() {
       let input = this.$refs.fileInput;
@@ -874,10 +874,7 @@ export default {
     },
     async editItem() {
       this.isLoading = true;
-      if (
-        this.formData.status == 1
-        && this.formData.work_groups == []
-      ) {
+      if (this.formData.status == 1 && this.formData.work_groups == []) {
         this.showSnackbar(
           "آگهی انتشار یافته نمیتواند فاقد دسته ی کاری باشد",
           "red"
@@ -909,7 +906,7 @@ export default {
                 }
               );
             });
-        } catch (error) { }
+        } catch (error) {}
       }
     },
     backToShowMode() {
@@ -1046,9 +1043,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-            this.options.page +
-            "&items_per_page=" +
-            this.options.itemsPerPage,
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage,
             {
               ...this.formData,
             }
@@ -1063,10 +1060,7 @@ export default {
     sendData() {
       this.$refs.form.validate();
       this.isLoading = true;
-      if (
-        this.formData.status == 1
-        && this.formData.work_groups == []
-      ) {
+      if (this.formData.status == 1 && this.formData.work_groups == []) {
         this.$refs.form.validate();
         this.showSnackbar(
           "آگهی انتشار یافته نمیتواند فاقد دسته ی کاری باشد",
@@ -1085,7 +1079,6 @@ export default {
               if (typeof imageFile == "object") {
                 this.saveImage(response[0]);
               }
-
               setTimeout(() => {
                 this.resetFormDataWithoutType();
                 this.search();
@@ -1111,6 +1104,7 @@ export default {
       this.isLoading = true;
       let input = this.$refs.fileInput;
       let imageFile = input.files[0];
+      console.log("something");
       let formData = new FormData();
       formData.append("image_file", imageFile);
       this.$axios
