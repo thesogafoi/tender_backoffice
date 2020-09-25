@@ -291,8 +291,9 @@ export default {
       if (!id) return "";
       let title = "";
       this.$store.getters["workGroups"].forEach((element) => {
-        if (element.children.find((child) => child.id == id) != undefined) {
-          title = element.children.find((child) => child.id == id).title;
+        let findedId = element.children.find((child) => child.id == id);
+        if ( findedId!= undefined) {
+          title = findedId.title;
         }
       });
       return title;
