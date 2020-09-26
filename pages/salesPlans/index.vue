@@ -200,19 +200,19 @@ import deleteConfirmationDialog from "~/components/general/deleteConfirmationDia
 
 export default {
   components: {
-    deleteConfirmationDialog
+    deleteConfirmationDialog,
   },
   data: () => ({
     isLoading: false,
     statusList: [
       {
         id: 0,
-        value: "غیر فعال"
+        value: "غیر فعال",
       },
       {
         id: 1,
-        value: "فعال"
-      }
+        value: "فعال",
+      },
     ],
     dialog: false,
     editDialog: false,
@@ -224,18 +224,18 @@ export default {
         text: "نام پلن",
         align: "start",
         sortable: false,
-        value: "title"
+        value: "title",
       },
 
       {
         text: "تعداد گروه‌های کاری",
         value: "allowed_selection",
-        sortable: false
+        sortable: false,
       },
       { text: "ارزش پلن", value: "cost", sortable: false },
       { text: "تاریخ انقضا", value: "period", sortable: false },
       { text: "اولویت", value: "priorty", sortable: false },
-      { text: "ابزار", value: "actions", sortable: false, align: "center" }
+      { text: "ابزار", value: "actions", sortable: false, align: "center" },
     ],
     editedIndex: -1,
     editedItem: {
@@ -245,27 +245,27 @@ export default {
       cost: 0,
       period: 0,
       priorty: "",
-      status: 0
+      status: 0,
     },
     meta: [],
     loading: false,
-    subscriptions: []
+    subscriptions: [],
   }),
   watch: {
     options: {
       handler() {
-        this.getDataFromApi().then(data => {
+        this.getDataFromApi().then((data) => {
           this.desserts = data.items;
           this.totalDesserts = data.total;
         });
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
-    }
+    },
   },
 
   created() {
@@ -281,7 +281,7 @@ export default {
         cost: 0,
         period: 0,
         priorty: "",
-        status: 0
+        status: 0,
       };
     },
     getDataFromApi() {
@@ -290,13 +290,15 @@ export default {
       return new Promise((resolve, reject) => {
         this.$axios
           .$get(
-            `subscription?page=${this.options.page === undefined ? 1 : this.options.page
-            }&items_per_page=${this.options.itemsPerPage === undefined
-              ? 10
-              : this.options.itemsPerPage
+            `subscription?page=${
+              this.options.page === undefined ? 1 : this.options.page
+            }&items_per_page=${
+              this.options.itemsPerPage === undefined
+                ? 10
+                : this.options.itemsPerPage
             }`
           )
-          .then(response => {
+          .then((response) => {
             this.meta = response.meta;
             this.subscriptions = response.data;
             // this.desserts = response.data;
@@ -313,15 +315,18 @@ export default {
     deleteItem(item) {
       const index = this.subscriptions.indexOf(item);
       confirm("آیا میخواهید پاک شود؟") && this.subscriptions.splice(index, 1);
+      this.$nuxt.$loading.start();
       return new Promise((resolve, reject) => {
         this.$axios
           .$delete("subscription/" + item.id)
-          .then(response => {
+          .then((response) => {
             this.showSnackbar("طرح اشتراکی مورد نظر پاک شد", "green");
+            this.$nuxt.$loading.finish();
           })
-          .catch(error => {
+          .catch((error) => {
             Object.values(this.$store.getters["errorHandling/errors"]).map(
-              error => {
+              (error) => {
+                this.$nuxt.$loading.finish();
                 this.showSnackbar(error[0], "red");
               }
             );
@@ -345,6 +350,7 @@ export default {
     },
     save() {
       this.isLoading = true;
+      this.$nuxt.$loading.start();
       if (this.editedIndex > -1) {
         Object.assign(this.subscriptions[this.editedIndex], this.editedItem);
       } else {
@@ -352,16 +358,18 @@ export default {
         return new Promise((resolve, reject) => {
           this.$axios
             .$post("subscription", this.editedItem)
-            .then(response => {
+            .then((response) => {
+              this.$nuxt.$loading.finish();
               this.isLoading = false;
               this.showSnackbar("طرح اشتراکی با موفقیت اضافه شد", "green");
               this.getDataFromApi();
               this.closeAddItem();
             })
-            .catch(error => {
+            .catch((error) => {
+              this.$nuxt.$loading.finish();
               this.isLoading = false;
               Object.values(this.$store.getters["errorHandling/errors"]).map(
-                error => {
+                (error) => {
                   this.showSnackbar(error[0], "red");
                 }
               );
@@ -372,6 +380,7 @@ export default {
 
     updateItem() {
       this.isLoading = true;
+      this.$nuxt.$loading.start();
       if (this.editedIndex > -1) {
         Object.assign(this.subscriptions[this.editedIndex], this.editedItem);
       } else {
@@ -379,23 +388,25 @@ export default {
         return new Promise((resolve, reject) => {
           this.$axios
             .$put("subscription/" + this.editedItem.id, this.editedItem)
-            .then(response => {
+            .then((response) => {
+              this.$nuxt.$loading.finish();
               this.isLoading = false;
               this.showSnackbar("طرح اشتراکی با موفقیت تغییر یافت", "green");
               this.getDataFromApi();
               this.closeEditDialog();
             })
-            .catch(error => {
+            .catch((error) => {
+              this.$nuxt.$loading.finish();
               this.isLoading = false;
               Object.values(this.$store.getters["errorHandling/errors"]).map(
-                error => {
+                (error) => {
                   this.showSnackbar(error[0], "red");
                 }
               );
             });
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>

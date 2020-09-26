@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="parent-loader">
     <div class="loader" v-if="loading"></div>
   </div>
 </template>
@@ -7,19 +7,17 @@
 <script>
 export default {
   data: () => ({
-    loading: false
+    loading: false,
   }),
   methods: {
     start() {
-      console.log(this.loading);
-      this.loading = true
+      this.loading = true;
     },
     finish() {
-      console.log(this.loading);
-      this.loading = false
-    }
-  }
-}
+      this.loading = false;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -29,8 +27,12 @@ export default {
   border-top: 16px solid #3498db;
   width: 120px;
   height: 120px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
-  animation: spin 2s linear infinite;
+  -webkit-animation: spin-data-v-3f9bef8e 2s linear infinite;
+  animation: spin-data-v-3f9bef8e 2s linear infinite;
+  position: absolute;
+  z-index: 99999;
+  left: 43%;
+  top: 37%;
 }
 
 /* Safari */

@@ -615,7 +615,6 @@ export default {
       return this.formData.type;
     },
   },
-
   watch: {
     choosed_action() {
       if (this.choosed_action == 0) {
@@ -799,6 +798,7 @@ export default {
       }
     },
     sendAction() {
+      this.$nuxt.$loading.start();
       let advertiseId = [];
       if (
         this.advertises_action.length == 0 ||
@@ -846,8 +846,10 @@ export default {
           this.action = "";
           this.getDataFromApi();
           this.showSnackbar("تغییرات انجام شد", "green");
+          this.$nuxt.$loading.finish();
         })
         .catch((error) => {
+          this.$nuxt.$loading.finish();
           Object.values(this.$store.getters["errorHandling/errors"]).map(
             (error) => {
               this.showSnackbar(error[0], "red");
@@ -873,6 +875,7 @@ export default {
       }
     },
     async editItem() {
+      this.$nuxt.$loading.start();
       this.isLoading = true;
       if (this.formData.status == 1 && this.formData.work_groups == []) {
         this.showSnackbar(
@@ -888,6 +891,7 @@ export default {
               this.showSnackbar("آگهی به روز رسانی شد", "green");
               let input = this.$refs.fileInput;
               let imageFile = input.files[0];
+              this.$nuxt.$loading.finish();
               if (typeof imageFile == "object") {
                 this.saveImage(response[0]);
               }
@@ -899,6 +903,7 @@ export default {
               }, 1500);
             })
             .catch(() => {
+              this.$nuxt.$loading.finish();
               this.isLoading = false;
               Object.values(this.$store.getters["errorHandling/errors"]).map(
                 (error) => {
@@ -964,16 +969,23 @@ export default {
       };
     },
     turnToEditMode(item) {
+      this.$nuxt.$loading.start();
       this.resetFormData();
       this.editMode = true;
       this.advertiseId = item.id;
-      this.$axios.$get("advertise/show/" + item.id).then(({ data }) => {
-        this.formData = JSON.parse(JSON.stringify(data));
-        this.formData.is_nerve_center = this.formData.is_nerve_center.toString();
-        if (this.formData.image != null) {
-          this.previewImage = this.formData.image;
-        }
-      });
+      this.$axios
+        .$get("advertise/show/" + item.id)
+        .then(({ data }) => {
+          this.formData = JSON.parse(JSON.stringify(data));
+          this.formData.is_nerve_center = this.formData.is_nerve_center.toString();
+          if (this.formData.image != null) {
+            this.previewImage = this.formData.image;
+          }
+          this.$nuxt.$loading.finish();
+        })
+        .catch((errors) => {
+          this.$nuxt.$loading.finish();
+        });
     },
     showItem(item) {
       this.showItemDialog = true;
@@ -981,6 +993,7 @@ export default {
     },
     deleteItem(item) {
       try {
+        this.$nuxt.$loading.start();
         this.advertises.splice(this.advertises.indexOf(item), 1);
         this.$axios
           .$delete("advertise/" + item.id)
@@ -990,8 +1003,10 @@ export default {
               this.search();
             }, 1500);
             this.showSnackbar("آگهی با موفقیت حذف شد", "success");
+            this.$nuxt.$loading.finish();
           })
           .catch((error) => {
+            this.$nuxt.$loading.finish();
             Object.values(this.$store.getters["errorHandling/errors"]).map(
               (error) => {
                 this.showSnackbar(error[0], "red");
@@ -1004,13 +1019,17 @@ export default {
     },
     async callShowAdvertise(fillableValue, item) {
       try {
+        this.$nuxt.$loading.start();
         let something = await this.$axios.$get("advertise/show/" + item.id);
         this[fillableValue] = something.data;
+        this.$nuxt.$loading.finish();
       } catch (error) {
+        this.$nuxt.$loading.finish();
         console.log(error);
       }
     },
     async onFileChange(e) {
+      this.$nuxt.$loading.start();
       let formData = new FormData();
       const file = e.target.files[0];
       formData.append("excel_file", file);
@@ -1024,8 +1043,10 @@ export default {
               this.search();
             }, 1500);
             this.showSnackbar("آگهی های اکسل با موفقیت اضافه شدند", "green");
+            this.$nuxt.$loading.finish();
           });
       } catch (error) {
+        this.$nuxt.$loading.finish();
         Object.values(this.$store.getters["errorHandling/errors"]).map(
           (error) => {
             this.showSnackbar(error[0], "red");
@@ -1058,6 +1079,7 @@ export default {
       });
     },
     sendData() {
+      this.$nuxt.$loading.start();
       this.$refs.form.validate();
       this.isLoading = true;
       if (this.formData.status == 1 && this.formData.work_groups == []) {
@@ -1079,12 +1101,14 @@ export default {
               if (typeof imageFile == "object") {
                 this.saveImage(response[0]);
               }
+              this.$nuxt.$loading.finish();
+              this.resetFormDataWithoutType();
               setTimeout(() => {
-                this.resetFormDataWithoutType();
                 this.search();
               }, 1500);
             })
             .catch((error) => {
+              this.$nuxt.$loading.finish();
               this.isLoading = false;
               Object.values(this.$store.getters["errorHandling/errors"]).map(
                 (error) => {
@@ -1101,6 +1125,7 @@ export default {
       // send axios to backend and add refresh data
     },
     saveImage(id) {
+      this.$nuxt.$loading.start();
       this.isLoading = true;
       let input = this.$refs.fileInput;
       let imageFile = input.files[0];
@@ -1111,8 +1136,10 @@ export default {
         .$post("advertise/save/image/" + id, formData)
         .then((response) => {
           this.isLoading = false;
+          this.$nuxt.$loading.finish();
         })
         .catch((error) => {
+          this.$nuxt.$loading.finish();
           this.isLoading = false;
           Object.values(this.$store.getters["errorHandling/errors"]).map(
             (error) => {

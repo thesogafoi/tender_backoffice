@@ -507,7 +507,7 @@ import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
 
 export default {
-  mounted() { },
+  mounted() {},
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
   components: {
     deleteConfirmationDialog,
@@ -525,6 +525,7 @@ export default {
   },
   methods: {
     async getExcel() {
+      this.$nuxt.$loading.start();
       return this.$axios
         .$get("workgroups/as/excel")
         .then((response) => {
@@ -534,10 +535,11 @@ export default {
           fileLink.setAttribute("download", "AsanTenderWorkGroups.xlsx");
           fileLink.setAttribute("target", "_blank");
           document.body.appendChild(fileLink);
-
+          this.$nuxt.$loading.finish();
           fileLink.click();
         })
         .catch((error) => {
+          this.$nuxt.$loading.finish();
           console.log(error);
         });
     },
@@ -560,9 +562,11 @@ export default {
     },
     deleteItem(item) {
       try {
+        this.$nuxt.$loading.start();
         this.$axios
           .$delete("workgroup/delete/" + item.id)
           .then((res) => {
+            this.$nuxt.$loading.finish();
             this.$store.getters.workGroups.splice(
               this.$store.getters.workGroups.indexOf(item),
               1
@@ -570,6 +574,13 @@ export default {
             this.showSnackbar("دسته ی کاری با موفقیت حذف شد", "green");
           })
           .catch((e) => {
+            this.$nuxt.$loading.finish();
+            if (e.response.status == 422) {
+              this.showSnackbar(
+                "دسته ی کاری مورد نظر شامل زیر گروه است نمیتوانید آنرا حذف کنید",
+                "red"
+              );
+            }
             Object.values(this.$store.getters["errorHandling/errors"]).map(
               (error) => {
                 this.showSnackbar(error[0], "red");
@@ -577,18 +588,22 @@ export default {
             );
           });
       } catch (error) {
+        this.$nuxt.$loading.finish();
         this.showSnackbar("مشکلی پیش آمده دوباره تلاش کنید ", "red");
       }
     },
     deleteChildItem(child, parent) {
+      this.$nuxt.$loading.start();
       try {
         this.$axios
           .$delete("workgroup/delete/" + child.id)
           .then((res) => {
+            this.$nuxt.$loading.finish();
             parent.children.splice(parent.children.indexOf(child), 1);
             this.showSnackbar("دسته ی کاری با موفقیت حذف شد", "green");
           })
           .catch((e) => {
+            this.$nuxt.$loading.finish();
             Object.values(this.$store.getters["errorHandling/errors"]).map(
               (error) => {
                 this.showSnackbar(error[0], "red");
@@ -596,6 +611,7 @@ export default {
             );
           });
       } catch (error) {
+        this.$nuxt.$loading.finish();
         console.log(error);
         this.showSnackbar("مشکلی پیش آمده دوباره تلاش کنید ", "red");
       }
@@ -639,6 +655,7 @@ export default {
       window.location.reload();
     },
     save(type) {
+      this.$nuxt.$loading.start();
       this.isLoading = true;
       try {
         if (type == "child") {
@@ -656,6 +673,7 @@ export default {
         this.$axios
           .$post("workgroup/create", this.editedItem)
           .then((res) => {
+            this.$nuxt.$loading.finish();
             this.isLoading = false;
             this.showSnackbar("گروه کاری با موفقیت اضافه شد", "green");
             this.resetFormData();
@@ -667,6 +685,7 @@ export default {
             }, 1500);
           })
           .catch((errors) => {
+            this.$nuxt.$loading.finish();
             this.isLoading = false;
             Object.values(this.$store.getters["errorHandling/errors"]).map(
               (error) => {
@@ -674,11 +693,13 @@ export default {
               }
             );
           });
-      } catch (error) { }
+      } catch (error) {
+        this.$nuxt.$loading.finish();
+      }
       // this.$refs.form.resetValidation();
     },
     async update(type) {
-      console.log(this.editedItem);
+      this.$nuxt.$loading.start();
       this.isLoading = true;
       if (type == "child") {
         if (
@@ -696,6 +717,7 @@ export default {
         this.$axios
           .$put("workgroup/" + this.editedItem.id, this.editedItem)
           .then((res) => {
+            this.$nuxt.$loading.finish();
             this.isLoading = false;
             this.showSnackbar("گروه کاری با موفقیت تغییر یافت", "green");
             this.resetFormData();
@@ -705,14 +727,12 @@ export default {
             }, 1500);
           })
           .catch((errors) => {
+            this.$nuxt.$loading.finish();
             this.isLoading = false;
-            this.showSnackbar(
-              errors.response.data.message,
-              "red"
-            );
-
+            this.showSnackbar(errors.response.data.message, "red");
           });
       } catch (error) {
+        this.$nuxt.$loading.finish();
         // console.log(error);
       }
     },
@@ -720,11 +740,13 @@ export default {
       let formData = new FormData();
       const file = e.target.files[0];
       formData.append("excel_file", file);
+      this.$nuxt.$loading.start();
       e.target.value = "";
       try {
         await this.$axios
           .$post("workgroup/excel/create", formData)
           .then((response) => {
+            this.$nuxt.$loading.finish();
             this.showSnackbar(
               "دسته های کاری اکسل با موفقیت اضافه شدند",
               "green"
@@ -736,6 +758,7 @@ export default {
             }, 1500);
           })
           .catch((errors) => {
+            this.$nuxt.$loading.finish();
             Object.values(this.$store.getters["errorHandling/errors"]).map(
               (error) => {
                 this.showSnackbar(error[0], "red");
@@ -743,6 +766,7 @@ export default {
             );
           });
       } catch (error) {
+        this.$nuxt.$loading.finish();
         this.showSnackbar("مشکلی پیش آمده دوباره تلاش کنید ", "red");
       }
     },

@@ -541,9 +541,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-            this.options.page +
-            "&items_per_page=" +
-            this.options.itemsPerPage,
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage,
             {
               ...this.formData,
             }
@@ -613,9 +613,16 @@ export default {
     },
     showItem(item) {
       this.showItemDialog = true;
-      this.$axios.$get("advertise/show/" + item.id).then((response) => {
-        this.singleAdvertise = response.data;
-      });
+      this.$nuxt.$loading.start();
+      this.$axios
+        .$get("advertise/show/" + item.id)
+        .then((response) => {
+          this.singleAdvertise = response.data;
+          this.$nuxt.$loading.finish();
+        })
+        .catch((errors) => {
+          this.$nuxt.$loading.finish();
+        });
     },
     close() {
       this.singleAdvertise = "";
