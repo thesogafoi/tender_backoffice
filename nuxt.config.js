@@ -1,16 +1,6 @@
 import colors from "vuetify/es5/util/colors";
 
 export default {
-
-  /*
-     ** Nuxt rendering mode
-     ** See https://nuxtjs.org/api/configuration-mode
-     */
-  /*
-   ** Nuxt rendering mode
-   ** See https://nuxtjs.org/api/configuration-mode
-   */
-
   /*
    ** Nuxt rendering mode
    ** See https://nuxtjs.org/api/configuration-mode
@@ -98,7 +88,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: "http://asan.matican.work/api/"
+    baseURL: "http://tender-backend.localhost/api/"
   },
   /*
    ** vuetify module configuration

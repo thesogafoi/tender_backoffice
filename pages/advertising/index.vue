@@ -140,7 +140,6 @@
               id="free-date"
               v-model="formData.free_date"
               prepend-inner-icon="mdi-calendar"
-              :clearable="true"
               label="رایگان از تاریخ"
             ></v-text-field>
             <custom-date-picker
@@ -670,8 +669,8 @@ export default {
     valid: true,
     formData: {
       description: "",
-      type: "",
-      status: "",
+      type: "TENDER",
+      status: "0",
       image: "",
       provinces: [],
       work_groups: [],
@@ -679,7 +678,7 @@ export default {
       invitation_code: "",
       resource: "",
       adinviter_title: "",
-      is_nerve_center: "",
+      is_nerve_center: "1",
       invitation_date: "",
       submit_date: "",
       receipt_date: "",
@@ -930,13 +929,13 @@ export default {
         work_groups: [],
         description: "",
         type: this.formData.type,
-        status: "",
+        status: "0",
         provinces: [],
         title: "",
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: "",
+        is_nerve_center: "1",
         invitation_date: "",
         submit_date: "",
         receipt_date: "",
@@ -953,14 +952,14 @@ export default {
         image: "",
         work_groups: [],
         description: "",
-        type: "",
-        status: "",
+        type: "TENDER",
+        status: "0",
         provinces: [],
         title: "",
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: "",
+        is_nerve_center: "1",
         invitation_date: "",
         submit_date: "",
         receipt_date: "",

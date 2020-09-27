@@ -311,7 +311,6 @@ export default {
       Object.assign(this.editedItem, item);
       this.editDialog = true;
     },
-
     deleteItem(item) {
       const index = this.subscriptions.indexOf(item);
       confirm("آیا میخواهید پاک شود؟") && this.subscriptions.splice(index, 1);

@@ -33,6 +33,8 @@
                 label="Password"
                 @click:append="show3 = !show3"
               ></v-text-field>
+
+              <span style="color: #b71c1c">{{ errorMessage }}</span>
               <v-btn block color="primary" class="my-3" type="submit"
                 >LOGIN</v-btn
               >
@@ -51,6 +53,7 @@ export default {
   auth: false,
   data() {
     return {
+      errorMessage: "",
       show3: false,
       validLogin: true,
       validForgotPassword: true,
@@ -71,19 +74,27 @@ export default {
       ],
     };
   },
+
   methods: {
     validateForgotPassword() {
       this.$refs.form.validate();
     },
+
     async login() {
       var validate = this.$refs.form.validate();
 
       if (!validate) return;
 
       try {
-        let response = await this.$auth.loginWith("local", {
-          data: this.loginData,
-        });
+        let response = await this.$auth
+          .loginWith("local", {
+            data: this.loginData,
+          })
+          .catch((error) => {
+            if (error.response.status == 401) {
+              this.errorMessage = "شماره موبایل یا رمز عبور نادرست است";
+            }
+          });
         this.$router.push("/dashboard");
       } catch (err) {
         console.log(err);
