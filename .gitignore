@@ -88,6 +88,3 @@ sw.*
 
 # Vim swap files
 *.swp
-
-# Ignore Nuxt Config
-nuxt.config.js
