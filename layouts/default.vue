@@ -1,6 +1,13 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" right :clipped="clipped" fixed app>
+    <v-navigation-drawer
+      v-model="drawer"
+      right
+      :clipped="clipped"
+      fixed
+      app
+      :width="200"
+    >
       <v-list>
         <v-toolbar-title class="nav-title">
           <img src="/Asan-2.png" alt />

@@ -205,6 +205,7 @@
               :rules="[(v) => !!v || 'Item is required']"
               label="شرح آگهی"
               v-model="formData.description"
+              rows="2"
             ></v-textarea>
           </div>
           <div class="w-30 c-px-10">
@@ -218,7 +219,7 @@
               />
               <div class="c-uploader-button">
                 فایل انتخابی را آپلود کنید
-                <v-icon class="c-mt-10">mdi-plus</v-icon>
+                <v-icon class="c-mt-0">mdi-plus</v-icon>
               </div>
               <div
                 v-if="previewImage !== ''"
@@ -910,7 +911,7 @@ export default {
                 }
               );
             });
-        } catch (error) {}
+        } catch (error) { }
       }
     },
     backToShowMode() {
@@ -1063,9 +1064,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-              this.options.page +
-              "&items_per_page=" +
-              this.options.itemsPerPage,
+            this.options.page +
+            "&items_per_page=" +
+            this.options.itemsPerPage,
             {
               ...this.formData,
             }

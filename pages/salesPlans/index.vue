@@ -107,7 +107,7 @@
             </template>
             <v-card>
               <v-card-title
-                class="justify-center primary font-18 white--text c-py-10"
+                class="justify-center primary font-16 white--text c-py-10"
               >
                 اضافه کردن طرح اشتراکی
               </v-card-title>
@@ -160,7 +160,7 @@
                         element="my-custom-input"
                       ></custom-date-picker>
                       <v-text-field
-                        v-model="editedItem.priorty"
+                        v-model="editedItem.period"
                         id="my-custom-input"
                         type="text"
                         label="تاریخ انقضا"
@@ -290,12 +290,10 @@ export default {
       return new Promise((resolve, reject) => {
         this.$axios
           .$get(
-            `subscription?page=${
-              this.options.page === undefined ? 1 : this.options.page
-            }&items_per_page=${
-              this.options.itemsPerPage === undefined
-                ? 10
-                : this.options.itemsPerPage
+            `subscription?page=${this.options.page === undefined ? 1 : this.options.page
+            }&items_per_page=${this.options.itemsPerPage === undefined
+              ? 10
+              : this.options.itemsPerPage
             }`
           )
           .then((response) => {

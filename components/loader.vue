@@ -1,6 +1,6 @@
 <template>
-  <div class="parent-loader">
-    <div class="loader" v-if="loading"></div>
+  <div class="parent-loader" v-if="loading">
+    <div class="loader"></div>
   </div>
 </template>
 
@@ -21,6 +21,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.parent-loader {
+  width: 100%;
+  position: absolute;
+  height: 100vh;
+  background: #fff;
+  display: flex;
+  z-index: 14;
+  align-items: center;
+  justify-content: center;
+}
 .loader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;
@@ -29,10 +39,7 @@ export default {
   height: 120px;
   -webkit-animation: spin-data-v-3f9bef8e 2s linear infinite;
   animation: spin-data-v-3f9bef8e 2s linear infinite;
-  position: absolute;
   z-index: 99999;
-  left: 43%;
-  top: 37%;
 }
 
 /* Safari */

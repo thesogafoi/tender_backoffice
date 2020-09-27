@@ -6,13 +6,26 @@
           <v-icon color="red">mdi-trash-can-outline</v-icon>
         </v-btn>
       </template>
-      <v-card class="pr-2 pb-2" style="border: 1px solid #494949">
-        <v-card-title class="font-weight-regular">آیا از پاک کردن این مورد اطمینان دارد؟</v-card-title>
-
+      <v-card style="border: 1px solid #494949">
+        <v-card-title class="font-weight-regular font-14 c-px-10"
+          >آیا از پاک کردن این مورد اطمینان دارد؟</v-card-title
+        >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="red darken-3" small outlined @click="emitToParent">بله</v-btn>
-          <v-btn color="blue darken-3 " small outlined @click="childDialog = !childDialog">انصراف</v-btn>
+          <v-btn
+            color="blue darken-3"
+            class="white--text"
+            small
+            @click="childDialog = !childDialog"
+            >انصراف</v-btn
+          >
+          <v-btn
+            color="red darken-3"
+            class="white--text"
+            small
+            @click="emitToParent"
+            >بله</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>

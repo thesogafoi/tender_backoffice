@@ -19,8 +19,8 @@
               >
             </template>
             <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
+              <v-card-title class="primary">
+                <span>{{ formTitle }}</span>
               </v-card-title>
 
               <v-card-text>
@@ -64,8 +64,12 @@
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+        <div class="d-flex align-items-center justify-center">
+          <v-icon small color="primary" class="mr-2" @click="editItem(item)"
+            >mdi-pencil</v-icon
+          >
+          <deleteConfirmationDialog @delete="deleteItem(item)" />
+        </div>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -75,23 +79,27 @@
 </template>
 
 <script>
+import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
+
 export default {
+  components: {
+    deleteConfirmationDialog,
+  },
   data: () => ({
     dialog: false,
     items: ["سوپرادمین", "ادمین", "کارمند"],
     headers: [
       {
-        text: " fullName",
+        text: " نام و نام‌خانوادگی",
         align: "start",
         sortable: false,
         value: "fullName"
       },
 
       { text: "موبایل", value: "phoneNumber" },
-      { text: "رمز عبور", value: "password" },
       { text: "شناسه", value: "id" },
       { text: "سطح دسترسی", value: "levelAccess" },
-      { text: "ابزار", value: "actions", sortable: false }
+      { text: "ابزار", value: "actions", sortable: false, align: 'center' }
     ],
     desserts: [],
     editedIndex: -1,
@@ -111,7 +119,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+      return this.editedIndex === -1 ? "اضافه کردن کاربر" : "ویرایش اطلاعات کاربر";
     }
   },
 
