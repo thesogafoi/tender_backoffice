@@ -1,6 +1,5 @@
 <template>
   <div>
-    {{ editedItem.image }}
     <v-data-table
       :headers="headers"
       :items="desserts"
@@ -9,55 +8,58 @@
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
-          <v-toolbar-title>کارمندان و دسترسی ها</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-toolbar-title class="font-16"
+            >کارمندان و دسترسی ها</v-toolbar-title
+          >
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
-                >اضافه کردن</v-btn
+              <v-btn color="success" dark class="mb-2" v-bind="attrs" v-on="on"
+                >اضافه کردن کاربر</v-btn
               >
             </template>
             <v-card>
-              <v-card-title class="primary">
-                <span>{{ formTitle }}</span>
+              <v-card-title class="primary text-center c-py-10">
+                <span class="white--text font-16 ma-auto">{{ formTitle }}</span>
               </v-card-title>
 
-              <v-card-text>
-                <v-container>
+              <v-card-text class="c-pb-0">
+                <v-container class="c-pb-0">
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="6">
                       <v-text-field
                         v-model="editedItem.fullName"
                         label="نام و نام خانوادگی"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="6">
+                      <v-select
+                        :items="items"
+                        v-model="editedItem.levelAccess"
+                        item-text="value"
+                        item-value="id"
+                        label="سطح دسترسی"
+                      ></v-select>
+                    </v-col>
+                    <v-col cols="6">
                       <v-text-field
                         v-model="editedItem.phoneNumber"
                         label="موبایل "
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="6">
                       <v-text-field
                         v-model="editedItem.password"
                         label="رمز عبور"
                       ></v-text-field>
-                    </v-col>
-                    <v-col class="d-flex" cols="12" sm="6">
-                      <v-select
-                        :items="items"
-                        v-model="editedItem.levelAccess"
-                        label="سطح دسترسی"
-                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+                <v-btn class="red white--text" @click="close">لغو</v-btn>
+                <v-btn class="success" @click="save">ذخیره</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -87,7 +89,18 @@ export default {
   },
   data: () => ({
     dialog: false,
-    items: ["سوپرادمین", "ادمین", "کارمند"],
+    items: [{
+      id: '0',
+      value: 'سوپر‌ادمین'
+    },
+    {
+      id: '1',
+      value: 'ادمین'
+    },
+    {
+      id: '2',
+      value: 'کارمند'
+    }],
     headers: [
       {
         text: " نام و نام‌خانوادگی",
@@ -97,7 +110,6 @@ export default {
       },
 
       { text: "موبایل", value: "phoneNumber" },
-      { text: "شناسه", value: "id" },
       { text: "سطح دسترسی", value: "levelAccess" },
       { text: "ابزار", value: "actions", sortable: false, align: 'center' }
     ],

@@ -8,40 +8,47 @@
     >
       <template v-slot:top>
         <v-toolbar flat color="white">
-          <v-toolbar-title>کد تخفیف</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-toolbar-title class="font-16">کد تخفیف</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="600px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on"
-                >اضافه کردن</v-btn
+              <v-btn color="success" dark class="mb-2" v-bind="attrs" v-on="on"
+                >اضافه کردن کد تخفیف</v-btn
               >
             </template>
             <v-card>
-              <v-card-title class="c-header">
-                <span class="headline">اضافه کردن کد تخفیف</span>
+              <v-card-title class="primary c-py-10">
+                <span class="ma-auto white--text font-16"
+                  >اضافه کردن کد تخفیف</span
+                >
               </v-card-title>
 
-              <v-card-text>
-                <v-container>
+              <v-card-text class="c-pb-0">
+                <v-container class="c-pb-0">
                   <v-row>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="6">
                       <v-text-field
                         v-model="editedItem.planName"
                         label=" نام پلن فروش"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="6">
                       <v-text-field
                         v-model="editedItem.discountCount"
                         label="تعداد کد تخفیف "
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12" sm="6" md="6">
+                    <v-col cols="6">
                       <custom-date-picker
                         label="تاریخ انقضا"
                         v-model="editedItem.expired"
+                        element="date-picker"
                       ></custom-date-picker>
+                      <v-text-field
+                        v-model="editedItem.expired"
+                        label="تاریخ انقضا "
+                        id="date-picker"
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -49,16 +56,20 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red" text @click="close">Cancel</v-btn>
-                <v-btn color="green" text @click="save">Save</v-btn>
+                <v-btn class="white--text red" @click="close">لغو</v-btn>
+                <v-btn class="white--text success" @click="save">ذخیره</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+        <div class="d-flex align-center justify-center">
+          <v-icon small color="primary" class="mr-2" @click="editItem(item)"
+            >mdi-pencil</v-icon
+          >
+          <deleteConfirmationDialog small @click="deleteItem(item)" />
+        </div>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize">Reset</v-btn>
@@ -68,7 +79,12 @@
 </template>
 
 <script>
+import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
+
 export default {
+  components: {
+    deleteConfirmationDialog,
+  },
   data: () => ({
     dialog: false,
     headers: [
@@ -81,9 +97,8 @@ export default {
 
       { text: "تعداد کد تخفیف ", value: "discountCount" },
       { text: "تاریخ انقضا", value: "expired" },
-      { text: "کد تخفیف", value: "discount" },
-      { text: "شناسه", value: "id" },
-      { text: "ابزار", value: "actions", sortable: false }
+      { text: "شناسه تخفیف", value: "discount" },
+      { text: "ابزار", value: "actions", sortable: false, align: 'center' }
     ],
     desserts: [],
     editedIndex: -1,
