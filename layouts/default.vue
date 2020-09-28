@@ -74,7 +74,7 @@ export default {
   methods: {
     async logOut() {
       await this.$auth.logout();
-    }
+    },
   },
 
   data() {
@@ -86,43 +86,43 @@ export default {
         {
           icon: "mdi-view-dashboard",
           title: "داشبورد",
-          to: "#"
+          to: "#",
         },
         {
           icon: "mdi-notebook-check",
           title: "آگهی",
-          to: "/advertising"
+          to: "/advertising",
         },
         {
           icon: "mdi-card-search-outline",
           title: "جستجوی آگهی",
-          to: "/adSearch"
+          to: "/adSearch",
         },
         {
           icon: "mdi-lightbulb-group",
           title: "گروه های کاری",
-          to: "/workingGroups"
+          to: "/workingGroups",
         },
         {
           icon: "mdi-format-list-text",
           title: "طرح های اشتراکی ",
-          to: "/salesPlans"
+          to: "/salesPlans",
         },
         {
           icon: "mdi-account-group",
           title: "مشتریان",
-          to: "/customers"
+          to: "/customers",
         },
 
         {
           icon: "mdi-receipt",
           title: "پرداخت ها",
-          to: "/payments"
+          to: "/payments",
         },
         {
           icon: "mdi-ticket-percent",
           title: "کد تخفیف",
-          to: "/discountCode"
+          to: "/discountCode",
         },
         // {
         //   icon: "mdi-post-outline",
@@ -137,8 +137,8 @@ export default {
         {
           icon: "mdi-account",
           title: "کارمندان و دسترسی ها",
-          to: "/staffAndAccess"
-        }
+          to: "/staffAndAccess",
+        },
         // {
         //   icon: "mdi-cog",
         //   title: "تنظیمات",
@@ -148,9 +148,9 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "Asantender"
+      title: "Asantender",
     };
-  }
+  },
 };
 </script>
 <style lang="css">

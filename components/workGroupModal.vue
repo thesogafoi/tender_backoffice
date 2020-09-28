@@ -42,6 +42,7 @@
                 background-color="white"
                 color="deep-purple accent-4"
                 right
+                class="w-100"
                 v-if="type != 'action'"
               >
                 <div class="header">
@@ -59,7 +60,7 @@
                     <v-row>
                       <v-col
                         cols="4"
-                        v-for="(parentGroup, index) in workingGroups"
+                        v-for="(parentGroup, index) in workingGroups['AUCTION']"
                         :key="index"
                       >
                         <v-expansion-panels
@@ -90,7 +91,7 @@
                     <v-row>
                       <v-col
                         cols="4"
-                        v-for="(parentGroup, index) in workingGroups"
+                        v-for="(parentGroup, index) in workingGroups['TENDER']"
                         :key="index"
                       >
                         <v-expansion-panels
@@ -121,7 +122,7 @@
                     <v-row>
                       <v-col
                         cols="4"
-                        v-for="(parentGroup, index) in workingGroups"
+                        v-for="(parentGroup, index) in workingGroups['INQUIRY']"
                         :key="index"
                       >
                         <v-expansion-panels
@@ -174,7 +175,7 @@
                     <v-row>
                       <v-col
                         cols="4"
-                        v-for="(parentGroup, index) in workingGroups"
+                        v-for="(parentGroup, index) in workingGroups['AUCTION']"
                         :key="index"
                       >
                         <v-expansion-panels
@@ -205,7 +206,7 @@
                     <v-row>
                       <v-col
                         cols="4"
-                        v-for="(parentGroup, index) in workingGroups"
+                        v-for="(parentGroup, index) in workingGroups['TENDER']"
                         :key="index"
                       >
                         <v-expansion-panels
@@ -236,7 +237,7 @@
                     <v-row>
                       <v-col
                         cols="4"
-                        v-for="(parentGroup, index) in workingGroups"
+                        v-for="(parentGroup, index) in workingGroups['INQUIRY']"
                         :key="index"
                       >
                         <v-expansion-panels
@@ -277,7 +278,17 @@
 export default {
   props: ["props_selected", "modal", "type"],
   mounted() {
-    this.workingGroups = this.$store.getters["workGroups"];
+    // this.workingGroups = this.$store.getters["workGroups"];
+    this.$store.getters["workGroups"].forEach((element) => {
+      if (element.type == "AUCTION") {
+        this.workingGroups["AUCTION"].push(element);
+      } else if (element.type == "TENDER") {
+        this.workingGroups["TENDER"].push(element);
+      } else if (element.type == "INQUIRY") {
+        this.workingGroups["INQUIRY"].push(element);
+      }
+    });
+    console.log(this.workingGroups);
   },
   created() {
     if (this.props_selected != undefined) {
@@ -333,7 +344,11 @@ export default {
       currentTab: "1",
       selected: [],
       selectedChildren: [],
-      workingGroups: [],
+      workingGroups: {
+        AUCTION: [],
+        TENDER: [],
+        INQUIRY: [],
+      },
     };
   },
 };
