@@ -62,12 +62,51 @@
               label="عنوان آگهی گذار "
             ></v-text-field>
           </div>
-          <div class="w-25 c-px-10">
-            <ChooseWorkGroup
-              :work_groups="this.$store.getters.workGroups"
-              @selected_work_group_changed="fillSelected"
+          <div class="w-40 c-px-10 d-flex align-center">
+            <!-- <ChooseWorkGroup
+              :dis="formData.type == undefined"
+              :work_groups="workGroups"
               ref="workGroups"
+              @selected_work_group_changed="selectedWorkGroupChanged"
               :multiple="true"
+            />-->
+            <!-- <v-combobox v-model="work_groups" :items="items" label="گروه های کاری" multiple></v-combobox> -->
+            <!-- <v-text-field
+              label="گروه‌های کاری"
+              @click=""
+            ></v-text-field>-->
+            <v-btn
+              @click="workGroupModal = true"
+              :disabled="formData.type == undefined || formData.type == ''"
+              class="w-48 c-ml-10"
+              >انتخاب دسته های کاری</v-btn
+            >
+            <v-btn class="w-50" disabled>
+              <span v-if="formData.work_groups">
+                <span v-if="formData.work_groups.length === 0"
+                  >دسته کاری انتخاب نشده</span
+                >
+                <span v-if="formData.work_groups.length > 0"
+                  >{{ formData.work_groups.length }} دسته کاری انتخاب شده</span
+                >
+              </span>
+            </v-btn>
+            <workingGroupsModal
+              v-if="workGroupModal"
+              :modal="workGroupModal"
+              :props_selected.sync="formData.work_groups"
+              :type="formData.type"
+              @close_modal="workGroupModal = false"
+              @add_selected="childSeleted"
+            />
+
+            <workingGroupsModal
+              v-if="workGroupModalAction"
+              :modal="workGroupModalAction"
+              :props_selected.sync="work_groups_action"
+              type="action"
+              @close_modal="workGroupModalAction = false"
+              @add_selected="actionChildSeleted"
             />
           </div>
           <div class="w-15 c-px-10">
@@ -132,7 +171,7 @@
               element="created-at-second"
             ></custom-date-picker>
           </div>
-          <div class="w-60 c-px-10">
+          <div class="w-45 c-px-10">
             <v-text-field
               v-model="formData.description"
               label="شرح"
@@ -399,9 +438,19 @@
 
 <script>
 import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
+import workingGroupsModal from "~/components/workGroupModal";
+
 export default {
   mixins: [WorkGroupMixin],
+  components: {
+    workingGroupsModal,
+  },
   data: () => ({
+    workGroupModalAction: false,
+    work_groups_action: [],
+    choosed_action: [],
+    workGroupsTitle: [],
+    workGroupModal: false,
     meta: [],
     options: {},
     loading: true,
@@ -519,6 +568,23 @@ export default {
     },
   },
   methods: {
+    actionChildSeleted(e) {
+      this.work_groups_action = [];
+      if (e != undefined) {
+        e.forEach((element) => {
+          this.work_groups_action.push(element);
+        });
+      }
+    },
+    childSeleted(e) {
+      this.formData.work_groups = [];
+      this.workGroupsTitle = [];
+      if (e != undefined) {
+        e.forEach((element) => {
+          this.formData.work_groups.push(element);
+        });
+      }
+    },
     findTitle(id) {
       if (!id) return "";
       let title = "";
@@ -541,9 +607,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-              this.options.page +
-              "&items_per_page=" +
-              this.options.itemsPerPage,
+            this.options.page +
+            "&items_per_page=" +
+            this.options.itemsPerPage,
             {
               ...this.formData,
             }
