@@ -33,9 +33,11 @@
               item-value="id"
               label="استان"
               multiple
+              ref="selectOptionProvinces"
               :rules="[(v) => !!v || 'Item is required']"
               required
-            ></v-select>
+            >
+            </v-select>
           </div>
           <div class="w-20 c-px-10">
             <v-text-field
@@ -115,6 +117,7 @@
               prepend-inner-icon="mdi-calendar"
               label="تاریخ ارسال"
             ></v-text-field>
+            {{ formData.submit_date }}
             <custom-date-picker
               v-model="formData.submit_date"
               element="send-date"
@@ -368,7 +371,7 @@
           >
         </template>
         <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize">آگهی وجود ندارد</v-btn>
+          <v-btn color="primary">آگهی وجود ندارد</v-btn>
         </template>
       </v-data-table>
     </v-card>
@@ -488,7 +491,7 @@
             <v-card>
               <v-card-text class="d-flex c-py-10 flex-wrap">
                 <h4 class="rtl c-ml-5">تاریخ بازگشایی:</h4>
-                <p class="c-mb-0">{{ singleAdvertise.free_date }}</p>
+                <p class="c-mb-0">{{ singleAdvertise.start_date }}</p>
               </v-card-text>
             </v-card>
           </div>
@@ -504,7 +507,7 @@
             <v-card>
               <v-card-text class="d-flex c-py-10 flex-wrap">
                 <h4 class="rtl c-ml-5">رایگان از تاریخ:</h4>
-                <p class="c-mb-0">{{ singleAdvertise.start_date }}</p>
+                <p class="c-mb-0">{{ singleAdvertise.free_date }}</p>
               </v-card-text>
             </v-card>
           </div>
@@ -610,6 +613,7 @@ export default {
     deleteConfirmationDialog,
     workingGroupsModal,
   },
+  mounted() {},
   computed: {
     formDataType() {
       return this.formData.type;
@@ -679,7 +683,7 @@ export default {
       invitation_code: "",
       resource: "",
       adinviter_title: "",
-      is_nerve_center: "1",
+      is_nerve_center: "0",
       invitation_date: "",
       submit_date: "",
       receipt_date: "",
@@ -772,6 +776,18 @@ export default {
   }),
 
   methods: {
+    // toggleAllProvinces() {
+    //   const thisClass = this;
+    //   thisClass.formData.provinces = [];
+
+    //   if (this.$refs.allProvincesCheckBox.checked) {
+    //     for (let index = 1; index <= 31; index++) {
+    //       this.formData.provinces.push(index);
+    //     }
+    //   } else {
+    //     thisClass.formData.provinces = [];
+    //   }
+    // },
     findTitle(id) {
       if (!id) return "";
       let title = "";
@@ -911,7 +927,7 @@ export default {
                 }
               );
             });
-        } catch (error) { }
+        } catch (error) {}
       }
     },
     backToShowMode() {
@@ -936,7 +952,7 @@ export default {
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: "1",
+        is_nerve_center: "0",
         invitation_date: "",
         submit_date: "",
         receipt_date: "",
@@ -960,7 +976,7 @@ export default {
         invitation_code: "",
         resource: "",
         adinviter_title: "",
-        is_nerve_center: "1",
+        is_nerve_center: "0",
         invitation_date: "",
         submit_date: "",
         receipt_date: "",
@@ -1064,9 +1080,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-            this.options.page +
-            "&items_per_page=" +
-            this.options.itemsPerPage,
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage,
             {
               ...this.formData,
             }

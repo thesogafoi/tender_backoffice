@@ -288,7 +288,6 @@ export default {
         this.workingGroups["INQUIRY"].push(element);
       }
     });
-    console.log(this.workingGroups);
   },
   created() {
     if (this.props_selected != undefined) {

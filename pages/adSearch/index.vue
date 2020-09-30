@@ -525,11 +525,11 @@ export default {
 
     isNerveCenterList: [
       {
-        id: 1,
+        id: "1",
         value: "ستادی",
       },
       {
-        id: 0,
+        id: "0",
         value: "غیر ستادی",
       },
     ],
@@ -607,9 +607,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-            this.options.page +
-            "&items_per_page=" +
-            this.options.itemsPerPage,
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage,
             {
               ...this.formData,
             }
@@ -634,7 +634,8 @@ export default {
       this.getDataFromApi();
     },
     resetFormData() {
-      this.clearSelectedWorkGroups("workGroups");
+      // this.clearSelectedWorkGroups("workGroups");
+
       this.formData = {
         range_created_at: {
           first: "",

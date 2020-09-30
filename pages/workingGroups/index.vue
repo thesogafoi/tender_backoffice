@@ -575,11 +575,9 @@ export default {
           })
           .catch((e) => {
             this.$nuxt.$loading.finish();
+
             if (e.response.status == 422) {
-              this.showSnackbar(
-                "دسته ی کاری مورد نظر شامل زیر گروه است نمیتوانید آنرا حذف کنید",
-                "red"
-              );
+              this.showSnackbar(e.response.data.message, "red");
             }
             Object.values(this.$store.getters["errorHandling/errors"]).map(
               (error) => {
@@ -603,6 +601,9 @@ export default {
             this.showSnackbar("دسته ی کاری با موفقیت حذف شد", "green");
           })
           .catch((e) => {
+            if (e.response.status == 422) {
+              this.showSnackbar(e.response.data.message, "red");
+            }
             this.$nuxt.$loading.finish();
             Object.values(this.$store.getters["errorHandling/errors"]).map(
               (error) => {
@@ -778,11 +779,11 @@ export default {
       dialogEdit: false,
       statusList: [
         {
-          id: 0,
+          id: "0",
           value: "در حال بررسی",
         },
         {
-          id: 1,
+          id: "1",
           value: "انتشار یافته",
         },
       ],
