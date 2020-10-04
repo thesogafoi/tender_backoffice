@@ -123,17 +123,17 @@ export default {
     content: "";
     left: -150px;
     bottom: 12px;
-    background-color: #fff;
+    background-color: #b5b5b5;
   }
   position: absolute;
-  color: #fff;
+  color: #b5b5b5;
   bottom: 40px;
   left: 130px;
   &:after {
     width: 100vw;
     height: 2px;
     content: "";
-    background-color: #fff;
+    background-color: #b5b5b5;
     position: absolute;
     left: 148px;
     bottom: 12px;
