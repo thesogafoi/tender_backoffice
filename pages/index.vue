@@ -1,49 +1,52 @@
 <template>
-  <div class="main-container">
-    <v-row>
-      <v-col cols="12" align="center" justify="center">
-        <div class="c-loading-wrapper">
-          <div class="left">
-            <img src="/30462.jpg" alt="Arad Mobile Logo" />
-          </div>
-          <div class="right">
-            <div class="right-logo mb-4">
-              <img class="animatedLogo" src="/Asan-2.png" alt />
-            </div>
-            <v-form
-              v-if="forgotPassword"
-              class="form-style"
-              ref="form"
-              v-model="validLogin"
-              @submit.prevent="login"
-            >
-              <h2 class="welcome mt-4 mb-4">Welcome Back</h2>
-              <v-text-field
-                v-model="loginData.mobile"
-                label="Username"
-                outlined
-                :rules="required"
-              ></v-text-field>
-              <v-text-field
-                :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
-                outlined
-                :rules="required"
-                :type="show3 ? 'text' : 'password'"
-                v-model="loginData.password"
-                label="Password"
-                @click:append="show3 = !show3"
-              ></v-text-field>
-
-              <span style="color: #b71c1c">{{ errorMessage }}</span>
-              <v-btn block color="primary" class="my-3" type="submit"
-                >LOGIN</v-btn
-              >
-              <div class="flex-end"></div>
-            </v-form>
-          </div>
+  <div class="main-container c-relative-row">
+    <div class="c-loading-wrapper">
+      <div class="right">
+        <div class="right-logo mb-4">
+          <img class="animatedLogo c-mb-20" src="/Asan-2.png" alt />
+          <h2 class="welcome mt-4 mb-4">به پنل کاربری آسان‌تندر خوش‌آمدید .</h2>
         </div>
-      </v-col>
-    </v-row>
+        <v-form
+          v-if="forgotPassword"
+          class="form-style"
+          ref="form"
+          v-model="validLogin"
+          @submit.prevent="login"
+        >
+          <div
+            class="input-panel"
+            :class="{
+              'c-mb-0': formValidate == false,
+              'c-mb-40': formValidate == true,
+            }"
+          >
+            <v-text-field
+              v-model="loginData.mobile"
+              label="شماره موبایل خود را وارد کنید"
+              solo
+              :rules="required"
+            ></v-text-field>
+            <v-text-field
+              :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
+              solo
+              :rules="required"
+              :type="show3 ? 'text' : 'password'"
+              v-model="loginData.password"
+              label="رمز عبور"
+              @click:append="show3 = !show3"
+            ></v-text-field>
+          </div>
+          <p class="validation-alert text-center" v-if="formValidate == false">
+            {{ errorMessage }}
+          </p>
+          <v-btn block color="primary" class="my-3" type="submit"
+            >ورود به پنل کاربری</v-btn
+          >
+          <div class="flex-end"></div>
+        </v-form>
+      </div>
+    </div>
+    <div class="version-line">Version 1.0068</div>
   </div>
 </template>
 <script>
@@ -53,8 +56,9 @@ export default {
   auth: false,
   data() {
     return {
-      errorMessage: "",
+      errorMessage: "رمز عبور یا تلفن اشتباه است",
       show3: false,
+      formValidate: true,
       validLogin: true,
       validForgotPassword: true,
       forgotPassword: true,
@@ -62,9 +66,9 @@ export default {
         mobile: "",
         password: "",
       },
-      required: [(v) => !!v || "This Field Is Required"],
-      usernameRules: [(v) => !!v || "This Field Is Required"],
-      passwordRules: [(v) => !!v || "This Field Is Required"],
+      required: [(v) => !!v],
+      usernameRules: [(v) => !!v || "شماره موبایل را وارد کنید"],
+      passwordRules: [(v) => !!v || "رمز عبور را وارد کنید"],
       emailRules: [
         (v) => !!v || "E-mail is required",
         (v) =>
@@ -79,10 +83,16 @@ export default {
     validateForgotPassword() {
       this.$refs.form.validate();
     },
+    checkValidation() {
 
+    },
     async login() {
       var validate = this.$refs.form.validate();
-
+      if (!this.$refs.form.validate()) {
+        this.formValidate = false
+      } else {
+        this.formValidate = true
+      }
       if (!validate) return;
 
       try {
@@ -104,40 +114,116 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.version-line {
+  &:before {
+    width: 120px;
+    position: absolute;
+    height: 2px;
+    content: "";
+    left: -150px;
+    bottom: 12px;
+    background-color: #fff;
+  }
+  position: absolute;
+  color: #fff;
+  bottom: 40px;
+  left: 130px;
+  &:after {
+    width: 100vw;
+    height: 2px;
+    content: "";
+    background-color: #fff;
+    position: absolute;
+    left: 148px;
+    bottom: 12px;
+  }
+}
+.validation-alert {
+  margin-top: 10px;
+  color: #c62828;
+  font-weight: 600;
+  font-size: 13px;
+}
+.c-relative-row {
+  .c-loading-wrapper {
+    position: absolute;
+    top: 10%;
+    right: 200px;
+    display: flex;
+    flex-flow: column;
+    .right {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      flex-direction: column;
+      .v-text-field.v-text-field--solo .v-label {
+        right: 50% !important;
+        transform: translateX(50%) !important;
+      }
+      input {
+        text-align: center !important;
+      }
+      .v-icon.v-icon {
+        font-size: 18px !important;
+      }
+      .v-text-field.v-text-field--solo .v-input__control {
+        min-height: 40px !important;
+      }
+      .v-text-field.v-text-field--solo .v-input__append-inner,
+      .v-text-field.v-text-field--solo .v-input__prepend-inner {
+        position: absolute !important;
+        left: 15px;
+      }
+      .v-form {
+        width: 100%;
+        .v-text-field.v-text-field--enclosed .v-text-field__details {
+          display: none;
+        }
+      }
+    }
+    .theme--light.v-btn:not(.v-btn--flat):not(.v-btn--text):not(.v-btn--outlined) {
+      background-color: #ff9600 !important;
+      min-width: 50% !important;
+      margin: auto;
+      .v-btn__content {
+        color: #333 !important;
+        font-weight: 700 !important;
+      }
+    }
+  }
+}
 .main-container {
   width: 100%;
   height: 100%;
-  background: #e3e3e3 100% fixed;
-  background-repeat: no-repeat;
-  background-size: cover;
-  text-align: center;
   margin: 0;
   padding: 0;
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  backdrop-filter: grayscale(100%);
+  position: relative;
+  &:before {
+    background: #e3e3e3 100% fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: grayscale(100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(/کاربرد-گاز-نیتروژن-در-پالایشگاه-ها.jpg);
+    content: "";
+  }
 }
 .c-loading-wrapper {
-  width: 59vw;
-  min-height: 65vh;
-  height: 100%;
-  background-color: #fff;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  border-radius: 10px;
-  -webkit-box-shadow: 0px 0px 5px 1px rgba(171, 171, 171, 1);
-  -moz-box-shadow: 0px 0px 5px 1px rgba(171, 171, 171, 1);
-  box-shadow: 0px 0px 5px 1px rgba(171, 171, 171, 1);
+  width: 23vw;
+  max-width: 90%;
+  min-height: 66vh;
+  max-height: 90vh;
+  background-color: rgba($color: #fff, $alpha: 0.75);
+  border-radius: 5px;
 }
 .c-loading-wrapper .left {
-  width: 60%;
+  width: 100%;
   height: 100%;
   background-size: cover;
   background-position: bottom;
@@ -171,68 +257,30 @@ export default {
   z-index: 999;
 }
 .c-loading-wrapper .right {
-  width: 40%;
-  padding: 40px 80px;
+  width: 100%;
+  padding: 40px 30px 20px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-.c-loading-wrapper .right .welcome {
-  font-size: 20px;
-  color: #696969;
+.welcome {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333;
 }
 .c-loading-wrapper .right .right-logo img {
   max-width: 200px;
   width: 100%;
   height: auto;
 }
-@media (max-width: 1444px) {
-  .c-loading-wrapper {
-    width: 80vw;
-  }
-  .c-loading-wrapper .right {
-    width: 50%;
-    padding: 40px 50px;
-  }
-  .c-loading-wrapper .left {
-    width: 50%;
-  }
-}
+
 @media (max-width: 991px) {
   .c-loading-wrapper {
     width: 80vw;
-  }
-  .c-loading-wrapper .right {
-    width: 50%;
-  }
-  .c-loading-wrapper .left {
-    width: 50%;
-  }
-}
-@media (max-width: 767px) {
-  .c-loading-wrapper {
-    width: 80vw;
-  }
-  .c-loading-wrapper .right {
-    width: 50%;
-    padding: 40px 20px;
-  }
-  .c-loading-wrapper .left {
-    width: 50%;
-  }
-}
-@media (max-width: 575px) {
-  .c-loading-wrapper {
-    width: 80vw;
-  }
-  .c-loading-wrapper .right {
-    width: 100%;
-    padding: 40px 15px;
-  }
-  .c-loading-wrapper .left {
-    display: none;
+    right: 50% !important;
+    transform: translateX(50%);
   }
 }
 </style>
