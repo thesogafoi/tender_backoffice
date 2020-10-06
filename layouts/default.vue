@@ -113,6 +113,11 @@ export default {
           title: "مشتریان",
           to: "/customers",
         },
+        {
+          icon: "mdi-account-group",
+          title: "تبلیغات",
+          to: "/advertisementBanner",
+        },
 
         {
           icon: "mdi-receipt",
