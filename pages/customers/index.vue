@@ -2,25 +2,24 @@
   <div>
     <v-card>
       <v-card-title>
-        <span class="font-16"> مشتریان </span>
+        <span class="font-16"> &#127481; &#127479; </span>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
           append-icon="mdi-magnify"
           label="جستجوی مشتری"
-          @keyup="getDataFromApi"
           single-line
           hide-details
         ></v-text-field>
       </v-card-title>
       <v-data-table
         :headers="headers"
-        :items="desserts"
+        :items="customerDetail"
         :options.sync="options"
-        :server-items-length="totalDesserts"
-        :loading="loading"
+        :server-items-length="customerDetail"
         class="elevation-1"
-      ></v-data-table>
+      >
+      </v-data-table>
     </v-card>
   </div>
 </template>
@@ -29,9 +28,10 @@
 export default {
   data() {
     return {
+      emoji: '\U+1F600',
+      customerDetail: [],
       totalDesserts: 0,
       search: "",
-      desserts: [],
       loading: true,
       options: {},
       headers: [
@@ -39,18 +39,39 @@ export default {
           text: 'کد مشتری',
           align: "start",
           sortable: false,
-          value: "clientCode",
+          value: "client_code",
         },
-        { text: "نام مشتری", value: "clientName" },
-        { text: "نام شرکت", value: "companyName" },
-        { text: "شماره موبایل", value: "mobileNumber" },
-        { text: "تاریخ ثبت‌ نام", value: "registerDate" },
-        { text: "نوع کاربر", value: "userType" },
+        { text: "نام مشتری", value: "client_name" },
+        { text: "نام شرکت", value: "company_name" },
+        { text: "شماره موبایل", value: "mobile" },
+        { text: "تاریخ ثبت‌ نام", value: "register_date" },
+        { text: "نوع کاربر", value: "user_type" },
         { text: "تلفن", value: "tel" },
         { text: "گزینه‌ها", value: "options" },
       ],
     };
   },
-  methods: {},
+  created() {
+    this.getCustomer()
+  },
+  methods: {
+    getCustomer() {
+      return this.$axios
+        .$get("client-detail/index")
+        .then((res) => {
+          this.customerDetail = res;
+          res.forEach(element => {
+            if (element.user_type == 'NATURAL') {
+              element.user_type = 'حقیقی'
+            }
+            if (element.user_type == 'LEGAL') {
+              element.user_type = 'حقوقی'
+            }
+          });
+        })
+        .catch((errors) => {
+        });
+    }
+  },
 };
 </script>
