@@ -10,6 +10,7 @@
           label="جستجوی مشتری"
           single-line
           hide-details
+          class="search-text"
         ></v-text-field>
       </v-card-title>
       <v-data-table
@@ -25,10 +26,14 @@
 </template>
 
 <script>
+import workingGroupsModal from "~/components/workGroupModal";
 export default {
+  components: {
+    workingGroupsModal,
+  },
   data() {
     return {
-      emoji: '\U+1F600',
+      emoji: "U+1F600",
       customerDetail: [],
       totalDesserts: 0,
       search: "",
@@ -36,7 +41,7 @@ export default {
       options: {},
       headers: [
         {
-          text: 'کد مشتری',
+          text: "کد مشتری",
           align: "start",
           sortable: false,
           value: "client_code",
@@ -51,27 +56,39 @@ export default {
       ],
     };
   },
+  mounted() {
+    const thisClass = this;
+    document
+      .getElementsByClassName("search-text")[0]
+      .addEventListener("keypress", function (e) {
+        if (e.key == "Enter") {
+          thisClass.getCustomer(this.search);
+        }
+      });
+  },
   created() {
-    this.getCustomer()
+    this.getCustomer();
   },
   methods: {
-    getCustomer() {
-      return this.$axios
-        .$get("client-detail/index")
+    getCustomer(search = "") {
+      this.$nuxt.$loading.start();
+      this.$axios
+        .$get("client-detail/index?searchTerm=" + this.search)
         .then((res) => {
+          this.$nuxt.$loading.finish();
+          res = res.data;
           this.customerDetail = res;
-          res.forEach(element => {
-            if (element.user_type == 'NATURAL') {
-              element.user_type = 'حقیقی'
+          res.forEach((element) => {
+            if (element.user_type == "NATURAL") {
+              element.user_type = "حقیقی";
             }
-            if (element.user_type == 'LEGAL') {
-              element.user_type = 'حقوقی'
+            if (element.user_type == "LEGAL") {
+              element.user_type = "حقوقی";
             }
           });
         })
-        .catch((errors) => {
-        });
-    }
+        .catch((errors) => {});
+    },
   },
 };
 </script>

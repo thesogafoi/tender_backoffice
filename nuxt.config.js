@@ -81,7 +81,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     "@nuxtjs/axios",
     "@nuxtjs/pwa",
-    "@nuxtjs/auth-next"
+    "@nuxtjs/auth-next",
   ],
   /*
    ** Axios module configuration
