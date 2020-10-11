@@ -88,7 +88,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: "http://0b5f4bb43989.ngrok.io/api/"
+    baseURL: "http://00b863dfa135.ngrok.io/api/"
   },
   /*
    ** vuetify module configuration
