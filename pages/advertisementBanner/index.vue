@@ -123,45 +123,57 @@ export default {
       bannersData: [],
       dialog: false,
       bannerData: {
-        title: '',
-        link: '',
-        start_date: '',
-        expire_date: '',
-        hasButton: null
+        title: "",
+        link: "",
+        start_date: "",
+        expire_date: "",
+        hasButton: null,
       },
       headers: [
         {
-          text: 'کد آگهی', value: 'id', align: 'right'
+          text: "کد آگهی",
+          value: "id",
+          align: "right",
         },
         {
-          text: 'عنوان تبلیغات', value: 'title', align: 'center'
+          text: "عنوان تبلیغات",
+          value: "title",
+          align: "center",
         },
         {
-          text: 'تاریخ شروع', value: 'start_date', align: 'center'
+          text: "تاریخ شروع",
+          value: "start_date",
+          align: "center",
         },
         {
-          text: 'تاریخ پایان', value: 'expire_date', align: 'center'
+          text: "تاریخ پایان",
+          value: "expire_date",
+          align: "center",
         },
         {
-          text: 'تعداد کلیک های انجام شده', value: 'click_count', align: 'center'
+          text: "تعداد کلیک های انجام شده",
+          value: "click_count",
+          align: "center",
         },
         {
-          text: 'ابزارها', value: 'actions', align: 'center'
+          text: "ابزارها",
+          value: "actions",
+          align: "center",
         },
-      ]
-    }
+      ],
+    };
   },
   created() {
-    this.getBanners()
+    this.getBanners();
   },
   methods: {
     clearBannerData() {
-      this.bannerData.title = '',
-        this.bannerData.link = '',
-        this.bannerData.start_date = '',
-        this.bannerData.expire_date = '',
-        this.bannerData.hasButton = null,
-        this.previewImage = ''
+      (this.bannerData.title = ""),
+        (this.bannerData.link = ""),
+        (this.bannerData.start_date = ""),
+        (this.bannerData.expire_date = ""),
+        (this.bannerData.hasButton = null),
+        (this.previewImage = "");
     },
     pickFile() {
       let input = this.$refs.fileInput;
@@ -176,47 +188,43 @@ export default {
       }
     },
     closeAddItem() {
-      this.clearBannerData()
-      this.dialog = false
+      this.clearBannerData();
+      this.dialog = false;
     },
 
     createBanner() {
+      this.$nuxt.$loading.start();
+      this.dialog = false;
       return this.$axios
-        .$post(
-          'banner/create', this.bannerData,
-        )
+        .$post("banner/create", this.bannerData)
         .then((response) => {
-          this.dialog = false
-          this.clearBannerData()
+          this.$nuxt.$loading.finish();
+          this.clearBannerData();
           let input = this.$refs.fileInput;
           let imageFile = input.files[0];
           if (typeof imageFile == "object") {
             this.saveImage(response.banner_id);
           }
           this.$nuxt.$loading.finish();
-          this.getBanners()
+          this.getBanners();
         });
     },
     getBanners() {
       return this.$axios
-        .$get('banner/index-back-office')
+        .$get("banner/index-back-office")
         .then((response) => {
           if (response.message == "There is no banner") {
           } else {
             this.bannersData = response;
           }
-
         })
-        .catch((e) => {
-
-        });
+        .catch((e) => {});
     },
     saveImage(id) {
       this.$nuxt.$loading.start();
       this.isLoading = true;
       let input = this.$refs.fileInput;
       let imageFile = input.files[0];
-      console.log("something");
       let formData = new FormData();
       formData.append("image_file", imageFile);
       this.$axios
@@ -235,8 +243,8 @@ export default {
           );
         });
     },
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>

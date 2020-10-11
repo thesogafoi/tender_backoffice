@@ -2,7 +2,6 @@
   <div>
     <v-card>
       <v-card-title>
-        <span class="font-16"> &#127481; &#127479; </span>
         <v-spacer></v-spacer>
         <v-text-field
           v-model="search"
@@ -19,7 +18,14 @@
         :options.sync="options"
         :server-items-length="customerDetail"
         class="elevation-1"
+        :loading="loading"
       >
+        <template v-slot:item.options="{ item }">
+          <div class="" style="cursor: pointer" @click="singleAdvertise(item)">
+            <v-icon small color="primary" class="mr-2">mdi-pencil</v-icon>
+            <deleteConfirmationDialog />
+          </div>
+        </template>
       </v-data-table>
     </v-card>
   </div>
@@ -52,7 +58,7 @@ export default {
         { text: "تاریخ ثبت‌ نام", value: "register_date" },
         { text: "نوع کاربر", value: "user_type" },
         { text: "تلفن", value: "tel" },
-        { text: "گزینه‌ها", value: "options" },
+        { text: "ابزارها", value: "options" },
       ],
     };
   },
@@ -70,12 +76,16 @@ export default {
     this.getCustomer();
   },
   methods: {
+    singleAdvertise(item) {
+      console.log(item);
+      this.$router.push("customerSingle/" + item.client_code);
+    },
     getCustomer(search = "") {
-      this.$nuxt.$loading.start();
+      this.loading = true;
       this.$axios
         .$get("client-detail/index?searchTerm=" + this.search)
         .then((res) => {
-          this.$nuxt.$loading.finish();
+          this.loading = false;
           res = res.data;
           this.customerDetail = res;
           res.forEach((element) => {
@@ -87,7 +97,9 @@ export default {
             }
           });
         })
-        .catch((errors) => {});
+        .catch((errors) => {
+          this.loading = false;
+        });
     },
   },
 };
