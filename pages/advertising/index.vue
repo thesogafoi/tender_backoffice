@@ -603,9 +603,10 @@
 
 <script>
 import searchOnWorkGroupsMixins from "~/mixins.js/searchOnWorkGroupsMixins.js";
+import workingGroupsModal from "~/components/workGroupModal";
 import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
-import workingGroupsModal from "~/components/workGroupModal";
+
 
 export default {
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
