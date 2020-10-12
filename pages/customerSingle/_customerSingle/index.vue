@@ -23,12 +23,21 @@
 
       <div>تلفن : {{ customerData.tel }}</div>
       <div>
-        <button @click="changeCustomerData">save</button>
         <button @click="workGroupModal = true">مشاهده گروه های کاری</button>
+        <div class="w-15 c-px-10">
+          <v-select
+            v-model="customerData.status"
+            :items="statusList"
+            item-value="id"
+            item-text="value"
+            label="وضعیت کاربر"
+          ></v-select>
+        </div>
         <div>
           تعداد بارهایی که گروه کاری تغییر داده شده است :
           <span v-if="customerData.work_groups_changes == null">{{ 0 }}</span>
           <span v-else>{{ customerData.work_groups_changes }}</span>
+          <button @click="updateClientDatas">save</button>
         </div>
       </div>
     </v-card>
@@ -66,17 +75,16 @@
 
 <script>
 import workingGroupsModal from "~/components/workGroupModal";
+import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
 export default {
   components: {
     workingGroupsModal,
+    deleteConfirmationDialog,
   },
   mounted() {
     this.getCustomerData();
   },
   methods: {
-    changeCustomerData() {
-      this.$axios.$post("client-detail/takeworkgroups");
-    },
     childSeleted(e) {
       this.customerData.work_groups = [];
       this.workGroupsTitle = [];
@@ -86,8 +94,35 @@ export default {
         });
       }
     },
+    resetCustomerData() {
+      this.customerData = {
+        client_code: "",
+        client_name: "",
+        company_name: "",
+        mobile: "",
+        register_date: "",
+        status: "",
+        tel: "",
+        user_type: "",
+        work_groups: [],
+      };
+    },
+    updateClientDatas() {
+      this.$nuxt.$loading.start();
+      this.$axios
+        .$put(
+          "client-detail/update/" + this.customerData.client_code,
+          this.customerData
+        )
+        .then((response) => {
+          this.$nuxt.$loading.finish();
+        })
+        .catch((error) => {
+          this.$nuxt.$loading.finish();
+        });
+    },
     getCustomerData() {
-      this.customerData = {};
+      this.resetCustomerData();
       this.$nuxt.$loading.start();
       this.$axios
         .$get("client-detail/show/" + this.$route.params.customerSingle)
@@ -102,9 +137,30 @@ export default {
   },
   data() {
     return {
+      statusList: [
+        {
+          id: "0",
+          value: "غیر فعال",
+        },
+        {
+          id: "1",
+          value: "فعال",
+        },
+      ],
+
       workGroupModal: false,
       work_groups_action: [],
-      customerData: [],
+      customerData: {
+        client_code: "",
+        client_name: "",
+        company_name: "",
+        mobile: "",
+        register_date: "",
+        status: "",
+        tel: "",
+        user_type: "",
+        work_groups: [],
+      },
       loading: false,
       paymentsHeader: [
         {
