@@ -607,7 +607,6 @@ import workingGroupsModal from "~/components/workGroupModal";
 import WorkGroupMixin from "~/mixins.js/chooseWorkGroupMixins.js";
 import deleteConfirmationDialog from "~/components/general/deleteConfirmationDialog";
 
-
 export default {
   mixins: [searchOnWorkGroupsMixins, WorkGroupMixin],
   components: {
@@ -900,35 +899,58 @@ export default {
           "red"
         );
       } else {
-        try {
-          await this.$axios
-            .$put("advertise/update/" + this.advertiseId, this.formData)
-            .then((response) => {
-              this.isLoading = false;
-              this.showSnackbar("آگهی به روز رسانی شد", "green");
-              let input = this.$refs.fileInput;
-              let imageFile = input.files[0];
-              this.$nuxt.$loading.finish();
-              if (typeof imageFile == "object") {
-                this.saveImage(response[0]);
+        let canUpdate = true;
+
+        this.formData.work_groups.map((wGId) => {
+          let wG = [];
+          Object.values(this.$store.getters["workGroups"]).map((vuexWG) => {
+            Object.values(vuexWG.children).map((vuxWGChild) => {
+              if (this.formData.type != vuxWGChild.type) {
+                canUpdate = false;
               }
-              this.editMode = false;
-              this.backToShowMode();
-              setTimeout(() => {
-                this.resetFormData();
-                this.search();
-              }, 1500);
-            })
-            .catch(() => {
-              this.$nuxt.$loading.finish();
-              this.isLoading = false;
-              Object.values(this.$store.getters["errorHandling/errors"]).map(
-                (error) => {
-                  this.showSnackbar(error[0], "red");
-                }
-              );
             });
-        } catch (error) {}
+          });
+        });
+
+        if (canUpdate) {
+          this.$nuxt.$loading.finish();
+          try {
+            await this.$axios
+              .$put("advertise/update/" + this.advertiseId, this.formData)
+              .then((response) => {
+                this.isLoading = false;
+                this.showSnackbar("آگهی به روز رسانی شد", "green");
+                let input = this.$refs.fileInput;
+                let imageFile = input.files[0];
+                this.$nuxt.$loading.finish();
+                if (typeof imageFile == "object") {
+                  this.saveImage(response[0]);
+                }
+                this.editMode = false;
+                this.backToShowMode();
+                setTimeout(() => {
+                  this.resetFormData();
+                  this.search();
+                }, 1500);
+              })
+              .catch(() => {
+                this.$nuxt.$loading.finish();
+                this.isLoading = false;
+                Object.values(this.$store.getters["errorHandling/errors"]).map(
+                  (error) => {
+                    this.showSnackbar(error[0], "red");
+                  }
+                );
+              });
+          } catch (error) {}
+        } else {
+          this.$nuxt.$loading.finish();
+          this.isLoading = false;
+          this.showSnackbar(
+            "نوع آگهی با دسته های انتخاب شده همخوانی ندارد , لطفا ابتدا دسته های کاری را حذف کرده سپس نوع آگهی را تغییر دهید",
+            "red"
+          );
+        }
       }
     },
     backToShowMode() {

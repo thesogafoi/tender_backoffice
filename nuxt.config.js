@@ -116,7 +116,7 @@ export default {
     strategies: {
       local: {
         token: {
-          property: "token"
+          property: "token",
         },
         user: {
           property: "data"
