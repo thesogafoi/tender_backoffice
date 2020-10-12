@@ -8,23 +8,33 @@
       @add_selected="childSeleted"
       type="action"
     />
-    <v-card>
-      <div>کد مشتری : {{ customerData.client_code }}</div>
+    <v-card class="c-pa-15 c-mb-20">
+      <div class="row w-100 align-center">
+        <div class="w-25 c-px-15 c-py-5">
+          <div class="font-14">کد مشتری : {{ customerData.client_code }}</div>
+        </div>
+        <div class="w-25 c-px-15 c-py-5">
+          <div class="font-14">نام : {{ customerData.client_name }}</div>
+        </div>
+        <div class="w-25 c-px-15 c-py-5">
+          <div class="font-14">نام شرکت : {{ customerData.company_name }}</div>
+        </div>
+        <div class="w-25 c-px-15 c-py-5">
+          <div class="font-14">موبایل : {{ customerData.mobile }}</div>
+        </div>
+        <div class="w-25 c-px-15 c-py-5">
+          <div class="font-14">
+            تاریخ ثبت نام : {{ customerData.register_date }}
+          </div>
+        </div>
+        <div class="w-25 c-px-15 c-py-5">
+          <div class="font-14">نوع کاربر : {{ customerData.user_type }}</div>
+        </div>
+        <div class="w-25 c-px-15 c-py-5">
+          <div class="font-14">تلفن : {{ customerData.tel }}</div>
+        </div>
 
-      <div>نام : {{ customerData.client_name }}</div>
-
-      <div>نام شرکت : {{ customerData.company_name }}</div>
-
-      <div>موبایل : {{ customerData.mobile }}</div>
-
-      <div>تاریخ ثبت نام : {{ customerData.register_date }}</div>
-
-      <div>نوع کاربر : {{ customerData.user_type }}</div>
-
-      <div>تلفن : {{ customerData.tel }}</div>
-      <div>
-        <button @click="workGroupModal = true">مشاهده گروه های کاری</button>
-        <div class="w-15 c-px-10">
+        <div class="w-25 c-px-15 c-py-5">
           <v-select
             v-model="customerData.status"
             :items="statusList"
@@ -33,11 +43,22 @@
             label="وضعیت کاربر"
           ></v-select>
         </div>
-        <div>
+        <div class="w-75 d-flex flex-wrap c-px-15 font-14">
           تعداد بارهایی که گروه کاری تغییر داده شده است :
           <span v-if="customerData.work_groups_changes == null">{{ 0 }}</span>
           <span v-else>{{ customerData.work_groups_changes }}</span>
-          <button @click="updateClientDatas">save</button>
+        </div>
+        <div class="w-25 c-px-15 c-py-5 d-flex align-center justify-end">
+          <v-btn
+            color="info"
+            dark
+            @click="workGroupModal = true"
+            class="c-ml-10"
+            >مشاهده گروه های کاری</v-btn
+          >
+          <v-btn color="success" dark @click="updateClientDatas"
+            >ذخیره اطلاعات</v-btn
+          >
         </div>
       </div>
     </v-card>
