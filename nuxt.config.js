@@ -19,17 +19,17 @@ export default {
     titleTemplate: "%s - " + process.env.npm_package_name,
     title: process.env.npm_package_name || "",
     meta: [{
-      charset: "utf-8"
-    },
-    {
-      name: "viewport",
-      content: "width=device-width, initial-scale=1"
-    },
-    {
-      hid: "description",
-      name: "description",
-      content: process.env.npm_package_description || ""
-    }
+        charset: "utf-8"
+      },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1"
+      },
+      {
+        hid: "description",
+        name: "description",
+        content: process.env.npm_package_description || ""
+      }
     ],
     link: [{
       rel: "icon",
@@ -88,7 +88,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: "http://tender-backend.localhost/api/"
+    baseURL: "https://f65687dd2915.ngrok.io/api/"
   },
   /*
    ** vuetify module configuration
@@ -116,7 +116,7 @@ export default {
     strategies: {
       local: {
         token: {
-          property: "token"
+          property: "token",
         },
         user: {
           property: "data"
