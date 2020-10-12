@@ -395,8 +395,8 @@
                 <p class="c-mb-0">
                   {{
                     singleAdvertise.status == 0
-                      ? "انتشار یافته"
-                      : "در حال بررسی"
+                      ? "در حال بررسی"
+                      : "انتشار یافته"
                   }}
                 </p>
               </v-card-text>
@@ -614,7 +614,7 @@ export default {
     deleteConfirmationDialog,
     workingGroupsModal,
   },
-  mounted() {},
+  mounted() { },
   computed: {
     formDataType() {
       return this.formData.type;
@@ -928,7 +928,7 @@ export default {
                 }
               );
             });
-        } catch (error) {}
+        } catch (error) { }
       }
     },
     backToShowMode() {
@@ -1081,9 +1081,9 @@ export default {
         this.$axios
           .$post(
             "advertise/page/get/searchable/advertises?page=" +
-              this.options.page +
-              "&items_per_page=" +
-              this.options.itemsPerPage,
+            this.options.page +
+            "&items_per_page=" +
+            this.options.itemsPerPage,
             {
               ...this.formData,
             }

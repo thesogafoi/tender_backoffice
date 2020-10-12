@@ -23,7 +23,7 @@ export default {
 <style lang="scss" scoped>
 .parent-loader {
   width: 100%;
-  position: absolute;
+  position: fixed;
   height: 100vh;
   background: #fff;
   display: flex;
