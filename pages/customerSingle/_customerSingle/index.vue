@@ -74,6 +74,9 @@ export default {
     this.getCustomerData();
   },
   methods: {
+    changeCustomerData() {
+      this.$axios.$post("client-detail/takeworkgroups");
+    },
     childSeleted(e) {
       this.customerData.work_groups = [];
       this.workGroupsTitle = [];
