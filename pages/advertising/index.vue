@@ -117,7 +117,6 @@
               prepend-inner-icon="mdi-calendar"
               label="تاریخ ارسال"
             ></v-text-field>
-            {{ formData.submit_date }}
             <custom-date-picker
               v-model="formData.submit_date"
               element="send-date"
@@ -900,7 +899,6 @@ export default {
         );
       } else {
         let canUpdate = true;
-
         this.formData.work_groups.map((wGId) => {
           let wG = [];
           Object.values(this.$store.getters["workGroups"]).map((vuexWG) => {
