@@ -903,8 +903,11 @@ export default {
           let wG = [];
           Object.values(this.$store.getters["workGroups"]).map((vuexWG) => {
             Object.values(vuexWG.children).map((vuxWGChild) => {
-              if (this.formData.type != vuxWGChild.type) {
-                canUpdate = false;
+              if (wGId == vuxWGChild.id) {
+                if (this.formData.type != vuxWGChild.type) {
+                  console.log(this.formData.type != vuxWGChild.type);
+                  canUpdate = false;
+                }
               }
             });
           });
