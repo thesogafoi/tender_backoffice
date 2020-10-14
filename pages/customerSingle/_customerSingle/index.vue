@@ -4,9 +4,10 @@
       v-if="workGroupModal"
       :modal="workGroupModal"
       @close_modal="workGroupModal = false"
-      :props_selected.sync="customerData['work_groups']"
+      :props_selected.sync="customerData.work_groups"
       @add_selected="childSeleted"
       type="action"
+      :subscription_count="customerData.subscription_count"
     />
     <v-card class="c-pa-15 c-mb-20">
       <div class="row w-100 align-center">
@@ -43,13 +44,32 @@
             label="وضعیت کاربر"
           ></v-select>
         </div>
-        <div class="w-75 d-flex flex-wrap c-px-15 font-14">
-          تعداد بارهایی که گروه کاری تغییر داده شده است :
-          <span v-if="customerData.work_groups_changes == null">{{ 0 }}</span>
-          <span v-else>{{ customerData.work_groups_changes }}</span>
+
+        <div
+          class="w-75 d-flex flex-wrap c-px-15 font-14"
+          v-if="customerData.has_plne"
+        >
+          <div>
+            تعداد بارهایی که گروه کاری تغییر داده شده است :
+            <span v-if="customerData.work_groups_changes == null">{{ 0 }}</span>
+            <span v-else>{{ customerData.work_groups_changes }}</span>
+          </div>
+          <div>
+            تعداد گروه های کاری قابل انتخاب :
+            <span v-if="customerData.subscription_count == null">{{ 0 }}</span>
+            <span v-else>{{
+              customerData.subscription_count - customerData.work_groups.length
+            }}</span>
+          </div>
+          <div>
+            نام طرح اشتراکی :
+            <span> {{ customerData.subscription_title }}</span>
+          </div>
         </div>
+
         <div class="w-25 c-px-15 c-py-5 d-flex align-center justify-end">
           <v-btn
+            v-if="customerData.has_plne"
             color="info"
             dark
             @click="workGroupModal = true"
@@ -136,9 +156,14 @@ export default {
           this.customerData
         )
         .then((response) => {
+          this.showSnackbar("تغییرات با موفقیت انجام شد", "green");
           this.$nuxt.$loading.finish();
+          this.getCustomerData();
         })
         .catch((error) => {
+          if (error.response.status == 403) {
+            this.showSnackbar(error.response.data.message, "red");
+          }
           this.$nuxt.$loading.finish();
         });
     },

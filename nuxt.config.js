@@ -88,7 +88,7 @@ export default {
    ** See https://axios.nuxtjs.org/options
    */
   axios: {
-    baseURL: "https://api.asantender.com/api/"
+    baseURL: "http://tender-backend.localhost/api/"
 
 
   },

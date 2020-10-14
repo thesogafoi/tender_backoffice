@@ -11,6 +11,11 @@
           <v-btn icon dark @click="closeModal()">
             <v-icon>mdi-close</v-icon>
           </v-btn>
+          <span v-if="subscription_count != undefined">
+            تعداد گروه های کاری قابل انتخاب :
+            <span v-if="subscription_count == null">{{ 0 }}</span>
+            <span v-else>{{ subscription_count - selected.length }} </span>
+          </span>
           <v-toolbar-title>
             <div v-if="currentTab == 'AUCTION'">مزایده</div>
             <div v-if="currentTab == 'TENDER'">مناقصه</div>
@@ -171,7 +176,7 @@
                   </div>
                 </div>
                 <div class="tab-body">
-                  <div v-if="currentTab == 'AUCTION'">
+                  <div v-show="currentTab == 'AUCTION'">
                     <v-row>
                       <v-col
                         cols="4"
@@ -180,7 +185,7 @@
                       >
                         <v-expansion-panels
                           accordion
-                          v-if="parentGroup.type == 'AUCTION'"
+                          v-show="parentGroup.type == 'AUCTION'"
                         >
                           <v-expansion-panel>
                             <v-expansion-panel-header>{{
@@ -202,7 +207,7 @@
                       </v-col>
                     </v-row>
                   </div>
-                  <div v-if="currentTab == 'TENDER'">
+                  <div v-show="currentTab == 'TENDER'">
                     <v-row>
                       <v-col
                         cols="4"
@@ -211,7 +216,7 @@
                       >
                         <v-expansion-panels
                           accordion
-                          v-if="parentGroup.type == 'TENDER'"
+                          v-show="parentGroup.type == 'TENDER'"
                         >
                           <v-expansion-panel>
                             <v-expansion-panel-header>{{
@@ -233,7 +238,7 @@
                       </v-col>
                     </v-row>
                   </div>
-                  <div v-if="currentTab == 'INQUIRY'">
+                  <div v-show="currentTab == 'INQUIRY'">
                     <v-row>
                       <v-col
                         cols="4"
@@ -242,7 +247,7 @@
                       >
                         <v-expansion-panels
                           accordion
-                          v-if="parentGroup.type == 'INQUIRY'"
+                          v-show="parentGroup.type == 'INQUIRY'"
                         >
                           <v-expansion-panel>
                             <v-expansion-panel-header>{{
@@ -276,7 +281,7 @@
 
 <script>
 export default {
-  props: ["props_selected", "modal", "type"],
+  props: ["props_selected", "modal", "type", "subscription_count"],
   mounted() {
     // this.workingGroups = this.$store.getters["workGroups"];
     this.$store.getters["workGroups"].forEach((element) => {

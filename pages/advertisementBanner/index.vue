@@ -331,12 +331,13 @@ export default {
       ],
     };
   },
-  created() {
+  mounted() {
     this.getBanners();
   },
   methods: {
     openAddModal() {
-      (this.dialog = true), this.clearBannerData();
+      this.dialog = true;
+      this.clearBannerData();
     },
     clearBannerData() {
       this.bannerData.title = "";
@@ -345,6 +346,7 @@ export default {
       this.bannerData.expire_date = "";
       this.bannerData.hasButton = null;
       this.previewImage = "";
+      console.log(this.$refs.fileInput);
     },
     pickFile() {
       let input = this.$refs.fileInput;
@@ -359,7 +361,6 @@ export default {
       }
     },
     showBanner(item) {
-      console.log(item);
       this.viewDialog = true;
       this.bannerData.title = item.title;
       this.bannerData.link = item.link;
@@ -376,7 +377,6 @@ export default {
       this.viewDialog = false;
     },
     openEditModal(item) {
-      console.log(item);
       this.editDialog = true;
       this.bannerData.title = item.title;
       this.bannerData.link = item.link;

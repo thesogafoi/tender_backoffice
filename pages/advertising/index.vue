@@ -775,18 +775,6 @@ export default {
   }),
 
   methods: {
-    // toggleAllProvinces() {
-    //   const thisClass = this;
-    //   thisClass.formData.provinces = [];
-
-    //   if (this.$refs.allProvincesCheckBox.checked) {
-    //     for (let index = 1; index <= 31; index++) {
-    //       this.formData.provinces.push(index);
-    //     }
-    //   } else {
-    //     thisClass.formData.provinces = [];
-    //   }
-    // },
     findTitle(id) {
       if (!id) return "";
       let title = "";
@@ -833,6 +821,7 @@ export default {
 
       if (this.choosed_action == 0) {
         if (this.work_groups_action.length == 0) {
+          this.$nuxt.$loading.finish();
           this.showSnackbar(
             "لطفا دسته ی کاری مورد نظر را انتخاب نمایید",
             "red"
@@ -863,13 +852,12 @@ export default {
           this.showSnackbar("تغییرات انجام شد", "green");
           this.$nuxt.$loading.finish();
         })
-        .catch((error) => {
+        .catch((errors) => {
           this.$nuxt.$loading.finish();
-          Object.values(this.$store.getters["errorHandling/errors"]).map(
-            (error) => {
-              this.showSnackbar(error[0], "red");
-            }
-          );
+
+          if (errors.response.status == 422) {
+            this.showSnackbar(errors.response.data.message, "red");
+          }
         });
     },
     actionChildSeleted(e) {
@@ -905,7 +893,6 @@ export default {
             Object.values(vuexWG.children).map((vuxWGChild) => {
               if (wGId == vuxWGChild.id) {
                 if (this.formData.type != vuxWGChild.type) {
-                  console.log(this.formData.type != vuxWGChild.type);
                   canUpdate = false;
                 }
               }
