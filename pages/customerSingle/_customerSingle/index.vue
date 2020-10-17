@@ -88,13 +88,26 @@
         <v-spacer></v-spacer>
       </v-card-title>
       <v-data-table
-        :headers="plansHeader"
-        :server-items-length="totalDesserts"
-        :items="planItems"
-        :loading="loading"
+        :single-select="false"
+        :options.sync="planeOptions"
+        :headers="planesHeader"
+        :items="clientPlanes"
+        :server-items-length="planeMeta.total"
+        :loading="planeLoader"
         disable-sort
         class="elevation-1"
-      ></v-data-table>
+      >
+        <template v-slot:item.isExpire="{ item }">
+          <span v-if="item.isExpire == 1">
+            فعال
+            <v-icon small class="mr-1" color="success">mdi-check</v-icon>
+          </span>
+          <span v-if="item.isExpire == 0">
+            منقضی شده
+            <v-icon small class="mr-1" color="red darken-4">mdi-close</v-icon>
+          </span>
+        </template>
+      </v-data-table>
     </v-card>
     <v-card class="c-mt-20">
       <v-card-title>
@@ -124,8 +137,45 @@ export default {
   },
   mounted() {
     this.getCustomerData();
+    this.getPlanes();
+  },
+  watch: {
+    planeOptions: {
+      handler() {
+        this.getPlanes().then((data) => {
+          console.log(data);
+          this.desserts = data.items;
+          this.totalDesserts = data.total;
+        });
+      },
+      deep: true,
+    },
   },
   methods: {
+    getPlanes() {
+      this.planeLoader = true;
+      const { sortBy, sortDesc, page, itemsPerPage } = this.planeOptions;
+
+      return new Promise((resolve, reject) => {
+        this.$axios
+          .$get(
+            "client-detail/planes/" +
+              this.$route.params.customerSingle +
+              "?page=" +
+              this.planeOptions.page +
+              "&items_per_page=" +
+              this.planeOptions.itemsPerPage
+          )
+          .then((res) => {
+            this.clientPlanes = res.data;
+            this.planeMeta = res;
+            this.planeLoader = false;
+          })
+          .catch((e) => {
+            this.planeLoader = false;
+          });
+      });
+    },
     childSeleted(e) {
       this.customerData.work_groups = [];
       this.workGroupsTitle = [];
@@ -183,6 +233,10 @@ export default {
   },
   data() {
     return {
+      planeMeta: {},
+      planeOptions: {},
+      planeLoader: true,
+      clientPlanes: [],
       statusList: [
         {
           id: "0",
@@ -234,26 +288,27 @@ export default {
           value: "planName",
         },
       ],
-      plansHeader: [
+      planesHeader: [
         {
           text: "نام پلن",
-          value: "planName",
+          value: "plane_title",
         },
         {
           text: "تاریخ فعال‌سازی",
-          value: "activaionDate",
+          value: "plane_submited",
         },
         {
           text: "تاریخ انقضا",
-          value: "expiryDate",
+          value: "plane_expired",
         },
         {
           text: "ارزش پلن",
-          value: "planValue",
+          value: "plane_cost",
         },
         {
-          text: "تعداد تغییرات باقی‌مانده",
-          value: "changesLeft",
+          text: "وضعیت طرح اشتراکی",
+          value: "isExpire",
+          align: "center",
         },
       ],
     };

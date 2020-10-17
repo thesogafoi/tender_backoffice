@@ -6,18 +6,11 @@
           <img class="animatedLogo c-mb-20" src="/Asan-2.png" alt />
           <h2 class="welcome mt-4 mb-4">به پنل کاربری آسان‌تندر خوش‌آمدید .</h2>
         </div>
-        <v-form
-          v-if="forgotPassword"
-          class="form-style"
-          ref="form"
-          v-model="validLogin"
-          @submit.prevent="login"
-        >
+        <v-form class="form-style" @submit.prevent="login">
           <div
             class="input-panel"
             :class="{
-              'c-mb-0': formValidate == false,
-              'c-mb-40': formValidate == true,
+              'c-mb-40': true,
             }"
           >
             <v-text-field
@@ -36,7 +29,7 @@
               @click:append="show3 = !show3"
             ></v-text-field>
           </div>
-          <p class="validation-alert text-center" v-if="formValidate == false">
+          <p class="validation-alert text-center">
             {{ errorMessage }}
           </p>
           <v-btn block color="primary" class="my-3" type="submit"
@@ -56,12 +49,10 @@ export default {
   auth: false,
   data() {
     return {
-      errorMessage: "رمز عبور یا تلفن اشتباه است",
+      errorMessage: "",
       show3: false,
       formValidate: true,
-      validLogin: true,
-      validForgotPassword: true,
-      forgotPassword: true,
+
       loginData: {
         mobile: "",
         password: "",
@@ -78,37 +69,31 @@ export default {
       ],
     };
   },
-
+  created() {},
   methods: {
-    validateForgotPassword() {
-      this.$refs.form.validate();
-    },
-    checkValidation() {
-
-    },
     async login() {
-      var validate = this.$refs.form.validate();
-      if (!this.$refs.form.validate()) {
-        this.formValidate = false
-      } else {
-        this.formValidate = true
-      }
-      if (!validate) return;
-
       try {
+        this.$nuxt.$loading.start();
         let response = await this.$auth
           .loginWith("local", {
             data: this.loginData,
           })
+          .then((response) => {
+            this.errorMessage = "";
+            this.$nuxt.$loading.finish();
+          })
           .catch((error) => {
+            this.$nuxt.$loading.finish();
             if (error.response.status == 401) {
-              this.errorMessage = "شماره موبایل یا رمز عبور نادرست است";
+              this.errorMessage = "اطلاعات وارد شده صحیح نمیباشد";
+            }
+
+            if (error.response.status == 422) {
+              this.errorMessage = "لطفا تمامی فیلد ها را کامل کنید";
             }
           });
         this.$router.push("/dashboard");
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     },
   },
 };

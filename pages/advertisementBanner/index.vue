@@ -8,8 +8,9 @@
       :headers="headers"
       :loading="loading"
       :options.sync="options"
+      :server-items-length="meta.total"
       :footer-props="{
-        'items-per-page-options': [10, 20, 30, 40, 50],
+        'items-per-page-options': [5, 10, 20, 30, 40],
       }"
     >
       <template v-slot:top>
@@ -246,6 +247,8 @@
                         class="c-uploader-input"
                         @input="pickFile"
                       />
+                      <br />
+                      <img :src="bannerData.image_file" alt="" width="150" />
                     </v-col>
                   </v-row>
                 </v-container>
@@ -273,6 +276,18 @@
           >
         </div>
       </template>
+      <template v-slot:item.isExpire="{ item }">
+        <v-icon small class="mr-1" color="success" v-if="item.isExpire == 0"
+          >mdi-check</v-icon
+        >
+        <v-icon
+          small
+          class="mr-1"
+          color="red darken-4"
+          v-if="item.isExpire == 1"
+          >mdi-close</v-icon
+        >
+      </template>
     </v-data-table>
   </div>
 </template>
@@ -285,9 +300,13 @@ export default {
   },
   data() {
     return {
+      previewImage: "",
       viewDialog: false,
       editDialog: false,
       banner_id: null,
+      loading: true,
+      meta: {},
+      options: {},
       bannersData: [],
       dialog: false,
       bannerData: {
@@ -328,8 +347,46 @@ export default {
           value: "actions",
           align: "center",
         },
+        {
+          text: "وضعیت",
+          value: "isExpire",
+          align: "center",
+        },
       ],
     };
+  },
+
+  watch: {
+    dialog() {
+      if (this.dialog == true) {
+        if (this.$refs.fileInput != undefined) {
+          this.$refs.fileInput.value = "";
+        }
+      }
+    },
+    editDialog() {
+      if (this.editDialog == true) {
+        if (this.$refs.fileInput != undefined) {
+          this.$refs.fileInput.value = "";
+        }
+      }
+    },
+    viewDialog() {
+      if (this.viewDialog == true) {
+        if (this.$refs.fileInput != undefined) {
+          this.$refs.fileInput.value = "";
+        }
+      }
+    },
+    options: {
+      handler() {
+        this.getBanners().then((data) => {
+          this.desserts = data.items;
+          this.totalDesserts = data.total;
+        });
+      },
+      deep: true,
+    },
   },
   mounted() {
     this.getBanners();
@@ -346,7 +403,6 @@ export default {
       this.bannerData.expire_date = "";
       this.bannerData.hasButton = null;
       this.previewImage = "";
-      console.log(this.$refs.fileInput);
     },
     pickFile() {
       let input = this.$refs.fileInput;
@@ -377,13 +433,18 @@ export default {
       this.viewDialog = false;
     },
     openEditModal(item) {
-      this.editDialog = true;
-      this.bannerData.title = item.title;
-      this.bannerData.link = item.link;
-      this.bannerData.start_date = item.start_date;
-      this.bannerData.expire_date = item.expire_date;
-      this.bannerData.hasButton = item.hasButton;
-      this.bannerData.id = item.id;
+      this.$nuxt.$loading.start();
+      this.clearBannerData();
+      this.$axios
+        .$get("banner/" + item.id)
+        .then((data) => {
+          Object.assign(this.bannerData, data[0]);
+          this.$nuxt.$loading.finish();
+          this.editDialog = true;
+        })
+        .catch((errors) => {
+          this.$nuxt.$loading.finish();
+        });
     },
     editBanner() {
       this.$axios
@@ -407,7 +468,6 @@ export default {
     },
     createBanner() {
       this.$nuxt.$loading.start();
-
       return this.$axios
         .$post("banner/create", this.bannerData)
         .then((response) => {
@@ -430,15 +490,28 @@ export default {
         });
     },
     getBanners() {
-      return this.$axios
-        .$get("banner/index-back-office")
-        .then((response) => {
-          if (response.message == "There is no banner") {
-          } else {
-            this.bannersData = response;
-          }
-        })
-        .catch((e) => {});
+      this.loading = true;
+      return new Promise((resolve, reject) => {
+        const { sortBy, sortDesc, page, itemsPerPage } = this.options;
+        this.$axios
+          .$get(
+            "banner/index-back-office?page=" +
+              this.options.page +
+              "&items_per_page=" +
+              this.options.itemsPerPage
+          )
+          .then((response) => {
+            this.loading = false;
+            if (response.message == "There is no banner") {
+            } else {
+              this.bannersData = response.data;
+              this.meta = response;
+            }
+          })
+          .catch((e) => {
+            this.loading = false;
+          });
+      });
     },
     saveImage(id) {
       this.$nuxt.$loading.start();
@@ -451,6 +524,7 @@ export default {
         .$post("banner/save/image/" + id, formData)
         .then((response) => {
           this.isLoading = false;
+          this.showSnackbar("تبلیغ مورد نظر به روز رسانی شد", "green");
           this.$nuxt.$loading.finish();
         })
         .catch((error) => {

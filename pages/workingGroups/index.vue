@@ -61,12 +61,12 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12" class="c-py-0">
-                  <!-- <v-file-input
-                  @change="onFileChange"
-                  v-model="editedItem.image"
-                  accept="image/*"
-                  label="File input"
-                  ></v-file-input>-->
+                  <input
+                    accept="image/x-png,image/gif,image/jpeg"
+                    ref="fileInputCreate"
+                    type="file"
+                    class="c-uploader-input"
+                  />
                 </v-col>
               </v-row>
               <v-card-actions>
@@ -205,12 +205,13 @@
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="12" class="c-py-0">
-                  <!-- <v-file-input
-                  @change="onFileChange"
-                  v-model="editedItem.image"
-                  accept="image/*"
-                  label="File input"
-                ></v-file-input>-->
+                  <input
+                    accept="image/x-png,image/gif,image/jpeg"
+                    ref="fileInputEdit"
+                    type="file"
+                    class="c-uploader-input"
+                  />
+                  <img :src="editedItem.image" alt="" width="150" />
                 </v-col>
               </v-row>
               <v-card-actions>
@@ -358,12 +359,24 @@
             >ورود اطلاعت با اکسل</label
           >
         </div>
-        <div>
+      </v-card-actions>
+      <br />
+      <v-card-actions class="justify-end c-pt-0 align-center">
+        <div class="c-mr-10">
           <label
             for="export_excel"
             @click.prevent="getExcel"
             class="uploader-button"
-            >دریافت اطلاعات با اکسل</label
+            >دریافت اطلاعات دسته های اصلی
+          </label>
+        </div>
+
+        <div class="c-mr-10">
+          <label
+            for="export_excel"
+            @click.prevent="getAllExcel"
+            class="uploader-button"
+            >دریافت تمامی اطلاعت دسته ها</label
           >
         </div>
       </v-card-actions>
@@ -391,7 +404,12 @@
         </template>
         <template v-slot:item.image="{ item }">
           <v-avatar size="36px">
-            <img src="https://placehold.co/30x30" alt="John" />
+            <img
+              v-if="item.image == null"
+              src="https://placehold.co/30x30"
+              alt="John"
+            />
+            <img v-else :src="item.image" alt="John" />
           </v-avatar>
         </template>
         <template v-slot:item.type="{ item }">
@@ -496,9 +514,9 @@
       </v-data-table>
     </v-card>
     <!-- edit main dialog -->
-
-    <!-- edit main dialog end -->
   </div>
+
+  <!-- edit main dialog end -->
 </template>
 
 <script>
@@ -524,10 +542,29 @@ export default {
     },
   },
   methods: {
-    async getExcel() {
+    async getAllExcel() {
       this.$nuxt.$loading.start();
       return this.$axios
         .$get("workgroups/as/excel")
+        .then((response) => {
+          var fileURL = window.URL.createObjectURL(new Blob([response.url]));
+          var fileLink = document.createElement("a");
+          fileLink.href = response.url;
+          fileLink.setAttribute("download", "AsanTenderWorkGroups.xlsx");
+          fileLink.setAttribute("target", "_blank");
+          document.body.appendChild(fileLink);
+          this.$nuxt.$loading.finish();
+          fileLink.click();
+        })
+        .catch((error) => {
+          this.$nuxt.$loading.finish();
+          console.log(error);
+        });
+    },
+    async getExcel() {
+      this.$nuxt.$loading.start();
+      return this.$axios
+        .$get("parent/workgroups/as/excel")
         .then((response) => {
           var fileURL = window.URL.createObjectURL(new Blob([response.url]));
           var fileLink = document.createElement("a");
@@ -655,48 +692,78 @@ export default {
     reloadPage() {
       window.location.reload();
     },
+    saveImage(id, file) {
+      this.$nuxt.$loading.start();
+      this.isLoading = true;
+      let formData = new FormData();
+      formData.append("image", file);
+      this.$axios
+        .$post("workgroup/save/image/" + id, formData)
+        .then((response) => {
+          this.isLoading = false;
+          this.showSnackbar(
+            "دسته های کاری با موفقیت به روز رسانی شده اند",
+            "green"
+          );
+          this.$nuxt.$loading.finish();
+        })
+        .catch((errors) => {
+          console.log(errors);
+          this.$nuxt.$loading.finish();
+          this.isLoading = false;
+          Object.values(this.$store.getters["errorHandling/errors"]).map(
+            (error) => {
+              this.showSnackbar(error[0], "red");
+            }
+          );
+        });
+    },
     save(type) {
       this.$nuxt.$loading.start();
       this.isLoading = true;
-      try {
-        if (type == "child") {
-          if (
-            this.editedItem.parent_id == "" ||
-            this.editedItem.parent_id == null ||
-            this.editedItem.parent_id.length == 0
-          ) {
-            this.showSnackbar("لطفا سرگروه را انتخاب کنید", "red");
-            return;
-          } else {
-            this.editedItem.parent_id = this.editedItem.parent_id.id;
-          }
+      if (type == "child") {
+        if (
+          this.editedItem.parent_id == "" ||
+          this.editedItem.parent_id == null ||
+          this.editedItem.parent_id.length == 0
+        ) {
+          this.showSnackbar("لطفا سرگروه را انتخاب کنید", "red");
+          return;
+        } else {
+          this.editedItem.parent_id = this.editedItem.parent_id.id;
         }
-        this.$axios
-          .$post("workgroup/create", this.editedItem)
-          .then((res) => {
-            this.$nuxt.$loading.finish();
-            this.isLoading = false;
-            this.showSnackbar("گروه کاری با موفقیت اضافه شد", "green");
-            this.resetFormData();
-            this.refreshWorkGroup();
-            this.dialog = false;
-            this.dialogEdit = false;
-            setTimeout(() => {
-              this.workGroupSearch();
-            }, 1500);
-          })
-          .catch((errors) => {
-            this.$nuxt.$loading.finish();
-            this.isLoading = false;
-            Object.values(this.$store.getters["errorHandling/errors"]).map(
-              (error) => {
-                this.showSnackbar(error[0], "red");
-              }
-            );
-          });
-      } catch (error) {
-        this.$nuxt.$loading.finish();
       }
+      this.$axios
+        .$post("workgroup/create", this.editedItem)
+        .then((res) => {
+          this.$nuxt.$loading.finish();
+          this.isLoading = false;
+          let input = this.$refs.fileInputCreate[0];
+
+          let imageFile = input.files[0];
+
+          if (typeof imageFile == "object") {
+            this.saveImage(res[0], imageFile);
+          }
+          this.showSnackbar("گروه کاری با موفقیت اضافه شد", "green");
+          this.resetFormData();
+          this.refreshWorkGroup();
+          this.dialog = false;
+          this.dialogEdit = false;
+          setTimeout(() => {
+            this.workGroupSearch();
+          }, 1500);
+        })
+        .catch((errors) => {
+          this.$nuxt.$loading.finish();
+          this.isLoading = false;
+          Object.values(this.$store.getters["errorHandling/errors"]).map(
+            (error) => {
+              this.showSnackbar(error[0], "red");
+            }
+          );
+        });
+
       // this.$refs.form.resetValidation();
     },
     async update(type) {
@@ -720,6 +787,11 @@ export default {
           .then((res) => {
             this.$nuxt.$loading.finish();
             this.isLoading = false;
+            let input = this.$refs.fileInputEdit;
+            let imageFile = input.files[0];
+            if (typeof imageFile == "object" && type == "parent") {
+              this.saveImage(this.editedItem.id, imageFile);
+            }
             this.showSnackbar("گروه کاری با موفقیت تغییر یافت", "green");
             this.resetFormData();
             this.refreshWorkGroup();
@@ -779,11 +851,11 @@ export default {
       dialogEdit: false,
       statusList: [
         {
-          id: "0",
+          id: 0,
           value: "در حال بررسی",
         },
         {
-          id: "1",
+          id: 1,
           value: "انتشار یافته",
         },
       ],

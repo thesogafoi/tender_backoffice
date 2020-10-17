@@ -119,6 +119,7 @@ export default {
       local: {
         token: {
           property: "token",
+          maxAge: 60 * 60 * 24 * 30 * 8
         },
         user: {
           property: "data"
