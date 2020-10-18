@@ -29,7 +29,12 @@
           </div>
         </div>
         <div class="w-25 c-px-15 c-py-5">
-          <div class="font-14">نوع کاربر : {{ customerData.user_type }}</div>
+          <div class="font-14">
+            نوع کاربر :
+            <span v-if="customerData.user_type == 'NATURAL'">حقیقی</span>
+            <span v-if="customerData.user_type == 'LEGAL'">حقوقی</span>
+            <span v-if="customerData.user_type == 'COMPANY'">شرکتی</span>
+          </div>
         </div>
         <div class="w-25 c-px-15 c-py-5">
           <div class="font-14">تلفن : {{ customerData.tel }}</div>

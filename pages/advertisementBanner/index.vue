@@ -491,8 +491,8 @@ export default {
     },
     getBanners() {
       this.loading = true;
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options;
       return new Promise((resolve, reject) => {
-        const { sortBy, sortDesc, page, itemsPerPage } = this.options;
         this.$axios
           .$get(
             "banner/index-back-office?page=" +
