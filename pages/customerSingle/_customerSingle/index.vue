@@ -51,28 +51,28 @@
         </div>
 
         <div
-          class="w-75 d-flex flex-wrap c-px-15 font-14"
+          class="w-100 d-flex flex-wrap c-px-15 font-14"
           v-if="customerData.has_plne"
         >
-          <div>
+          <div class="w-25 c-pl-15">
             تعداد بارهایی که گروه کاری تغییر داده شده است :
             <span v-if="customerData.work_groups_changes == null">{{ 0 }}</span>
             <span v-else>{{ customerData.work_groups_changes }}</span>
           </div>
-          <div>
+          <div class="w-25 c-px-10">
             تعداد گروه های کاری قابل انتخاب :
             <span v-if="customerData.subscription_count == null">{{ 0 }}</span>
             <span v-else>{{
               customerData.subscription_count - customerData.work_groups.length
             }}</span>
           </div>
-          <div>
+          <div class="w-25 c-px-10">
             نام طرح اشتراکی :
             <span> {{ customerData.subscription_title }}</span>
           </div>
         </div>
 
-        <div class="w-25 c-px-15 c-py-5 d-flex align-center justify-end">
+        <div class="w-100 c-px-15 c-py-5 d-flex align-center justify-end">
           <v-btn
             v-if="customerData.has_plne"
             color="info"
