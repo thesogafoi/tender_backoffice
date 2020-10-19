@@ -250,8 +250,8 @@
                 <p class="c-mb-0">
                   {{
                     singleAdvertise.status == 0
-                      ? "انتشار یافته"
-                      : "در حال بررسی"
+                      ? "در حال بررسی"
+                      : "انتشار یافته"
                   }}
                 </p>
               </v-card-text>
@@ -346,7 +346,7 @@
             <v-card>
               <v-card-text class="d-flex c-py-10 flex-wrap">
                 <h4 class="rtl c-ml-5">تاریخ بازگشایی:</h4>
-                <p class="c-mb-0">{{ singleAdvertise.free_date }}</p>
+                <p class="c-mb-0">{{ singleAdvertise.start_date }}</p>
               </v-card-text>
             </v-card>
           </div>
@@ -362,7 +362,7 @@
             <v-card>
               <v-card-text class="d-flex c-py-10 flex-wrap">
                 <h4 class="rtl c-ml-5">رایگان از تاریخ:</h4>
-                <p class="c-mb-0">{{ singleAdvertise.start_date }}</p>
+                <p class="c-mb-0">{{ singleAdvertise.free_date }}</p>
               </v-card-text>
             </v-card>
           </div>
