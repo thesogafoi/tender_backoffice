@@ -236,14 +236,18 @@
         </v-row>
       </v-form>
       <v-card-actions class="justify-end c-pt-0">
-        <div class="w-25 c-mr-20 d-flex align-center" v-if="!editMode">
+        <div
+          class="w-25 c-mr-20 d-flex align-center"
+          v-if="!editMode && afterStaff()"
+        >
           <v-select
             :items="activityDrop"
             v-model="choosed_action"
             item-text="name"
             item-value="id"
             label="عملیات"
-          ></v-select>
+          >
+          </v-select>
           <v-btn
             color="primary "
             type="button"
@@ -253,6 +257,7 @@
             >اعمال تغییرات</v-btn
           >
         </div>
+
         <v-spacer></v-spacer>
         <div v-if="editMode">
           <v-btn
@@ -285,6 +290,7 @@
           >
 
           <v-btn
+            v-if="afterStaff()"
             :disabled="!valid || isLoading"
             color="success"
             type="button"
@@ -298,10 +304,11 @@
               type="file"
               name="uploadfile"
               id="img"
+              v-if="afterStaff()"
               @change="onFileChange"
               style="display: none"
             />
-            <label for="img" class="uploader-button"
+            <label v-if="afterStaff()" for="img" class="uploader-button"
               >ورود اطلاعات با اکسل</label
             >
           </div>
@@ -345,14 +352,35 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <div class="buttons-container">
-            <v-icon
-              small
-              class="mr-1"
-              color="blue lighten-2"
-              @click="turnToEditMode(item)"
-              >mdi-pencil</v-icon
-            >
-            <deleteConfirmationDialog @delete="deleteItem(item)" />
+            <span v-if="!afterAdmin()">
+              <v-icon
+                v-if="item.status != 1"
+                small
+                class="mr-1"
+                color="blue lighten-2"
+                @click="turnToEditMode(item)"
+                >mdi-pencil</v-icon
+              >
+            </span>
+            <span v-else>
+              <v-icon
+                small
+                class="mr-1"
+                color="blue lighten-2"
+                @click="turnToEditMode(item)"
+                >mdi-pencil</v-icon
+              >
+            </span>
+
+            <span v-if="!afterAdmin()">
+              <deleteConfirmationDialog
+                @delete="deleteItem(item)"
+                v-if="item.status != 1"
+              />
+            </span>
+            <span v-else>
+              <deleteConfirmationDialog @delete="deleteItem(item)" />
+            </span>
 
             <v-icon small class="mr-1" @click="showItem(item)">mdi-eye</v-icon>
           </div>
@@ -807,21 +835,33 @@ export default {
         this.advertises_action.length == 0 ||
         this.choosed_action.length == 0
       ) {
+        this.$nuxt.$loading.finish();
         this.showSnackbar(
           "لطفا آگهی ها یا عملیات مورد نظر را انتخاب کنید",
           "red"
         );
+
+        return (this.workGroupModalAction = false);
+      }
+      try {
+        this.advertises_action.forEach((advertise) => {
+          if (advertise.status == 1 && !this.afterAdmin()) {
+            throw BreakException;
+          }
+          advertiseId.push(advertise.id);
+        });
+      } catch (error) {
+        this.showSnackbar("آگهی انتشار یافته نمیتواند تغییر کند", "red");
+        this.$nuxt.$loading.finish();
         return;
       }
-      this.advertises_action.forEach((advertise) => {
-        advertiseId.push(advertise.id);
-      });
       // we need axio here
       let requestData = {};
 
       if (this.choosed_action == 0) {
         if (this.work_groups_action.length == 0) {
           this.$nuxt.$loading.finish();
+          advertiseId = [];
           this.showSnackbar(
             "لطفا دسته ی کاری مورد نظر را انتخاب نمایید",
             "red"
@@ -845,8 +885,8 @@ export default {
       this.$axios
         .$post("advertises/action", requestData)
         .then((response) => {
-          this.advertises_action = [];
           this.work_groups_action = [];
+          this.advertises_action = [];
           this.action = "";
           this.getDataFromApi();
           this.showSnackbar("تغییرات انجام شد", "green");
@@ -854,7 +894,8 @@ export default {
         })
         .catch((errors) => {
           this.$nuxt.$loading.finish();
-
+          this.choosed_action = "";
+          advertiseId = [];
           if (errors.response.status == 422) {
             this.showSnackbar(errors.response.data.message, "red");
           }

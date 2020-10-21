@@ -69,16 +69,10 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6" class="c-py-0">
-                      <custom-date-picker
-                        label="تاریخ انقضا"
-                        v-model="editedItem.period"
-                        element="my-custom-input"
-                      ></custom-date-picker>
                       <v-text-field
                         v-model="editedItem.period"
-                        id="my-custom-input"
-                        type="text"
-                        label="تاریخ انقضا"
+                        type="number"
+                        label="مدت زمان (به روز)"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -101,7 +95,13 @@
           </v-dialog>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="success" dark class="mb-2" v-bind="attrs" v-on="on"
+              <v-btn
+                color="success"
+                v-if="afterAdmin()"
+                dark
+                class="mb-2"
+                v-bind="attrs"
+                v-on="on"
                 >اضافه کردن</v-btn
               >
             </template>
@@ -154,16 +154,10 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="6" class="c-py-0">
-                      <custom-date-picker
-                        label="تاریخ انقضا"
-                        v-model="editedItem.period"
-                        element="my-custom-input"
-                      ></custom-date-picker>
                       <v-text-field
                         v-model="editedItem.period"
-                        id="my-custom-input"
-                        type="text"
-                        label="تاریخ انقضا"
+                        type="number"
+                        label="مدت زمان (به روز)"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -185,10 +179,18 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <div class="buttons-container">
-          <v-icon small color="primary" class="mr-2" @click="editItem(item)"
+          <v-icon
+            small
+            color="primary"
+            v-if="afterAdmin()"
+            class="mr-2"
+            @click="editItem(item)"
             >mdi-pencil</v-icon
           >
-          <deleteConfirmationDialog @delete="deleteItem(item)" />
+          <deleteConfirmationDialog
+            @delete="deleteItem(item)"
+            v-if="afterAdmin()"
+          />
         </div>
       </template>
     </v-data-table>
@@ -233,7 +235,7 @@ export default {
         sortable: false,
       },
       { text: "ارزش پلن", value: "cost", sortable: false },
-      { text: "تاریخ انقضا", value: "period", sortable: false },
+      { text: "مدت زمان (به روز)", value: "period", sortable: false },
       { text: "اولویت", value: "priorty", sortable: false },
       { text: "ابزار", value: "actions", sortable: false, align: "center" },
     ],
@@ -290,10 +292,12 @@ export default {
       return new Promise((resolve, reject) => {
         this.$axios
           .$get(
-            `subscription?page=${this.options.page === undefined ? 1 : this.options.page
-            }&items_per_page=${this.options.itemsPerPage === undefined
-              ? 10
-              : this.options.itemsPerPage
+            `subscription?page=${
+              this.options.page === undefined ? 1 : this.options.page
+            }&items_per_page=${
+              this.options.itemsPerPage === undefined
+                ? 10
+                : this.options.itemsPerPage
             }`
           )
           .then((response) => {

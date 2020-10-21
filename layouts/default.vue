@@ -19,8 +19,22 @@
           router
           dir="ltr"
         >
-          <v-list-item-title class="nav-icon" v-text="item.title" />
-          <v-icon>{{ item.icon }}</v-icon>
+          <div
+            class="d-flex justify-space-between w-100 align-center"
+            v-if="afterStaff"
+          >
+            <v-list-item-title class="nav-icon" v-text="item.title" />
+            <v-icon>{{ item.icon }}</v-icon>
+          </div>
+          <div v-else>
+            <div
+              class="d-flex justify-space-between w-100 align-center"
+              v-if="to != '/staffAndAccess'"
+            >
+              <v-list-item-title class="nav-icon" v-text="item.title" />
+              <v-icon>{{ item.icon }}</v-icon>
+            </div>
+          </div>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -71,6 +85,7 @@
 
 <script>
 export default {
+  middleware: ["checkLogin"],
   methods: {
     async logOut() {
       await this.$auth.logout();
@@ -129,26 +144,11 @@ export default {
           title: "کد تخفیف",
           to: "/discountCode",
         },
-        // {
-        //   icon: "mdi-post-outline",
-        //   title: "تبلیغات",
-        //   to: "/publicity",
-        // },
-        // {
-        //   icon: "mdi-ticket-account",
-        //   title: "آگهی گذار",
-        //   to: "/adTransition",
-        // },
         {
           icon: "mdi-account",
           title: "کارمندان و دسترسی ها",
           to: "/staffAndAccess",
         },
-        // {
-        //   icon: "mdi-cog",
-        //   title: "تنظیمات",
-        //   to: "/settings",
-        // },
       ],
       miniVariant: false,
       right: true,

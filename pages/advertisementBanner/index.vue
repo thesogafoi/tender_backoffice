@@ -17,7 +17,12 @@
         <v-toolbar flat color="white">
           <v-toolbar-title class="font-16">تبلیغات </v-toolbar-title>
           <v-spacer></v-spacer>
-          <v-btn color="success" dark class="mb-2" @click="openAddModal"
+          <v-btn
+            v-if="afterStaff()"
+            color="success"
+            dark
+            class="mb-2"
+            @click="openAddModal"
             >افزودن تبلیغ</v-btn
           >
           <v-dialog v-model="dialog" max-width="500px">

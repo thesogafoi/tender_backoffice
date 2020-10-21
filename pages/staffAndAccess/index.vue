@@ -21,7 +21,13 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn color="success" dark class="mb-2" v-bind="attrs" v-on="on"
+              <v-btn
+                v-if="afterStaff()"
+                color="success"
+                dark
+                class="mb-2"
+                v-bind="attrs"
+                v-on="on"
                 >اضافه کردن کاربر</v-btn
               >
             </template>
@@ -46,7 +52,10 @@
                         item-text="value"
                         item-value="id"
                         label="سطح دسترسی"
-                        :disabled="$auth.user.mobile == '09120751179'"
+                        :disabled="
+                          editedItem.mobile == '09120751179' &&
+                          editedItem.id != ''
+                        "
                       ></v-select>
                     </v-col>
                     <v-col cols="6">
@@ -76,11 +85,16 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <div class="d-flex align-items-center justify-center">
-          <v-icon small color="primary" class="mr-2" @click="updateuser(item)"
+          <v-icon
+            v-if="afterAdmin()"
+            small
+            color="primary"
+            class="mr-2"
+            @click="updateuser(item)"
             >mdi-pencil</v-icon
           >
           <deleteConfirmationDialog
-            v-if="$auth.user.mobile != item.mobile"
+            v-if="$auth.user.mobile != item.mobile && afterAdmin()"
             @delete="deleteUser(item)"
           />
         </div>

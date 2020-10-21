@@ -81,7 +81,11 @@
             class="c-ml-10"
             >مشاهده گروه های کاری</v-btn
           >
-          <v-btn color="success" dark @click="updateClientDatas"
+          <v-btn
+            v-if="afterStaff()"
+            color="success"
+            dark
+            @click="updateClientDatas"
             >ذخیره اطلاعات</v-btn
           >
         </div>

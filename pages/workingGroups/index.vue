@@ -332,7 +332,12 @@
         </div>
       </v-row>
       <v-card-actions class="justify-end c-pt-0 align-center">
-        <v-btn color="success" width="120" dark @click="openAdd"
+        <v-btn
+          color="success"
+          width="120"
+          dark
+          @click="openAdd"
+          v-if="afterAdmin()"
           >افزودن گروه کاری</v-btn
         >
         <v-spacer></v-spacer>
@@ -355,7 +360,10 @@
             @change="onExcelFileChange"
             style="display: none"
           />
-          <label for="import_excel" class="uploader-button c-ml-10"
+          <label
+            for="import_excel"
+            class="uploader-button c-ml-10"
+            v-if="afterAdmin()"
             >ورود اطلاعت با اکسل</label
           >
         </div>
@@ -428,11 +436,20 @@
         </template>
         <template v-slot:item.actions="{ item }">
           <div class="buttons-container">
-            <v-btn small icon color="primary" @click="openDialog(item)">
+            <v-btn
+              small
+              icon
+              color="primary"
+              v-if="afterAdmin()"
+              @click="openDialog(item)"
+            >
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
 
-            <deleteConfirmationDialog @delete="deleteItem(item)" />
+            <deleteConfirmationDialog
+              @delete="deleteItem(item)"
+              v-if="afterAdmin()"
+            />
           </div>
         </template>
         <!-- <template v-slot:expanded-item="{ headers, item }">
@@ -491,7 +508,7 @@
                       <span v-if="child.type == 'TENDER'">مناقصه</span>
                       <span v-if="child.type == 'INQUIRY'">استعلام</span>
                     </td>
-                    <td class="">
+                    <td class="" v-if="afterAdmin()">
                       <v-btn
                         small
                         icon
