@@ -194,7 +194,7 @@ export const mutations = {
 export const actions = {
   async refreshWorkGroups({ commit }) {
     let data = await this.$axios.$get('workgroup/component/index')
-    commit('SET_WORK_GROUPS', data);
+    commit('SET_WORK_GROUPS', data.data);
   },
   async nuxtServerInit({
     dispatch
