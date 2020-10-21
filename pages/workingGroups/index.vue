@@ -447,8 +447,8 @@
             </v-btn>
 
             <deleteConfirmationDialog
-              @delete="deleteItem(item)"
               v-if="afterAdmin()"
+              @delete="deleteItem(item)"
             />
           </div>
         </template>
