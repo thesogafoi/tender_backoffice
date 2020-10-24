@@ -7,11 +7,11 @@ export default {
             workGroups: [],
             statusList: [
                 {
-                    id: "0",
+                    id: 0,
                     value: "در حال بررسی",
                 },
                 {
-                    id: "1",
+                    id: 1,
                     value: "انتشار یافته",
                 },
             ],
@@ -64,6 +64,9 @@ export default {
                 if (this.filterExists(filter)) {
                     this[filter]();
                 }
+                if (this.filters.status == 0) {
+                    this.status();
+                }
             });
         },
         filterExists(filter) {
@@ -94,9 +97,11 @@ export default {
             });
         },
         status() {
-            if (this.filters.status == "") {
+
+            if (this.filters.status === "") {
                 return;
             }
+
             this.workGroups = Object.values(this.workGroups).filter(workGroup => {
                 return workGroup.status == this.filters.status
             });
@@ -105,6 +110,7 @@ export default {
             if (this.filters.type == "") {
                 return;
             }
+
             this.workGroups = Object.values(this.workGroups).filter(workGroup => {
                 return workGroup.type == this.filters.type
             });

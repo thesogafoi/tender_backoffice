@@ -559,9 +559,9 @@ export default {
     },
   },
   methods: {
-    async getAllExcel() {
+    getAllExcel() {
       this.$nuxt.$loading.start();
-      return this.$axios
+      this.$axios
         .$get("workgroups/as/excel")
         .then((response) => {
           var fileURL = window.URL.createObjectURL(new Blob([response.url]));
@@ -848,6 +848,9 @@ export default {
             }, 1500);
           })
           .catch((errors) => {
+            if (this.$store.getters["errorHandling/status"]) {
+              this.showSnackbar("فرمت اکسل وارد شده صحیح نمیباشد", "red");
+            }
             this.$nuxt.$loading.finish();
             Object.values(this.$store.getters["errorHandling/errors"]).map(
               (error) => {

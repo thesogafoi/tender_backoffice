@@ -1096,31 +1096,33 @@ export default {
         console.log(error);
       }
     },
-    async onFileChange(e) {
+    onFileChange(e) {
       this.$nuxt.$loading.start();
       let formData = new FormData();
       const file = e.target.files[0];
       formData.append("excel_file", file);
       e.target.value = "";
-      try {
-        await this.$axios
-          .$post("advertise/excel/create", formData)
-          .then((response) => {
-            setTimeout(() => {
-              this.resetFormData();
-              this.search();
-            }, 1500);
-            this.showSnackbar("آگهی های اکسل با موفقیت اضافه شدند", "green");
-            this.$nuxt.$loading.finish();
-          });
-      } catch (error) {
-        this.$nuxt.$loading.finish();
-        Object.values(this.$store.getters["errorHandling/errors"]).map(
-          (error) => {
-            this.showSnackbar(error[0], "red");
+      this.$axios
+        .$post("advertise/excel/create", formData)
+        .then((response) => {
+          setTimeout(() => {
+            this.resetFormData();
+            this.search();
+          }, 1500);
+          this.showSnackbar("آگهی های اکسل با موفقیت اضافه شدند", "green");
+          this.$nuxt.$loading.finish();
+        })
+        .catch((errors) => {
+          if (this.$store.getters["errorHandling/status"]) {
+            this.showSnackbar("فرمت اکسل وارد شده صحیح نمیباشد", "red");
           }
-        );
-      }
+          this.$nuxt.$loading.finish();
+          Object.values(this.$store.getters["errorHandling/errors"]).map(
+            (error) => {
+              this.showSnackbar(error[0], "red");
+            }
+          );
+        });
     },
     getDataFromApi() {
       this.loading = true;
