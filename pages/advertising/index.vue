@@ -894,6 +894,7 @@ export default {
         })
         .catch((errors) => {
           this.$nuxt.$loading.finish();
+          this.advertises_action = [];
           this.choosed_action = "";
           advertiseId = [];
           if (errors.response.status == 422) {

@@ -89,8 +89,6 @@ export default {
    */
   axios: {
     baseURL: "https://api.asantender.com/api/"
-
-
   },
   /*
    ** vuetify module configuration
